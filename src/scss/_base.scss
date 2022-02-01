@@ -1,0 +1,100 @@
+:root {
+
+    // Colors
+    --vm-color-primary: #{$color-primary};
+    --vm-color-text: #{$color-text};
+    --vm-color-ui-controls: #{$color-ui-controls};
+    --vm-color-radio-background: #{$color-radio-background};
+    --vm-color-switch-face: #{$color-switch-face};
+    --vm-color-html-primary: #{$color-html-primary};
+    --vm-color-js-primary: #{$color-js-primary};
+    --vm-color-border-common: #{$color-border-common};
+    --vm-color-moon: lightyellow;
+    --vm-color-sun: gold;
+    --vm-color-block-highlight: #{$color-block-highlight};
+
+    // Spacing and sizes
+    --vm-height-modal-header: #{$height-modal-header};
+    --vm-spacing-outer-modal: #{$spacing-outer-modal};
+    --vm-spacing-common: #{$spacing-common};
+    --vm-size-touch-common: #{$size-touch-common};
+    
+    // Font related
+    --vm-ff-primary: #{$ff-primary};
+    --vm-ff-code: #{$ff-code};
+    
+    // Transition ease
+    --vm-ease-common: #{$ease-common};
+}
+
+// Light theme color adjustments
+:root.js-view-markup-theme-light {
+    --vm-color-primary: #{$color-primary-light};
+    --vm-color-text: #{$color-text-light};
+    --vm-color-ui-controls: #{$color-ui-controls-light};
+    --vm-color-radio-background: #{$color-radio-background-light};
+    --vm-color-switch-face: #{$color-switch-face-light};
+    --vm-color-html-primary: #{$color-html-primary-light};
+    --vm-color-js-primary: #{$color-js-primary-light};
+    --vm-color-border-common: #{$color-border-common-light};
+    --vm-color-moon: #{$color-text-light};
+    --vm-color-sun: #{$color-text-light};
+}
+
+
+.view-markup-sr-only {
+    color: #000;
+    background-color: #fff;
+
+    @extend %sr-only;
+}
+
+.js-view-markup-modal-showing {
+    overflow: hidden;
+
+    height: 100vh;
+}
+
+// .js-view-markup-modal-showing--navigating {
+//     scroll-behavior: smooth;
+// 
+//     .view-markup-modal__dialog {
+//         opacity: 0;
+//         filter: blur(1px);
+//     }
+// }
+
+.view-markup {
+    position: relative;
+}
+
+.view-markup-btn-holder {
+    position: static;
+    height: 1px;
+    width: 1px;
+    overflow: visible;
+}
+
+// .view-markup__blue-guy {
+//     width: 16px;
+//     height: 24px;
+//     background-image: url('data:image/gif;base64,R0lGODlhVACTAKIGAP/gqFAwAPg4APDQsABY+AAAAP///wAAACH/C05FVFNDQVBFMi4wAwEAAAAh/wtYTVAgRGF0YVhNUDw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMTQ4IDc5LjE2NDAzNiwgMjAxOS8wOC8xMy0wMTowNjo1NyAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIDIxLjAgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6NkIxQjlDRjMwNENEMTFFQUI1NjE5Q0NGM0I5QkM4RUUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6NkIxQjlDRjQwNENEMTFFQUI1NjE5Q0NGM0I5QkM4RUUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDo2QjFCOUNGMTA0Q0QxMUVBQjU2MTlDQ0YzQjlCQzhFRSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDo2QjFCOUNGMjA0Q0QxMUVBQjU2MTlDQ0YzQjlCQzhFRSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/PgH//v38+/r5+Pf29fTz8vHw7+7t7Ovq6ejn5uXk4+Lh4N/e3dzb2tnY19bV1NPS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');
+//     background-repeat: no-repeat;
+//     background-size: 16px 24px;
+//     position: absolute;
+//     bottom: 0;
+//     left: 0;
+//     animation-name: running;
+//     animation-duration: 10s;
+//     animation-timing-function: linear;
+// }
+// 
+// @keyframes running {
+//     0% {
+//         left: 0;
+//     }
+// 
+//     100% {
+//         left: 100%;   
+//     }
+// }

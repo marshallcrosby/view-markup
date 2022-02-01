@@ -1,0 +1,93 @@
+
+
+
+// Tabs
+.view-markup__tabs {
+    position: absolute;
+    z-index: 1;
+    top: 8px;
+    left: 10px;
+
+    display: none;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+
+    box-sizing: content-box;
+    height: 43px;
+    height: var(--vm-size-touch-common);
+    margin-right: auto;
+    margin-left: 0;
+    padding: 2px;
+
+    border-radius: 60px;
+    background-color: var(--vm-color-primary);
+    background-color: var(--vm-color-radio-background);
+}
+
+.view-markup__tabs-button {
+    height: 30px;
+    padding-right: 15px;
+    padding-left: 15px;
+
+    cursor: pointer;
+
+    color: var(--vm-color-text);
+    border: 0;
+    border-radius: 60px;
+    background-color: var(--vm-color-ui-controls);
+
+    font-size: .92em;
+
+    &:hover {
+        opacity: .8;
+        background-color: lighten($color-radio-background, 8%);
+    }
+}
+
+// Javascript panel
+.view-markup__code--js {
+    display: none;
+}
+
+&.view-markup-modal--has-js {
+    .view-markup__code {
+        padding-top: 50px;
+    }
+
+    .view-markup__tabs-button--html {
+        pointer-events: none;
+    }
+
+    .view-markup__tabs-button--js {
+        margin-left: 2px;
+
+        background-color: lighten($color-radio-background, 8%);
+    }
+
+    .view-markup__tabs {
+        display: inline-flex;
+    }
+}
+
+&.view-markup--js-tab-showing {
+    .view-markup__tabs-button--html {
+        pointer-events: initial;
+
+        background-color: lighten($color-radio-background, 8%);
+    }
+
+    .view-markup__tabs-button--js {
+        pointer-events: none;
+
+        background-color: var(--vm-color-ui-controls);
+    }
+
+    .view-markup__code--html {
+        display: none;
+    }
+
+    .view-markup__code--js {
+        display: block;
+    }
+}

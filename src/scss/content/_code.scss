@@ -1,0 +1,84 @@
+.view-markup__pre {
+    position: relative;
+
+    display: flex;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+    border-radius: 0;
+    background-color: transparent;
+
+    font-size: 1em;
+
+    &:before,
+    &:after {
+        position: absolute;
+        top: 0;
+        right: 0;
+
+        width: var(--vm-spacing-common);
+        height: 100%;
+
+        content: "";
+        pointer-events: none;
+
+        background: transparent;
+        background: linear-gradient(90deg, rgba($color-primary, 0) 0%, rgba($color-primary, .8) 50%);
+    }
+
+    &:after {
+        top: auto;
+        bottom: 0;
+
+        width: 100%;
+        height: var(--vm-spacing-common);
+        // background: linear-gradient(0deg, rgba($color-primary, .8) 0%, rgba($color-primary, 0) 100%);
+
+        background: linear-gradient(180deg, rgba($color-primary, 0) 0%, rgba($color-primary, .8) 50%);
+    }
+}
+
+.view-markup__code {
+    overflow-y: auto;
+
+    width: 100%;
+    min-height: 190px;
+    max-height: 490px;
+    padding: var(--vm-spacing-common);
+
+    transition: width 500ms var(--vm-ease-common), height 500ms var(--vm-ease-common), max-height 500ms var(--vm-ease-common);
+    white-space: pre;
+    letter-spacing: normal;
+
+    border: 0;
+    border-radius: 0;
+    outline: 0 !important;
+    background-color: var(--vm-color-primary);
+
+    font-family: $ff-code;
+    font-size: 1em;
+    line-height: 1.45;
+
+    scrollbar-color: rgba(255, 255, 255, .75) transparent;
+    scrollbar-width: thin;
+
+    &::-webkit-scrollbar-corner {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar {
+        width: 5px;
+        height: 5px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        outline: 0;
+        background-color: rgba(255, 255, 255, .75);
+    }
+}

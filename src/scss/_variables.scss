@@ -1,0 +1,51 @@
+$color-primary: #1e2127;
+$color-primary-light: lighten(#f7f7f7, 2%);
+
+$color-text: darken(#fff, 12%);
+$color-text-light: #333;
+
+$color-ui-controls: lighten($color-primary, 15%);
+$color-ui-controls-light: darken($color-primary-light, 6%);
+
+$color-radio-background: darken($color-primary, 5%);
+$color-radio-background-light: darken($color-primary-light, 8%);
+
+$color-switch-face: lighten($color-primary, 15%);
+$color-switch-face-light: $color-primary-light;
+
+$color-html-primary: #e06c75;
+$color-html-primary-light: #e45649;
+
+$color-js-primary: #e6c07b;
+$color-js-primary-light: darken($color-js-primary, 10%);
+
+$color-block-highlight: #ff0000;
+
+$color-border-common: rgba(#000, .23);
+$color-border-common-light: rgba(#000, .05);
+
+$height-modal-header: 50px;
+$spacing-outer-modal: 15px;
+$spacing-common: 18px;
+$size-touch-common: 30px;
+
+$ff-primary: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+$ff-code: 'Menlo', 'Consolas', 'DejaVu Sans Mono', monospace;
+
+$ease-common: cubic-bezier(0.19, 1, 0.22, 1);
+
+%sr-only {
+    position: absolute;
+
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+
+    white-space: nowrap;
+
+    border: 0;
+}

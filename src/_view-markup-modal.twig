@@ -1,0 +1,128 @@
+<div class="view-markup__content">
+    <div class="view-markup__header">        
+        <div class="view-markup__nav">
+            <button class="view-markup__prev-btn view-markup--fancy-hover" aria-label="Previous" type="button">
+                <svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;">
+                    <polygon class="sty0" points="0,7.1 7.1,14.1 8.5,12.7 2.8,7.1 8.5,1.4 7.1,0 0,7.1 0,7.1 "/>
+                </svg>
+            </button>
+            <button class="view-markup__next-btn view-markup--fancy-hover" aria-label="Next" type="button">
+                <svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;">
+                    <polygon class="sty0" points="8.5,7.1 1.4,0 0,1.4 5.7,7.1 0,12.7 1.4,14.1 8.5,7.1 8.5,7.1 "/>
+                </svg>
+            </button>
+        </div>
+
+        <div class="view-markup__title" id="viewMarkupModalTitle"></div>        
+        
+        <button class="view-markup__close-btn view-markup--fancy-hover" aria-label="Close" type="button">
+            <svg aria-hidden="true" x="0px" y="0px" width="15.6px" height="15.6px" viewBox="0 0 15.6 15.6" style="enable-background:new 0 0 15.6 15.6;">
+                <g>
+                    <rect x="6.8" y="-2.2" transform="matrix(0.7071 0.7071 -0.7071 0.7071 7.7782 -3.2218)" class="sty0" width="2" height="20"/>
+                    <rect x="6.8" y="-2.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.2218 7.7782)" class="sty0" width="2" height="20"/>
+                </g>
+            </svg>
+        </button>
+    </div>
+    
+    <div class="view-markup__body">
+        <div class="view-markup__controls">
+            <button class="view-markup__copy-btn view-markup--fancy-hover" type="button">Copy all</button>
+            
+            <div class="view-markup__settings">
+                <button class="view-markup__settings-btn view-markup--fancy-hover" id="viewMarkupModalSettingsBtn" aria-label="Settings" type="button" aria-expanded="false">
+                    <svg x="0px" y="0px" width="3px" height="15px" viewBox="0 0 3 15" style="enable-background:new 0 0 3 15;">
+                        <g>
+                            <circle class="sty0" cx="1.5" cy="1.5" r="1.5"/>
+                            <circle class="sty0" cx="1.5" cy="7.5" r="1.5"/>
+                            <circle class="sty0" cx="1.5" cy="13.5" r="1.5"/>
+                        </g>
+                    </svg>
+                </button>
+                
+                <div class="view-markup__settings-dropdown" aria-labelledby="viewMarkupModalSettingsBtn">
+                    <form class="view-markup__tab-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingIndent">
+                        <span id="viewMarkupSettingsHeadingIndent" aria-hidden="true">Indent: </span>
+                        <fieldset class="view-markup__switch">
+                            <legend class="view-markup__switch-label">Indent: </legend>
+                            <input class="view-markup__indent-2" type="radio" id="viewMarkupModalIndent2" name="tabspaces">
+                            <label for="viewMarkupModalIndent2">2</label>
+                            
+                            <input class="view-markup__indent-4" type="radio" id="viewMarkupModalIndent4" name="tabspaces">
+                            <label for="viewMarkupModalIndent4">4</label>
+                            
+                            <div class="view-markup__switch-face"></div>
+                        </fieldset>
+                    </form>
+                    
+                    <form class="view-markup__size-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingModalSize">
+                        <span id="viewMarkupSettingsHeadingModalSize" aria-hidden="true">Modal size: </span>
+                        <fieldset class="view-markup__switch">
+                            <legend class="view-markup__switch-label">Modal size: </legend>
+                            <input class="view-markup__size-medium" type="radio" id="viewMarkupModalSizeMedium" name="modalsize">
+                            <label for="viewMarkupModalSizeMedium">md</label>
+                            
+                            <input class="view-markup__size-large" type="radio" id="viewMarkupModalSizeLarge" name="modalsize">
+                            <label for="viewMarkupModalSizeLarge">lg</label>
+                            
+                            <div class="view-markup__switch-face"></div>
+                        </fieldset>
+                    </form>
+                    
+                    <form class="view-markup__theme-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingTheme">
+                        <span id="viewMarkupSettingsHeadingTheme" aria-hidden="true">Theme: </span>
+                        <fieldset class="view-markup__switch">
+                            <legend class="view-markup__switch-label">Theme: </legend>
+                            <input class="view-markup__theme-dark" type="radio" id="viewMarkupModalThemeDark" name="themecolor">
+                            <label for="viewMarkupModalThemeDark">
+                                <span class="view-markup-sr-only">Dark</span>
+                                <svg class="view-markup__switch-moon" x="0px" y="0px" width="7.6px" height="9.5px" viewBox="0 0 7.6 9.5" style="enable-background:new 0 0 7.6 9.5;">
+                                    <path class="sty0" d="M3.3,5.5C2.5,3.5,3.2,1.3,4.8,0C4.2,0,3.6,0.1,3,0.3C0.6,1.3-0.6,4,0.3,6.5c1,2.4,3.7,3.6,6.1,2.7 C6.9,9,7.3,8.7,7.6,8.5C5.8,8.4,4,7.3,3.3,5.5z"/>
+                                </svg>
+                            </label>
+                            
+                            <input class="view-markup__theme-light" type="radio" id="viewMarkupModalThemeLight" name="themecolor">
+                            <label for="viewMarkupModalThemeLight">
+                                <span class="view-markup-sr-only">Light</span>
+                                <svg class="view-markup__switch-sun" x="0px" y="0px" width="14px" height="14px" viewBox="0 0 14 14" style="enable-background:new 0 0 14 14;">
+                                    <g>
+                                        <path class="sty0" d="M7.5,2.5V0h-1v2.5c0.2,0,0.3-0.1,0.5-0.1S7.3,2.5,7.5,2.5z"/>
+                                        <path class="sty0" d="M6.5,11.4V14h1v-2.5c-0.2,0-0.3,0.1-0.5,0.1S6.6,11.4,6.5,11.4z"/>
+                                        <path class="sty0" d="M10.5,4.2l1.8-1.8l-0.7-0.7L9.8,3.5C10,3.7,10.3,3.9,10.5,4.2z"/>
+                                        <path class="sty0" d="M3.5,9.8l-1.8,1.8l0.7,0.7l1.8-1.8C3.9,10.3,3.7,10,3.5,9.8z"/>
+                                        <path class="sty0" d="M11.4,7.5H14v-1h-2.5c0,0.2,0.1,0.3,0.1,0.5S11.4,7.3,11.4,7.5z"/>
+                                        <path class="sty0" d="M2.5,6.5H0v1h2.5c0-0.2-0.1-0.3-0.1-0.5S2.5,6.6,2.5,6.5z"/>
+                                        <path class="sty0" d="M4.2,3.5L2.4,1.7L1.7,2.4l1.8,1.8C3.7,3.9,3.9,3.7,4.2,3.5z"/>
+                                        <path class="sty0" d="M9.8,10.5l1.8,1.8l0.7-0.7l-1.8-1.8C10.3,10,10,10.3,9.8,10.5z"/>
+                                        <circle class="sty0" cx="7" cy="7" r="3.5"/>
+                                    </g>
+                                </svg>
+                            </label>
+                            
+                            <div class="view-markup__switch-face"></div>
+                        </fieldset>
+                    </form>
+
+                    <div class="view-markup__settings-item">
+                        <label class="view-markup__settings-label" for="viewMarkupSettingsFontSize">Font size (px): </label>
+                        <input class="view-markup__font-size" id="viewMarkupSettingsFontSize" type="number">
+                    </div>
+                </div>
+            </div>
+        </div>        
+        <div class="view-markup__main" id="viewMarkupModalHtml">
+            <div class="view-markup__tabs" role="tablist">
+                <button class="view-markup__tabs-button view-markup__tabs-button--html view-markup--fancy-hover" id="viewMarkupModalHtmlTab" type="button" role="tab" aria-selected="true">HTML</button>
+                <button class="view-markup__tabs-button view-markup__tabs-button--js view-markup--fancy-hover" id="viewMarkupModalJsTab" type="button" role="tab" aria-selected="false">JS</button>
+                <div class="view-markup__tabs-indicator" aria-hidden="true"></div>
+            </div>
+            <label class="view-markup-sr-only" for="viewMarkupModalHiddenTextArea" aria-hidden="true">Copied</label>
+            <textarea class="view-markup__hidden-textarea" id="viewMarkupModalHiddenTextArea" aria-hidden="true"></textarea>
+            <pre class="view-markup__pre" id="viewMarkupModalPreTag">
+                <code class="view-markup__code view-markup__code--html html" id="viewMarkupHtmlCodeTag" contenteditable="true"></code>
+                <code class="view-markup__code view-markup__code--js html" id="viewMarkupJsCodeTag" contenteditable="true"></code>
+            </pre>
+            </div>
+        </div>
+    </div>
+</div>

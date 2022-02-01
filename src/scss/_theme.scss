@@ -1,0 +1,90 @@
+.js-view-markup-theme-light {
+    .view-markup__modal-btn {
+        border: 1px solid lighten(#000, 80%);
+    }
+    
+    .view-markup-modal {
+        .view-markup__content {
+            border: 0;
+        }
+    }
+
+    .view-markup__header {
+        &:after {
+            background: linear-gradient(90deg, rgba($color-primary-light, 0) 0%, $color-primary-light 25%);
+        }
+    }
+    
+    .view-markup__settings-dropdown {
+        box-shadow: 2px 2px 10px rgba(#000, .1);
+    }
+
+    // Tabs
+    .view-markup__tabs-button {
+        background-color: #fff;
+
+        &:hover {
+            opacity: .8;
+            background-color: darken(#fff, 10%);
+        }
+    }
+
+    .view-markup-modal--has-js {
+        .view-markup__tabs-button--js {
+            background-color: darken(#fff, 5%);
+        }
+    }
+
+    .view-markup--js-tab-showing {    
+        .view-markup__tabs-button--html {
+            background-color: darken(#fff, 5%);
+        }
+
+        .view-markup__tabs-button--js {
+            background-color: #fff;
+        }
+    }
+
+    .view-markup__pre {
+        &:before,
+        &:after {
+            background: linear-gradient(90deg, rgba($color-primary-light, 0) 0%, rgba($color-primary-light, .8) 50%);
+        }
+        
+        &:after {
+            background: linear-gradient(180deg, rgba($color-primary-light, 0) 0%, rgba($color-primary-light, .8) 50%);
+        }
+    }
+
+    .view-markup__code {
+        scrollbar-color: rgba($color-text-light, .75) transparent;
+
+        &::-webkit-scrollbar-thumb {
+            outline: 0;
+            background-color: rgba($color-text-light, .75);
+        }
+    }
+
+    .view-markup__switch {
+        &:hover,
+        &:focus {
+            opacity: .8;
+        }
+            
+        [type="radio"] {
+            &:focus {                
+                ~ .view-markup__switch-face {
+                    &:after {
+                        background-color: lighten($color-switch-face-light, 5%);
+                    }
+                }
+            }
+        }
+    }
+
+    .view-markup--fancy-hover {    
+        &:before {
+            background-color: rgba(#000, .1);
+        }
+    }
+}

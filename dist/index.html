@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <!-- <link href="test.css" rel="stylesheet"> -->
+    <!-- <link rel="stylesheet" href="css/view-markup.css"> -->
+    <style>
+        .option-list li {
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+
+<body style="font-family: sans-serif;">
+
+    <div class="view-markup__tab-set" data-view-markup="title: Render in page example;render-in-page: true;">
+        <p>Indent: </p>
+        <fieldset class="view-markup__switch">
+            <legend>Indent: </legend>
+            <input type="radio" id="indent2">
+            <label for="indent2">2</label>
+            <input type="radio" id="indent4">
+            <label for="indent4">4</label>
+            <div class="view-markup__switch-face"></div>
+        </fieldset>
+    </div>
+
+    <div data-view-markup="btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true; title: Render in page example;">
+        <div class="more-stuff">
+            HEYO4
+        </div>
+    </div>
+
+    <div data-view-markup="btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
+        This is some markup 2
+    </div>
+    
+    <p>
+        Add view-markup.js before any script tags at the bottom of the body. Add the <strong>data-view-markup</strong> attribute to the any html element inside the body that you want to view the markup for.
+    </p>
+
+    <h2>Options</h2>
+    
+    <p>
+        Add the below options inside the <strong>data-view-markup</strong> value.
+    </p>
+    
+    <ul class="option-list" data-view-markup="preserve-attribute: true; title: Options list; associated-script: #exampleScript2; backdrop-rgb: 255, 255, 255; render-in-page: true;">        
+        <li>
+            <strong>Add title to modal</strong><br>
+            <small>Examaple:</small><br>
+            data-view-markup="<strong><em>title: Block Name</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Adjust markup modal button x position</strong><br>
+            <small>Examaple:</small><br>
+            data-view-markup="<strong><em>btn-x: 10px</em></strong>"
+        </li>
+
+        <li>
+            <strong>Adjust markup modal button y position</strong><br>
+            <small>Examaple:</small><br>
+            data-view-markup="<strong><em>btn-y: 10px</em></strong>"
+        </li>
+
+        <li data-view-markup>
+            <strong>Adjust markup modal button z-index</strong><br>
+            <small>Examaple:</small><br>
+            data-view-markup="<strong><em>btn-z: 2</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Adjust markup modal button position (might need this when placing the button in a custom spot)</strong><br>
+            <small>Example:</small><br>
+            data-view-markup="<strong><em>btn-pos: relative</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Display a snippet of javascript that goes along with html</strong><br>
+            <small>Example:</small><br>
+            data-view-markup="<strong><em>associated-script: #scriptTagID</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Customize backdrop color (rgb values)</strong><br>
+            <small>Example:</small><br>
+            data-view-markup="<strong><em>backdrop-rgb: 255, 255, 255</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Render in page (after element)</strong><br>
+            <small>Example:</small><br>
+            data-view-markup="<strong><em>render-in-page: true</em></strong>"
+        </li>
+                        
+        <li>
+            <strong>Multiple options (separate with a semi-colon)</strong><br>
+            <small>Examaple:</small><br>
+            data-view-markup="<strong><em>title: Block Name; btn-x: -3px; btn-z: 3</em></strong>"
+        </li>
+    </ul>
+
+    <h2>Experimental query param settings</h2>
+    
+    <p>
+        Add the below settings as a query param to the view-markup script tag src.
+    </p>
+
+    <ul class="option-list">        
+        <li>
+            <strong>modal-nav</strong> - Activate navigation arrows in modal to be able to navigate between view-markup elements<br>
+            <small>Examaple:</small><br>
+            js/view-markup.min.js?<strong>modal-nav</strong>
+        </li>
+        
+        <li>
+            <strong>dynamic-pos</strong> - Dynamically position view markup modal button(s) without modifying the DOM around the view-markup element<br>
+            <small>Examaple:</small><br>
+            "js/view-markup.min.js?<strong>dynamic-pos</strong>"
+        </li>
+        
+        <li>
+            <strong>Multiple params</strong><br>
+            <small>Examaple:</small><br>
+            "js/view-markup.min.js?<strong>dynamic-pos</strong>&amp;<strong>modal-nav</strong>"
+        </li>
+    </ul>
+    
+    
+    <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
+    <script id="view-markup-js" src="js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2"></script>
+
+    <script id="exampleScript">
+        let $exampleScriptlet = () => {
+            console.log('yes');
+        }
+    </script>
+    
+    <script id="exampleScript2">
+        let $exampleScriptVar2 = () => {
+            console.log('yes');
+        }
+    </script>
+</body>
+
+</html>

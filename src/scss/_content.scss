@@ -1,0 +1,36 @@
+.view-markup__content {
+    position: relative;
+
+    display: flex;
+    overflow: hidden;
+    flex-direction: column;
+
+    width: 100%;
+
+    pointer-events: auto;
+
+    outline: 0;
+    background-color: var(--vm-color-primary);
+    background-clip: padding-box;
+
+    font-size: 13px;
+    font-weight: 500;
+
+    * {
+        -webkit-font-smoothing: auto;
+        -moz-osx-font-smoothing: auto;
+    }
+
+    @import 'content/header';
+    @import 'content/title';
+    @import 'content/controls';
+    @import 'content/settings';
+    @import 'content/main';
+    @import 'content/code';
+    @import 'content/tabs';
+}
+
+.view-markup__in-page-view {
+    margin-top: var(--vm-spacing-common);
+    margin-bottom: var(--vm-spacing-common);
+}

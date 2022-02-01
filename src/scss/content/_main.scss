@@ -1,0 +1,16 @@
+.view-markup__main {
+    flex: 0 0 100%;
+
+    min-width: 100%;
+    padding: 0;
+}
+
+.view-markup__hidden-textarea {
+    @extend %sr-only;
+}
+
+.view-markup__body {
+    display: flex;
+    flex-direction: row;
+    position: relative;
+}

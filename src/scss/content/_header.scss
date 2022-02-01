@@ -1,0 +1,28 @@
+.view-markup__header {
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+
+    height: var(--vm-height-modal-header);
+    padding: 5px var(--vm-spacing-common) 5px var(--vm-spacing-common);
+
+    color: var(--vm-color-text);
+    border-bottom: 1px solid var(--vm-color-border-common);
+
+    &:after {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        right: 0;
+
+        width: 75px;
+        height: 100%;
+
+        content: "";
+        pointer-events: none;
+
+        background: linear-gradient(90deg, rgba($color-primary, 0) 0%, $color-primary 32%);
+    }
+}

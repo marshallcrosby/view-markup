@@ -1,0 +1,11 @@
+.view-markup__modal-btn,
+.view-markup__in-page-view {
+    visibility: hidden;
+}
+
+.js-view-markup-ready {
+    .view-markup__modal-btn,
+    .view-markup__in-page-view {
+        visibility: visible;
+    }
+}
