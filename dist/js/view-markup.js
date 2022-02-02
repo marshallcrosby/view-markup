@@ -1150,9 +1150,12 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             to the associated element correctly
 
             TODOS:
-            ✓ Allow for button positioning
-            • Add "Skip to View markup modal navigation" skip link
+            ✓ Allow for dynamic button positioning
+            • Add "Skip to view markup modal navigation" skip link
             • Add visual focus indicator to modal button when focus in the background
+              when using modal navigation.
+            • Set smooth scrolling on the html,body when modal is active
+            • Enhance preserve attribute functionality a bit. (allow for top and inner)
         ----------------------------------------------------------------------------- */ 
 
         // Unwrap function
