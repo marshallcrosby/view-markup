@@ -25,6 +25,10 @@
     
     // Transition ease
     --vm-ease-common: #{$ease-common};
+
+    // Misc
+    --vm-modal-z: 1000000000000;  // 1 trillion, baby! Woo!
+    --vm-border-radius-common: 12px;
 }
 
 // Light theme color adjustments
@@ -53,6 +57,21 @@
     overflow: hidden;
 
     height: 100vh;
+
+    scroll-behavior: smooth;
+
+    .view-markup__modal-btn {
+        &:focus {
+            z-index: var(--vm-modal-z) !important;
+            animation: modal-btn-bounce 300ms 300ms ease;
+        }
+    }
+}
+
+@keyframes modal-btn-bounce {
+    50% {
+        margin-top: -5px;
+    }
 }
 
 // .js-view-markup-modal-showing--navigating {
@@ -68,7 +87,7 @@
     position: relative;
 }
 
-.view-markup-btn-holder {
+.view-markup-dynamic-nav {
     position: static;
     height: 1px;
     width: 1px;

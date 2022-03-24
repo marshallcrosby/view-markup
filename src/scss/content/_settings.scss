@@ -1,8 +1,9 @@
 .view-markup__settings-btn {
     svg {
         height: auto;
+        transform: rotate(90deg);
     }
-    
+
     .sty0 {
         fill: var(--vm-color-text);
     }
@@ -27,17 +28,17 @@
 
     display: none;
 
-    width: 175px;
+    width: 160px;
 
     letter-spacing: .5px;
 
-    border-radius: 5px;
+    border-radius: var(--vm-border-radius-common);
     background: var(--vm-color-primary);
     box-shadow: 2px 2px 10px rgba(#000, .65);
 
     font-family: var(--vm-ff-primary);
     font-weight: normal;
-    
+
     &.view-markup__settings-dropdown--showing {
         display: block;
     }
@@ -50,10 +51,10 @@
 
     padding: 6px 10px;
 
-    border-bottom: 1px solid var(--vm-color-border-common);
+    // border-bottom: 1px solid var(--vm-color-border-common);
 
     font-size: .92em;
-    
+
     &:last-child {
         border: 0;
     }
@@ -78,7 +79,7 @@
     height: var(--vm-size-touch-common);
 
     transition: all 300ms var(--vm-ease-common);
-    
+
     &:after {
         position: absolute;
         z-index: 0;
@@ -113,12 +114,12 @@
     border: 0 none !important;
     border-radius: 60px;
     background-color: var(--vm-color-radio-background);
-    
+
     &:hover,
     &:focus {
         opacity: .8;
     }
-        
+
     label {
         z-index: 1;
 
@@ -141,10 +142,11 @@
 
         font-family: var(--vm-ff-code);
         font-size: 1em;
+        font-weight: normal;
         line-height: 0;
 
         -webkit-touch-callout: none;
-        
+
         &:before {
             position: absolute;
             top: 0;
@@ -155,36 +157,36 @@
 
             content: "";
         }
-        
+
         &:first-of-type {
             margin-right: auto;
         }
-        
+
         &:last-of-type {
             margin-left: auto;
         }
     }
-    
+
     .sty0 {
         fill: var(--vm-color-text);
     }
-        
+
     [type="radio"] {
         @extend %sr-only;
         $switch-face-last-check-pos: $size-touch-common + 2;
-        
-        &:focus {                
+
+        &:focus {
             ~ .view-markup__switch-face {
                 &:after {
                     background-color: lighten($color-switch-face, 5%);
                 }
             }
         }
-        
+
         &:checked + label {
             pointer-events: none;
         }
-        
+
         &:last-of-type {
             &:checked {
                 ~ .view-markup__switch-face {
@@ -198,7 +200,7 @@
 
 .view-markup__switch-moon {
     transform: rotate(13deg);
-    
+
     .sty0 {
         fill: var(--vm-color-moon);
     }
@@ -206,7 +208,7 @@
 
 .view-markup__switch-sun {
     transform: rotate(13deg);
-    
+
     .sty0 {
         fill: var(--vm-color-sun);
     }

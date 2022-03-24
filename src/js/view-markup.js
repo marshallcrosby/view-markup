@@ -29,7 +29,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         let markupContentHtmlString = `//import _view-markup-modal.html`;
 
-        viewMarkupEl.forEach(function(item, index) {
+        viewMarkupEl.forEach(function (item, index) {
             
             // Cache all viewable markup elements
             elHtmlInitial[index] = viewMarkupEl[index].outerHTML.toString();
@@ -37,8 +37,6 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             // Remove the view markup specific data attributes
             if (!leaveAttr(viewMarkupEl[index])) {
                 elHtmlStripped[index] = elHtmlInitial[index].replace(/data-view-markup=".*"/, '');
-            } else {
-                elHtmlStripped[index] = elHtmlInitial[index];
             }
             
             // Create modal button
@@ -65,7 +63,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             }
             
             options = {
-                optionTitle: null,
+                title: null,
                 btnX: null,
                 btnY: null,
                 btnZ: null,
@@ -87,9 +85,9 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 let semiColonSplit = viewMarkupEl[index].getAttribute('data-view-markup').split(';');
                 
                 // Assign option values if any
-                semiColonSplit.forEach(function(item, index) {
+                semiColonSplit.forEach(function (item, index) {
                     if (semiColonSplit[index].split('title:')[1] !== undefined) {
-                        options.optionTitle = parseOption(semiColonSplit[index], 'title');
+                        options.title = parseOption(semiColonSplit[index], 'title');
                     }
 
                     if (semiColonSplit[index].split('btn-x:')[1] !== undefined) {
@@ -147,8 +145,8 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 });          
                                     
                 // Setup title attribute to be used later
-                if (options.optionTitle) {
-                    modalBtn.setAttribute('data-view-markup-title', options.optionTitle);
+                if (options.title) {
+                    modalBtn.setAttribute('data-view-markup-title', options.title);
                 }
 
                 // Btn x postion set
@@ -272,7 +270,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         let textStyle = document.createElement('style');
         textStyle.setAttribute('id', 'modalStyle');
 
-        // Said styles string copied and pasted from compressed css file
+        // Import compressed styles as a string
         let textStyleString = `//import view-markup.css`;
 
         // Apply in page styles to style tag
@@ -306,11 +304,17 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         let beautifyVersionNumb = '1.14.0';
         let beautifyScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/' + beautifyVersionNumb + '/beautify-html.min.js';
 
+        // HTML2Canvas CDN
+        let html2CanvasVersionNumb = '1.4.1';
+        let html2CanvasScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/' + html2CanvasVersionNumb + '/html2canvas.min.js';
+
         // Load highlight js/css external assets
         loadExternalCss(highlightCssUrl);
 
         // Initalize everything after getting beautify-html script
         loadExternalJs(beautifyScriptUrl, loadFinalJS);
+        
+        // loadExternalJs(html2CanvasScriptUrl);
 
         function loadFinalJS() {
             loadExternalJs(highlightScriptUrl, viewMarkupInitialize);
@@ -369,7 +373,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Set in page element
         let wrapperEl = document.querySelectorAll('.view-markup');
-        wrapperEl.forEach(function(item){
+        wrapperEl.forEach(function (item) {
             if (item.querySelector('[data-view-markup-in-page]')) {
                 let inPageBlock = document.createElement('div');
                 inPageBlock.classList.add('view-markup__in-page-view');
@@ -383,7 +387,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         let inPageHeader = document.querySelectorAll('.view-markup__in-page-view .view-markup__header');
         let modalSetSize = document.querySelectorAll('.view-markup__size-set');
 
-        inPageContent.forEach(function(item, index) {
+        inPageContent.forEach(function (item, index) {
             inPageHeader[index].remove();
             modalSetSize[index].remove();
             
@@ -411,7 +415,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // When external assets are loaded run this
         function readyAdjustments() {
-            wrapperEl.forEach(function(item, index) {
+            wrapperEl.forEach(function (item, index) {
                 
                 // Tidy js
                 if (item.querySelector('[data-view-markup-in-page]') && item.querySelector('[data-view-markup-script-selector]')) {
@@ -453,7 +457,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             modalNavigation();
             
             // Add ready class on body
-            document.body.classList.add('js-view-markup-ready');
+            document.documentElement.classList.add('js-view-markup-ready');
         }
 
 
@@ -502,11 +506,11 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Select cached tabspaces radio
         if (localStorage.getItem('checkedSpaceTab') === null || localStorage.getItem('checkedSpaceTab') === '4' ) {
-            radio4Spaces.forEach(function(item) {
+            radio4Spaces.forEach(function (item) {
                 item.checked = true;
             });
         } else {
-            radio2Spaces.forEach(function(item) {
+            radio2Spaces.forEach(function (item) {
                 item.checked = true;
             });
         }
@@ -514,11 +518,11 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Select cached theme radio
         if (localStorage.getItem('checkedThemeColor') === null || localStorage.getItem('checkedThemeColor') === 'dark') {
-            themeDark.forEach(function(item) {
+            themeDark.forEach(function (item) {
                 item.checked = true;
             });
         } else {
-            themeLight.forEach(function(item) {
+            themeLight.forEach(function (item) {
                 item.checked = true;
             });
             document.documentElement.classList.add('js-view-markup-theme-light');
@@ -527,11 +531,11 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Select cached modal size radio
         if (localStorage.getItem('checkedModalSize') === null || localStorage.getItem('checkedModalSize') === 'medium' ) {
-            modalSizeMedium.forEach(function(item) {
+            modalSizeMedium.forEach(function (item) {
                 item.checked = true;
             });
         } else {
-            modalSizeLarge.forEach(function(item) {
+            modalSizeLarge.forEach(function (item) {
                 item.checked = true;
             });
             document.body.classList.add('js-view-markup-size-large');
@@ -540,33 +544,33 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Get cached font-size
         if (localStorage.getItem('fontSizevalue') === null ) {
-            fontSize.forEach(function(item) {
+            fontSize.forEach(function (item) {
                 item.value = '13';
             });
         } else {
             let currentValue = localStorage.getItem('fontSizevalue');
             
-            fontSize.forEach(function(item) {
+            fontSize.forEach(function (item) {
                 item.value = localStorage.getItem('fontSizevalue');
             });
 
-            preEl.forEach(function(item, index) {
+            preEl.forEach(function (item, index) {
                 item.style.fontSize = currentValue + 'px';
             });
         }
 
         // Font code font size
-        fontSize.forEach(function(item, index) {
-            item.addEventListener('change', function() {
+        fontSize.forEach(function (item, index) {
+            item.addEventListener('change', function () {
                 let currentValue = item.value;
                 
                 localStorage.setItem('fontSizevalue', currentValue);
 
-                fontSize.forEach(function(item, index) {
+                fontSize.forEach(function (item, index) {
                     item.value = currentValue
                 });
 
-                preEl.forEach(function(item, index) {
+                preEl.forEach(function (item, index) {
                     item.style.fontSize = currentValue + 'px';
                 });
             });
@@ -580,8 +584,8 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         // -----------------------------------------------------------------------------
 
         // Copy button
-        copyBtn.forEach(function(item, index) {
-            item.addEventListener('click', function() {
+        copyBtn.forEach(function (item, index) {
+            item.addEventListener('click', function () {
                 let currentShowingCode;
                 let closestElement = item.closest('.view-markup__content');
                 let currentCode = closestElement.querySelectorAll('.view-markup__code');
@@ -601,23 +605,23 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Tabspaces (2) radio change event listeners
-        radio2Spaces.forEach(function(item, index) {
-            item.addEventListener('change', function() {
+        radio2Spaces.forEach(function (item, index) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
                     // Remember tab checked radio
                     localStorage.setItem('checkedSpaceTab', 2);
                     
-                    radio4Spaces.forEach(function(item, index){
+                    radio4Spaces.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    radio2Spaces.forEach(function(item, index){
+                    radio2Spaces.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
                     // Set to 2 tabs
-                    htmlCodeEl.forEach(function(item){
+                    htmlCodeEl.forEach(function (item) {
                         applyCleanHtml(item.textContent, 4, null, item);
                     });
                     
@@ -633,23 +637,23 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Tabspaces (4) radio change event listeners
-        radio4Spaces.forEach(function(item, index) {
-            item.addEventListener('change', function() {
+        radio4Spaces.forEach(function (item, index) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
                     // Remember tab checked radio
                     localStorage.setItem('checkedSpaceTab', 4);
                     
-                    radio2Spaces.forEach(function(item, index){
+                    radio2Spaces.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    radio4Spaces.forEach(function(item, index){
+                    radio4Spaces.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
                     // Set to 4 tabs
-                    htmlCodeEl.forEach(function(item){
+                    htmlCodeEl.forEach(function (item) {
                         applyCleanHtml(item.textContent, 4, null, item);
                     });
                     
@@ -666,15 +670,15 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
 
         // Dark theme radio change event listeners
-        themeDark.forEach(function(item) {
-            item.addEventListener('change', function() {
+        themeDark.forEach(function (item) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
-                    themeLight.forEach(function(item, index){
+                    themeLight.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    themeDark.forEach(function(item, index){
+                    themeDark.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
@@ -687,15 +691,15 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Light theme radio change event listeners
-        themeLight.forEach(function(item) {
-            item.addEventListener('change', function() {
+        themeLight.forEach(function (item) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
-                    themeDark.forEach(function(item, index){
+                    themeDark.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    themeLight.forEach(function(item, index){
+                    themeLight.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
@@ -708,15 +712,15 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Medium modal size radio change event listeners
-        modalSizeMedium.forEach(function(item) {
-            item.addEventListener('change', function() {
+        modalSizeMedium.forEach(function (item) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
-                    modalSizeLarge.forEach(function(item, index){
+                    modalSizeLarge.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    modalSizeMedium.forEach(function(item, index){
+                    modalSizeMedium.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
@@ -728,15 +732,15 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Large modal size radio change event listeners
-        modalSizeLarge.forEach(function(item) {
-            item.addEventListener('change', function() {
+        modalSizeLarge.forEach(function (item) {
+            item.addEventListener('change', function () {
                 if (this.checked === true) {
                     
-                    modalSizeMedium.forEach(function(item, index){
+                    modalSizeMedium.forEach(function (item, index) {
                         item.checked = false;
                     });
                     
-                    modalSizeLarge.forEach(function(item, index){
+                    modalSizeLarge.forEach(function (item, index) {
                         item.checked = true;
                     });
                     
@@ -755,15 +759,15 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         // HTML/JS tab toggling
         // -----------------------------------------------------------------------------
 
-        htmlTab.forEach(function(item, index) {
-            item.addEventListener('click', function() {
+        htmlTab.forEach(function (item, index) {
+            item.addEventListener('click', function () {
                 applyCopyBtnState('enabled');
                 this.closest('.view-markup__content').classList.remove('view-markup--js-tab-showing');
             });
         });
 
-        jsTab.forEach(function(item, index) {
-            item.addEventListener('click', function() {
+        jsTab.forEach(function (item, index) {
+            item.addEventListener('click', function () {
                 applyCopyBtnState('enabled');
                 this.closest('.view-markup__content').classList.add('view-markup--js-tab-showing');
             });
@@ -780,10 +784,10 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         // -----------------------------------------------------------------------------
 
         // Hide modal by clicking outside of it
-        modal.addEventListener('mousedown', function(event) {
+        modal.addEventListener('mousedown', function (event) {
             let isClickInside = false;
             
-            modalContent.forEach(function(item) {
+            modalContent.forEach(function (item) {
                 if ( item.contains(event.target) ) {
                     isClickInside = true;
                 }
@@ -795,17 +799,17 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Hide modal with close and cancel button click
-        modalCloseBtn.forEach(function(item) {
-            item.addEventListener('click', function(){
+        modalCloseBtn.forEach(function (item) {
+            item.addEventListener('click', function () {
                 modalHide();
             });
         });
 
         // Hide modal with esc key
-        modal.addEventListener('keydown', function(e) {
+        modal.addEventListener('keydown', function (e) {
             let key = e.key;
 
-            if (key === 'Escape' && document.body.classList.contains('js-view-markup-modal-showing')) {
+            if (key === 'Escape' && document.documentElement.classList.contains('js-view-markup-modal-showing')) {
                 modalHide();
             }
         });
@@ -821,8 +825,8 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         let optionDropdownClass = 'view-markup__settings-dropdown--showing';
 
         // Settings dropdown
-        settingsBtn.forEach(function(item, index) {
-            item.addEventListener('click', function() {
+        settingsBtn.forEach(function (item, index) {
+            item.addEventListener('click', function () {
                 let ariaExpandedAttr = this.getAttribute('aria-expanded');
 
                 this.setAttribute('aria-expanded', (ariaExpandedAttr === 'true') ? 'false' : 'true');
@@ -831,8 +835,8 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Hide settings dropdown by clicking outside of it
-        document.addEventListener('mousedown', function(event) {
-            settingsDropdown.forEach(function(item, index) {
+        document.addEventListener('mousedown', function (event) {
+            settingsDropdown.forEach(function (item, index) {
                 let isClickInside = item.contains(event.target);
 
                 if (
@@ -847,7 +851,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         });
 
         // Focus out of dropdown
-        // settingsDropdown.addEventListener('focusout', function(event) {
+        // settingsDropdown.addEventListener('focusout', function (event) {
         //     settingsBtn.setAttribute('aria-expanded', false);
         //     settingsDropdown.classList.remove(optionDropdownClass);
         // });
@@ -862,7 +866,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Function properly assigns untouched DOM html modal
         function viewMarkupInitialize() {
-            elHtmlStripped.forEach(function(item, index) {
+            elHtmlStripped.forEach(function (item, index) {
                 
                 // Assign modal button to correct html to view
                 let modalParent = viewMarkupEl[index].closest('.view-markup') || viewMarkupEl[index];
@@ -929,10 +933,12 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         // Function that gets html, beautifies it, and displays it in a modal
         let currentViewMarkupIndex;
         function modalMapping(html, spaces, btnEl) {    
-            btnEl.addEventListener('click', function() {        
+            btnEl.addEventListener('click', function () {        
                 
                 // Current modal button index (used for modal navigation)
-                currentViewMarkupIndex = this.getAttribute('data-view-markup-nav-index');        
+                currentViewMarkupIndex = this.getAttribute('data-view-markup-nav-index');
+                
+                // screenShotDomElement(viewMarkupEl[currentViewMarkupIndex]);
 
                 // Clean html
                 applyCleanHtml(html, spaces, this, modalCodeHtmlEL);
@@ -942,7 +948,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
                 modalContentEl.classList.remove('view-markup--js-tab-showing');
                 
-                jsCodeEl.forEach(function(item) {
+                jsCodeEl.forEach(function (item) {
                     if (item.textContent !== '') {
                         modalContentEl.classList.add('view-markup-modal--has-js');
                     } else {
@@ -975,13 +981,13 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         function applyCopyBtnState(state) {
             let clickedButton = document.querySelectorAll('.view-markup__copy-btn:focus');
             if (state === 'disabled') {
-                clickedButton.forEach(function(item) {
+                clickedButton.forEach(function (item) {
                     item.textContent = 'Copied';
                     item.setAttribute('disabled', 'disabled');
                 });
             } else if (state === 'enabled') {
-                copyBtn.forEach(function(item) {
-                    item.textContent = 'Copy all';
+                copyBtn.forEach(function (item) {
+                    item.textContent = 'Copy';
                     item.removeAttribute('disabled');
                 });
             }
@@ -1000,7 +1006,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Show modal
         function modalShow() {
-            document.body.classList.add('js-view-markup-modal-showing');
+            document.documentElement.classList.add('js-view-markup-modal-showing');
             modal.classList.add('view-markup-modal--showing');
             
             // Save current focus
@@ -1059,7 +1065,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Hide modal
         function modalHide() {
-            document.body.classList.remove('js-view-markup-modal-showing');
+            document.documentElement.classList.remove('js-view-markup-modal-showing');
             modal.classList.remove('view-markup-modal--showing');
             applyCopyBtnState('enabled');
             focusedElementBeforeModal.focus();
@@ -1078,16 +1084,13 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             let mapToModalBtnSelector = '[data-view-markup-nav-index="' + mapToModalBtnIndex + '"]';
             let mapToModalBtn = document.querySelector(mapToModalBtnSelector.toString());
             
-            let root = document.documentElement;
-            root.classList.add('js-view-markup-modal-showing--navigating');
+            document.documentElement.classList.add('js-view-markup-modal-showing--navigating');
             
-            let mapToModalBtnRect = mapToModalBtn.getBoundingClientRect();
-                
             mapToModalBtn.click();
             mapToModalBtn.focus();
             
-            setTimeout(function(){
-                root.classList.remove('js-view-markup-modal-showing--navigating');
+            setTimeout(function () {
+                document.documentElement.classList.remove('js-view-markup-modal-showing--navigating');
             }, 300);
         }
 
@@ -1096,12 +1099,11 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             
             // Add index to modal buttons for navigation
             let modalNavEl = document.querySelector('.view-markup__nav');
-            
             let modalBtn = document.querySelectorAll('.view-markup__modal-btn');
             
             elAmount = modalBtn.length;
             
-            modalBtn.forEach(function(item, index){
+            modalBtn.forEach(function (item, index) {
                 item.setAttribute('data-view-markup-nav-index', index);
             });
             
@@ -1114,12 +1116,12 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 let modalNextBtn = modal.querySelector('.view-markup__next-btn');
                 
                 // Modal previous button click
-                modalPrevBtn.addEventListener('click', function() {
+                modalPrevBtn.addEventListener('click', function () {
                     modalNavigate(this, 'prev');
                 });
 
                 // Modal next button click
-                modalNextBtn.addEventListener('click', function() {
+                modalNextBtn.addEventListener('click', function () {
                     modalNavigate(this, 'next');
                 });  
             } else {
@@ -1150,9 +1152,16 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             • Add "Skip to view markup modal navigation" skip link
             • Add visual focus indicator to modal button when focus in the background
               when using modal navigation.
-            • Set smooth scrolling on the html,body when modal is active
+            ✓ Set smooth scrolling on the html,body when modal is active
             • Enhance preserve attribute functionality a bit. (allow for top and inner)
-        ----------------------------------------------------------------------------- */ 
+        ----------------------------------------------------------------------------- */
+
+        // Render image of view-markup element
+        function screenShotDomElement(el) {
+            html2canvas(el).then(function(canvas) {
+                document.body.appendChild(canvas);
+            });
+        }
 
         // Unwrap function
         function unwrap(wrapper) {
@@ -1196,7 +1205,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 
                     // Create new div that will contain all modal buttons
                     let floatingButtonHolder = document.createElement('div');
-                    floatingButtonHolder.classList.add('view-markup-btn-holder');
+                    floatingButtonHolder.classList.add('view-markup-dynamic-nav');
                     
                     if (dynamicPosZIndex !== null) {
                         floatingButtonHolder.style.zIndex = dynamicPosZIndex.toString();
