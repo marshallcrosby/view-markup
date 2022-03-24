@@ -30,6 +30,8 @@
     background-color: transparent;
 
     line-height: 0;
+    margin-top: 0;
+    margin-bottom: 0;
 
     svg {
         position: relative;
@@ -134,6 +136,9 @@
     font-weight: 400;
     line-height: normal;
 
+    margin-top: 0;
+    margin-bottom: 0;
+
     &:disabled {
         opacity: .5;
     }
@@ -141,6 +146,7 @@
     &:hover,
     &:focus {
         opacity: .8;
+        color: inherit;
     }
 }
 

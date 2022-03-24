@@ -1,8 +1,9 @@
-.view-markup__modal-btn {
+button.view-markup__modal-btn {
     position: absolute;
     z-index: 100;
     top: 5px;
     left: 5px;
+    margin: 0;
 
     display: flex;
     overflow: hidden;
