@@ -41,6 +41,13 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             if (!leaveAttr(viewMarkupEl[index])) {
                 elHtmlStripped[index] = elHtmlInitial[index].replace(/data-view-markup=".*"/, '');
             }
+
+            // Remove class
+            if (suppressClass(viewMarkupEl[index])) {
+                var sRegExInput = new RegExp(suppressClass(viewMarkupEl[index]), 'g');
+                elHtmlStripped[index] = elHtmlInitial[index].replace(sRegExInput, '');
+                console.log(elHtmlStripped[index]);
+            }
             
             // Create modal button
             let modalBtn = document.createElement('button');
@@ -253,6 +260,21 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 } else {
                     return false;
                 }    
+            }
+        }
+        
+        function suppressClass(el) {
+            let optionSuppressClass = null;
+            
+            if (el.getAttribute('data-view-markup').split(';')) {
+                let semiColonSplit = el.getAttribute('data-view-markup').split(';');
+                
+                if (semiColonSplit[0].split('suppress-class:')[1] !== undefined) {
+                    optionSuppressClass = semiColonSplit[0].split('suppress-class:')[1].trim();
+                    return optionSuppressClass;
+                } else {
+                    return false;
+                }
             }
         }
 
@@ -1009,12 +1031,13 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         }
 
         // Show modal
+        let focusedElementBeforeModal;
         function modalShow() {
             document.documentElement.classList.add('js-view-markup-modal-showing');
             modal.classList.add('view-markup-modal--showing');
             
             // Save current focus
-            let focusedElementBeforeModal = document.activeElement;
+            focusedElementBeforeModal = document.activeElement;
 
             // Listen for and trap the keyboard
             modal.addEventListener('keydown', trapTabKey);
