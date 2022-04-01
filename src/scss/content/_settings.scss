@@ -217,6 +217,8 @@
 
 input.view-markup__font-size {
     flex: 0 0 40px;
+    padding: 0;
+    line-height: normal;
 
     max-width: 40px;
     height: var(--vm-size-touch-common);
