@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.1.5
+    * View markup v1.1.6
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -290,7 +290,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
         // Create style tag to dump styles into for the markup modal
         let textStyle = document.createElement('style');
-        textStyle.setAttribute('id', 'modalStyle');
+        textStyle.setAttribute('id', 'viewMarkupStyle');
 
         // Import compressed styles as a string
         let textStyleString = `//import view-markup.css`;
@@ -376,8 +376,8 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             
         // Setup modal outer div and attributes
         modal.classList.add('view-markup-modal');
-        modal.setAttribute('id', 'modal');
-        modal.setAttribute('aria-labelledby', 'modalTitle');
+        modal.setAttribute('id', 'viewMarkupModal');
+        modal.setAttribute('aria-labelledby', 'viewMarkupModalTitle');
         modal.setAttribute('aria-modal', true);
         modal.setAttribute('role', 'dialog');
         modal.setAttribute('tabindex', '-1');
