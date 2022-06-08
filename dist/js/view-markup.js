@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.1.6
+    * View markup v1.2.0
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
