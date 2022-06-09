@@ -60,7 +60,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
                 // Remove the view markup specific data attributes
                 if (!leaveAttr(viewMarkupEl[index])) {
-                    elHtmlStripped[index] = elHtmlInitial[index].replace(/data-view-markup=".*"/g, '').replace(/data-view-markup/g, '');
+                    elHtmlStripped[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
                 }
 
                 // Remove class
