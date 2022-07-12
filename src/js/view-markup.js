@@ -12,6 +12,21 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 (function () {
     "use strict"
 
+    // Get query params if any
+    let scriptLinkage = document.getElementById('view-markup-js');
+    let modalNav = null;
+    let dynamicPos = null;
+    let dynamicPosZIndex = null;
+    let excludeAttribute = null;
+
+    if (scriptLinkage) {
+        let urlParam = new URLSearchParams(scriptLinkage.getAttribute('src').split('?')[1]);
+        modalNav = urlParam.get('modal-nav');
+        dynamicPos = urlParam.get('dynamic-pos');
+        dynamicPosZIndex = urlParam.get('z-index');
+        excludeAttribute = urlParam.get('exclude-attribute');;
+    }
+
     // -----------------------------------------------------------------------------
     // Setup outer div and modal btn (with options)
     // -----------------------------------------------------------------------------
@@ -38,11 +53,17 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         }
     }
 
+    function removeAttributes(element, attributes) {
+        attributes.forEach(function (attribute) {
+            element.removeAttribute(attribute);
+        });
+    }
+
     document.addEventListener('src-is-ready', function () {
         if (viewMarkupEl.length > 0) {
             
             let elHtmlInitial = [];
-            let elHtmlStripped = [];
+            let elHtmlClean = [];
             let elAmount = 0;
             let options;
 
@@ -52,21 +73,21 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
             let markupContentHtmlString = `//import _view-markup-modal.html`;
 
             viewMarkupEl.forEach(function (item, index) {
+
+                // Remove specified param attrbute(s)
+                if (excludeAttribute !== null) {
+                    let excludeAttributeArr = excludeAttribute.split(',');
+                    removeAttributes(viewMarkupEl[index], excludeAttributeArr);
+                }
                 
                 // Cache all viewable markup elements               
                 elHtmlInitial[index] = (index === 0 && viewMarkupEl[0].tagName.toLowerCase() === 'html') ?
                     pageSrc.toString() :
                     viewMarkupEl[index].outerHTML.toString();
-
+                
                 // Remove the view markup specific data attributes
                 if (!leaveAttr(viewMarkupEl[index])) {
-                    elHtmlStripped[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
-                }
-
-                // Remove class
-                if (suppressClass(viewMarkupEl[index])) {
-                    var sRegExInput = new RegExp(suppressClass(viewMarkupEl[index]), 'g');
-                    elHtmlStripped[index] = elHtmlInitial[index].replace(sRegExInput, '');
+                    elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
                 }
                 
                 // Create modal button
@@ -180,16 +201,6 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                     }
 
                     // Btn x postion set
-                    // if (options.btnX && options.btnX === 'right') {
-                    //     modalBtn.style.left = 'auto';
-                    //     modalBtn.style.right = '0';
-                    // } else if (options.btnX && options.btnX === 'center') {
-                    //     modalBtn.style.left = 'calc(50% - ' + (modalBtn.offsetWidth / 2) + 'px)';
-                    // } else if (options.btnX) {
-                    //     modalBtn.style.left = options.btnX;
-                    // }
-
-                    // Btn x postion set
                     if (options.btnX) {
                         modalBtn.style.transform = 'translateX(' + options.btnX + ')';
                     }
@@ -283,20 +294,6 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 }
             }
             
-            function suppressClass(el) {
-                let optionSuppressClass = null;
-                
-                if (el.getAttribute('data-view-markup').split(';')) {
-                    let semiColonSplit = el.getAttribute('data-view-markup').split(';');
-                    
-                    if (semiColonSplit[0].split('suppress-class:')[1] !== undefined) {
-                        optionSuppressClass = semiColonSplit[0].split('suppress-class:')[1].trim();
-                        return optionSuppressClass;
-                    } else {
-                        return false;
-                    }
-                }
-            }
 
             // Spit out option value
             function parseOption(splitOn, optionString) {
@@ -485,7 +482,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                     // Tidy html
                     if (item.querySelector('[data-view-markup-in-page]')) {
                         let inPageCodeHtmlBlock = item.querySelector('.view-markup__code--html');
-                        let tidyHTML = html_beautify(elHtmlStripped[index], {
+                        let tidyHTML = html_beautify(elHtmlClean[index], {
                             indent_size: getCachedSpaceTab(),
                             space_in_empty_paren: true
                         });
@@ -911,7 +908,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
             // Function properly assigns untouched DOM html modal
             function viewMarkupInitialize() {
-                elHtmlStripped.forEach(function (item, index) {
+                elHtmlClean.forEach(function (item, index) {
                     
                     // Assign modal button to correct html to view
                     let modalParent = viewMarkupEl[index].closest('.view-markup') || viewMarkupEl[index];
@@ -926,7 +923,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
             // Cleanup and highlight markup
             function applyCleanHtml(html, spaces, btnEl, codeEl) {
-                let tidyHTML = html_beautify(html, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
+                let tidyHTML = html_beautify(cleanHTML, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
                     
                 codeEl.textContent = tidyHTML;
                 
@@ -1185,6 +1182,65 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
 
 
+            // If dynamic position query param is set, do some stuff
+            if (dynamicPos !== null) {
+                window.addEventListener('load', () => {
+                
+                    // Create new div that will contain all modal buttons
+                    let floatingButtonHolder = document.createElement('div');
+                    floatingButtonHolder.classList.add('view-markup-dynamic-nav');
+                    
+                    if (dynamicPosZIndex !== null) {
+                        floatingButtonHolder.style.zIndex = dynamicPosZIndex.toString();
+                    }
+                    
+                    document.body.appendChild(floatingButtonHolder);
+            
+                    // Cache elements with modals
+                    let withmodalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
+                    
+                    // Re-cache remaining buttons
+                    let floatingModalBtn = document.querySelectorAll('.view-markup__modal-btn');
+                    
+                    // Dynamically position modal button next to associated element
+                    function positionModalBtns(load) {
+                        
+                        // Add inline css to position button at the top left of the element
+                        withmodalEl.forEach( (item, i) => {
+                            let btnElement = floatingModalBtn[i];
+            
+                            btnElement.style.top = (item.getBoundingClientRect().top + window.scrollY) + 'px';
+                            btnElement.style.left = item.getBoundingClientRect().left + 'px';
+            
+                            if (load === 'load') {
+                                floatingButtonHolder.appendChild(btnElement);
+                            }
+                        });
+                    }
+                    
+                    // Remove un-needed highlight divs
+                    let highlightElement = document.querySelectorAll('.view-markup__highlight');
+                    highlightElement.forEach( (item) => {
+                        item.remove();
+                    });
+            
+                    // Unwrap view-markup div
+                    wrapperEl.forEach( (item) => {
+                        unwrap(item);
+                    });
+                    
+                    // Position buttons on load
+                    positionModalBtns('load');
+                    
+                    // Position buttons after resize
+                    window.addEventListener('resize', debounce( () => {
+                        positionModalBtns();
+                    }));
+                });
+            }
+
+
+
 
             
             /* -----------------------------------------------------------------------------
@@ -1231,76 +1287,6 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                     }
                     timer = setTimeout(func, 1000, event);
                 };
-            }
-
-            // Get query params if any
-            let scriptLinkage = document.getElementById('view-markup-js');
-            let modalNav = null;
-            let dynamicPos = null;
-            let dynamicPosZIndex = null;
-
-            if (scriptLinkage) {
-                let urlParam = new URLSearchParams(scriptLinkage.getAttribute('src').split('?')[1]);
-                modalNav = urlParam.get('modal-nav');
-                dynamicPos = urlParam.get('dynamic-pos');
-                dynamicPosZIndex = urlParam.get('z-index');
-
-                // If dynamic position query param is set, do some stuff
-                if (dynamicPos !== null) {
-                    window.addEventListener('load', () => {
-                    
-                        // Create new div that will contain all modal buttons
-                        let floatingButtonHolder = document.createElement('div');
-                        floatingButtonHolder.classList.add('view-markup-dynamic-nav');
-                        
-                        if (dynamicPosZIndex !== null) {
-                            floatingButtonHolder.style.zIndex = dynamicPosZIndex.toString();
-                        }
-                        
-                        document.body.appendChild(floatingButtonHolder);
-                
-                        // Cache elements with modals
-                        let withmodalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
-                        
-                        // Re-cache remaining buttons
-                        let floatingModalBtn = document.querySelectorAll('.view-markup__modal-btn');
-                        
-                        // Dynamically position modal button next to associated element
-                        function positionModalBtns(load) {
-                            
-                            // Add inline css to position button at the top left of the element
-                            withmodalEl.forEach( (item, i) => {
-                                let btnElement = floatingModalBtn[i];
-                
-                                btnElement.style.top = (item.getBoundingClientRect().top + window.scrollY) + 'px';
-                                btnElement.style.left = item.getBoundingClientRect().left + 'px';
-                
-                                if (load === 'load') {
-                                    floatingButtonHolder.appendChild(btnElement);
-                                }
-                            });
-                        }
-                        
-                        // Remove un-needed highlight divs
-                        let highlightElement = document.querySelectorAll('.view-markup__highlight');
-                        highlightElement.forEach( (item) => {
-                            item.remove();
-                        });
-                
-                        // Unwrap view-markup div
-                        wrapperEl.forEach( (item) => {
-                            unwrap(item);
-                        });
-                        
-                        // Position buttons on load
-                        positionModalBtns('load');
-                        
-                        // Position buttons after resize
-                        window.addEventListener('resize', debounce( () => {
-                            positionModalBtns();
-                        }));
-                    });
-                }
             }
         }
     });
