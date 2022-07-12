@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.2.2
+    * View markup v1.2.3
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -13,7 +13,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
     "use strict"
 
     // Get query params if any
-    let scriptLinkage = document.getElementById('view-markup-js');
+    let scriptLinkage = document.getElementById('view-markup-js') || document.querySelector('script[src*=view-markup]');
     let modalNav = null;
     let dynamicPos = null;
     let dynamicPosZIndex = null;
@@ -24,7 +24,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
         modalNav = urlParam.get('modal-nav');
         dynamicPos = urlParam.get('dynamic-pos');
         dynamicPosZIndex = urlParam.get('z-index');
-        excludeAttribute = urlParam.get('exclude-attribute');;
+        excludeAttribute = urlParam.get('exclude-attribute');
     }
 
     // -----------------------------------------------------------------------------

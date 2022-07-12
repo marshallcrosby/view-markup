@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-view-markup>
+<html lang="en" data-view-markup="title: Page Source">
 
 <head>
     <meta charset="UTF-8">
@@ -15,8 +15,7 @@
     </style>
 </head>
 
-<body style="font-family: sans-serif;">
-
+<body style="font-family: sans-serif; padding: 20px;">
     <div id="shadow"></div>
 
     <div id="blockId" class="view-markup__tab-set" data-view-markup="title: Render in page example;render-in-page: true;" data-jtn-anchor="title: Test title">
@@ -33,11 +32,11 @@
 
     <div data-view-markup="btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true; title: Render in page example;">
         <div class="more-stuff">
-            HEYO4
+            HEY
         </div>
     </div>
 
-    <div data-view-markup="btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
+    <div data-view-markup="title: Test title; btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
         This is some markup 2
     </div>
     
@@ -51,28 +50,28 @@
         Add the below options inside the <strong>data-view-markup</strong> value.
     </p>
     
-    <ul class="option-list" data-view-markup="preserve-attribute: true; title: Options list; associated-script: #exampleScript2; backdrop-rgb: 255, 255, 255; render-in-page: true;">        
+    <ul class="option-list">        
         <li>
             <strong>Add title to modal</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             data-view-markup="<strong><em>title: Block Name</em></strong>"
         </li>
         
         <li>
             <strong>Adjust markup modal button x position</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             data-view-markup="<strong><em>btn-x: 10px</em></strong>"
         </li>
 
         <li>
             <strong>Adjust markup modal button y position</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             data-view-markup="<strong><em>btn-y: 10px</em></strong>"
         </li>
 
         <li data-view-markup>
             <strong>Adjust markup modal button z-index</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             data-view-markup="<strong><em>btn-z: 2</em></strong>"
         </li>
         
@@ -102,12 +101,12 @@
                         
         <li>
             <strong>Multiple options (separate with a semi-colon)</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             data-view-markup="<strong><em>title: Block Name; btn-x: -3px; btn-z: 3</em></strong>"
         </li>
     </ul>
 
-    <h2>Experimental query param settings</h2>
+    <h2>Query param settings</h2>
     
     <p>
         Add the below settings as a query param to the view-markup script tag src.
@@ -116,26 +115,35 @@
     <ul class="option-list">        
         <li>
             <strong>modal-nav</strong> - Activate navigation arrows in modal to be able to navigate between view-markup elements<br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             js/view-markup.min.js?<strong>modal-nav</strong>
         </li>
         
         <li>
             <strong>dynamic-pos</strong> - Dynamically position view markup modal button(s) without modifying the DOM around the view-markup element<br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             "js/view-markup.min.js?<strong>dynamic-pos</strong>"
         </li>
         
         <li>
+            <strong>exclude-attribute</strong><br>
+            <small>Example:</small><br>
+            "js/view-markup.min.js?<strong>exclude-attribute=data-jtn-anchor,example-attr</strong>"
+        </li>
+        
+        <li>
             <strong>Multiple params</strong><br>
-            <small>Examaple:</small><br>
+            <small>Example:</small><br>
             "js/view-markup.min.js?<strong>dynamic-pos</strong>&amp;<strong>modal-nav</strong>"
         </li>
     </ul>
+
+    <h2>CDN</h2>
+    <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js</code>
     
     
     <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
-    <script id="view-markup-js" src="js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2&exclude-attribute=class,data-jtn-anchor"></script>
+    <script src="js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2&exclude-attribute=class,data-jtn-anchor"></script>
 
     <script id="exampleScript">
         let $exampleScriptlet = () => {
