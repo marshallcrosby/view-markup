@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.2.1
+    * View markup v1.2.2
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -927,7 +927,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
 
             // Cleanup and highlight markup
             function applyCleanHtml(html, spaces, btnEl, codeEl) {
-                let tidyHTML = html_beautify(cleanHTML, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
+                let tidyHTML = html_beautify(html, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
                     
                 codeEl.textContent = tidyHTML;
                 
