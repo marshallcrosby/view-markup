@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.2.3
+    * View markup v1.2.4
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -7,7 +7,10 @@
 */
 
 // Cache view markup elements immediately.
-const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
+if (typeof viewMarkupEl === 'undefined') {
+    viewMarkupEl = document.querySelectorAll('[data-view-markup]');
+}
+
 
 (function () {
     "use strict"
@@ -1111,7 +1114,7 @@ const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
                 document.documentElement.classList.remove('js-view-markup-modal-showing');
                 modalEl.classList.remove('view-markup-modal--showing');
                 applyCopyBtnState('enabled');
-                focusedElementBeforemodalEl.focus();
+                focusedElementBeforeModal.focus();
             }
 
             // Go to previous/next view markup element
