@@ -143,16 +143,13 @@
     
     
     <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
-    <script>
-        const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
-    </script>
-    <script src="js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2&exclude-attribute=class,data-jtn-anchor"></script>
+    <script src="/js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2&exclude-attribute=class,data-jtn-anchor"></script>
 
     <script id="exampleScript">
+        document.getElementById('blockId').style.background = 'red';
         let $exampleScriptlet = () => {
             console.log('yes');
         }
-        document.getElementById('blockId').style.background = 'red';
     </script>
     
     <script id="exampleScript2">

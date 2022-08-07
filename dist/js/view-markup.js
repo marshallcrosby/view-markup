@@ -1,20 +1,17 @@
 /*!
-    * View markup v1.2.4
+    * View markup v1.3.0
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
     * https://marshallcrosby.com
 */
 
-// Cache view markup elements immediately.
-if (typeof viewMarkupEl === 'undefined') {
-    viewMarkupEl = document.querySelectorAll('[data-view-markup]');
-}
-
-
 (function () {
     "use strict"
-
+    
+    // Cache elements
+    const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
+    
     // Get query params if any
     let scriptLinkage = document.getElementById('view-markup-js') || document.querySelector('script[src*=view-markup]');
     let modalNav = null;
@@ -29,10 +26,6 @@ if (typeof viewMarkupEl === 'undefined') {
         dynamicPosZIndex = urlParam.get('z-index');
         excludeAttribute = urlParam.get('exclude-attribute');
     }
-
-    // -----------------------------------------------------------------------------
-    // Setup outer div and modal btn (with options)
-    // -----------------------------------------------------------------------------
    
     let srcready = new Event('src-is-ready');
     let pageSrc = null;
@@ -47,7 +40,7 @@ if (typeof viewMarkupEl === 'undefined') {
         }
     }
 
-    // Get page src
+    // Get original page src
     function makeHttpObject() {
         if ('XMLHttpRequest' in window) {
             return new XMLHttpRequest();
@@ -55,7 +48,15 @@ if (typeof viewMarkupEl === 'undefined') {
             return new ActiveXObject('Msxml2.XMLHTTP');
         }
     }
+    
+    // Convert src string to HTML
+    function stringToHTML(str) {
+        let parser = new DOMParser();
+        let doc = parser.parseFromString(str, 'text/html');
+        return doc;
+    }
 
+    // Remove multiple attributes
     function removeAttributes(element, attributes) {
         attributes.forEach(function (attribute) {
             element.removeAttribute(attribute);
@@ -63,7 +64,10 @@ if (typeof viewMarkupEl === 'undefined') {
     }
 
     document.addEventListener('src-is-ready', function () {
-        if (viewMarkupEl.length > 0) {
+        const copiedPageHTML = stringToHTML(pageSrc);
+        const copiedViewMarkupEl = copiedPageHTML.querySelectorAll('[data-view-markup]');
+        
+        if (copiedViewMarkupEl.length > 0) {
             
             let elHtmlInitial = [];
             let elHtmlClean = [];
@@ -83,13 +87,13 @@ if (typeof viewMarkupEl === 'undefined') {
                 // Remove specified param attrbute(s)
                 if (excludeAttribute !== null) {
                     let excludeAttributeArr = excludeAttribute.split(',');
-                    removeAttributes(viewMarkupEl[index], excludeAttributeArr);
+                    removeAttributes(copiedViewMarkupEl[index], excludeAttributeArr);
                 }
                 
                 // Cache all viewable markup elements               
                 elHtmlInitial[index] = (index === 0 && viewMarkupEl[0].tagName.toLowerCase() === 'html') ?
                     pageSrc.toString() :
-                    viewMarkupEl[index].outerHTML.toString();
+                    copiedViewMarkupEl[index].outerHTML.toString();
                 
                 // Remove the view markup specific data attributes
                 if (!leaveAttr(viewMarkupEl[index])) {
