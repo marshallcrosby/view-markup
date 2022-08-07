@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.3.0
+    * View markup v1.3.1
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -31,7 +31,7 @@
     let pageSrc = null;
     let request = makeHttpObject();
     
-    request.open('GET', '/', true);
+    request.open('GET', window.location, true);
     request.send(null);
     request.onreadystatechange = function() {
         if (request.readyState === 4) {
@@ -67,8 +67,7 @@
         const copiedPageHTML = stringToHTML(pageSrc);
         const copiedViewMarkupEl = copiedPageHTML.querySelectorAll('[data-view-markup]');
         
-        if (copiedViewMarkupEl.length > 0) {
-            
+        if (viewMarkupEl.length > 0) {
             let elHtmlInitial = [];
             let elHtmlClean = [];
             let elAmount = 0;
