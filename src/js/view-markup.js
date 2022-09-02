@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.3.2
+    * View markup v1.3.3
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -513,6 +513,10 @@
                     
                     // Add ready class on body
                     document.documentElement.classList.add('js-view-markup-ready');
+
+                    const vmReadyEvent = document.createEvent('Event');
+                    vmReadyEvent.initEvent('ViewMarkupReady', true, true);
+                    window.dispatchEvent(vmReadyEvent);
                 }
 
 
@@ -1197,7 +1201,7 @@
 
                 // If dynamic position query param is set, do some stuff
                 if (dynamicPos !== null) {
-                    window.addEventListener('load', () => {
+                    window.addEventListener('ViewMarkupReady', () => {
                     
                         // Create new div that will contain all modal buttons
                         let floatingButtonHolder = document.createElement('div');
@@ -1249,7 +1253,7 @@
                         window.addEventListener('resize', debounce( () => {
                             positionModalBtns();
                         }));
-                    });
+                    }, false);
                 }
 
 
