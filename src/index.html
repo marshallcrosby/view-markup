@@ -30,15 +30,45 @@
         </fieldset>
     </div>
 
-    <div data-view-markup="btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true; title: Render in page example;">
-        <div class="more-stuff">
-            HEY
+    <div data-view-markup-parent="title: B.1.4 - Full Width Promo Block;">
+        <div data-view-markup="title: Example 1; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+            <div class="more-stuff">
+                <h3>Example 1 test title</h3>
+                <p>Veritatis officia eum dolorem error non ullam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+            </div>
+        </div>
+    
+        <div data-view-markup="title: Test title; btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
+            <h3>Test title</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+        </div>
+
+        <div data-view-markup="title: Example 3; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+            <div class="more-stuff">
+                <h3>Example 3 test title</h3>
+                <p>Consequatur doloribus cumque quis illo possimus accusantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+            </div>
+        </div>
+        <div data-view-markup="title: Example 4; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+            <div class="more-stuff">
+                <h3>Example 4 test title</h3>
+                <p>Veritatis officia eum dolorem error non ullam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+            </div>
+        </div>
+    
+        <div data-view-markup="title: Test title 5; btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
+            <h3>Test title 5</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+        </div>
+
+        <div data-view-markup="title: Example 6; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+            <div class="more-stuff">
+                <h3>Example 6 test title</h3>
+                <p>Consequatur doloribus cumque quis illo possimus accusantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+            </div>
         </div>
     </div>
 
-    <div data-view-markup="title: Test title; btn-x:-10px;btn-y:20px; backdrop-rgb: 255, 255, 255;">
-        This is some markup 2
-    </div>
     
     <p>
         Add view-markup.js before any script tags at the bottom of the body. Add the <strong>data-view-markup</strong> attribute to the any html element inside the body that you want to view the markup for.
@@ -143,7 +173,7 @@
     
     
     <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
-    <script src="/js/view-markup.min.js?modal-nav&dynamic-pos&z-index=2&exclude-attribute=class,data-jtn-anchor&dynamic-pos"></script>
+    <script src="/js/view-markup.min.js?modal-nav&z-index=2&exclude-attribute=class,data-jtn-anchor"></script>
 
     <script id="exampleScript">
         document.getElementById('blockId').style.background = 'red';
