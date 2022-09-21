@@ -1338,12 +1338,13 @@
                     });
     
                     // Create tab title and max-width option
-                    let tabslistParamUrl = convertToParamString(parent.getAttribute('data-view-markup-parent'));
+                    let tabslistParam = convertToParamString(parent.getAttribute('data-view-markup-parent'));
                     let tabsParams = {
-                        title: tabslistParamUrl.get('title'),
-                        maxWidth: tabslistParamUrl.get('max-width'),
-                        background: tabslistParamUrl.get('background'),
-                        pillView: tabslistParamUrl.get('pill-view')
+                        title: tabslistParam.get('title'),
+                        maxWidth: tabslistParam.get('max-width'),
+                        background: tabslistParam.get('background'),
+                        pillView: tabslistParam.get('pill-view'),
+                        paddingX: tabslistParam.get('padding-x')
                     }
 
                     if (tabsParams.title !== null) {
@@ -1358,6 +1359,13 @@
                             maxWidth: tabsParams.maxWidth,
                             marginLeft: 'auto',
                             marginRight: 'auto',
+                        });
+                    }
+                    
+                    if (tabsParams.paddingX !== null) {
+                        Object.assign(tabNav.style,{
+                            paddingLeft: tabsParams.paddingX,
+                            paddingRight: tabsParams.paddingX,
                         });
                     }
 
