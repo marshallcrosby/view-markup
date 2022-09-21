@@ -72,7 +72,37 @@
         }
 
         &:last-child {
-            margin-right: 0;
+            margin-right: 15px;
+        }
+    }
+
+    &.view-markup-tabs--bg-none {
+        .view-markup-tabs__title {
+            padding: 0;
+        }
+        
+        .view-markup-tabs__nav {
+            background-color: transparent;
+        }
+
+        .view-markup-tabs__tabs-list {
+            padding: 13px 0;
+        }
+
+        &.view-markup-tabs--pill-view {
+            .view-markup-tabs__tab-button {
+                box-shadow: none;
+                
+                &:not([aria-selected="true"]) {
+                    background-color: var(--vm-color-gray-100);
+                }
+            }
+        }
+    }
+    
+    &.view-markup-tabs--pill-view {
+        .view-markup-tabs__tab-button {
+            border-radius: 30px;
         }
     }
 }

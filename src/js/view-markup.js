@@ -1055,6 +1055,16 @@
                     mapToModalBtn.click();
                     mapToModalBtn.focus();
                     
+                    // Show corresponding tab if contained in one
+                    if (mapToModalBtn.closest('.view-markup-tabs__panel')) {
+                        let tabParent = mapToModalBtn.closest('[data-view-markup-parent]');
+                        let tablistPanelId = mapToModalBtn.closest('.view-markup-tabs__panel').id;
+                        
+                        tabParent
+                            .querySelector(`[aria-controls="${tablistPanelId}"]`)
+                            .click();
+                    }
+                    
                     setTimeout(function () {
                         document.documentElement.classList.remove('js-view-markup-modal-showing--navigating');
                     }, 300);
@@ -1327,7 +1337,9 @@
                     let tabslistParamUrl = convertToParamString(parent.getAttribute('data-view-markup-parent'));
                     let tabsParams = {
                         title: tabslistParamUrl.get('title'),
-                        maxWidth: tabslistParamUrl.get('max-width')
+                        maxWidth: tabslistParamUrl.get('max-width'),
+                        background: tabslistParamUrl.get('background'),
+                        pillView: tabslistParamUrl.get('pill-view')
                     }
 
                     if (tabsParams.title !== null) {
@@ -1343,6 +1355,14 @@
                             marginLeft: 'auto',
                             marginRight: 'auto',
                         });
+                    }
+
+                    if (tabsParams.background === 'none') {
+                        parent.classList.add('view-markup-tabs--bg-none');
+                    }
+                    
+                    if (tabsParams.pillView === 'true') {
+                        parent.classList.add('view-markup-tabs--pill-view');
                     }
                 });
     
