@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.4.0
+    * View markup v1.4.1
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -357,18 +357,12 @@
                 let beautifyVersionNumb = '1.14.0';
                 let beautifyScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/' + beautifyVersionNumb + '/beautify-html.min.js';
 
-                // HTML2Canvas CDN
-                let html2CanvasVersionNumb = '1.4.1';
-                let html2CanvasScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/' + html2CanvasVersionNumb + '/html2canvas.min.js';
-
                 // Load highlight js/css external assets
                 loadExternalCss(highlightCssUrl);
 
                 // Initalize everything after getting beautify-html script
                 loadExternalJs(beautifyScriptUrl, loadFinalJS);
                 
-                // loadExternalJs(html2CanvasScriptUrl);
-
                 function loadFinalJS() {
                     loadExternalJs(highlightScriptUrl, viewMarkupInitialize);
                 }
@@ -1274,13 +1268,6 @@
                     • Add tab view
                 ----------------------------------------------------------------------------- */
 
-                // Render image of view-markup element
-                function screenShotDomElement(el) {
-                    html2canvas(el).then(function(canvas) {
-                        document.body.appendChild(canvas);
-                    });
-                }
-
                 // Unwrap function
                 function unwrap(wrapper) {
                     let docFrag = document.createDocumentFragment();
@@ -1304,181 +1291,199 @@
                         timer = setTimeout(func, 1000, event);
                     };
                 }
-            }
+
+                // Spit out option value
+                function parseOption(splitOn, optionString) {
+                    return splitOn.split(optionString + ':')[1].trim();
+                }
 
 
 
 
 
-            // -----------------------------------------------------------------------------
-            // WIP:
-            // Create tabs view of view markup elements inside a container
-            // Based off https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role
-            // -----------------------------------------------------------------------------
 
-            const viewMarkupParent = document.querySelectorAll('[data-view-markup-parent]');
+                // -----------------------------------------------------------------------------
+                // WIP:
+                // Create tabs view of view markup elements inside a container
+                // Based off https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Roles/tab_role
+                // -----------------------------------------------------------------------------
     
-            viewMarkupParent.forEach((parent) => {
-                parent.classList.add('view-markup-tabs');
-                
-                // Create tab nav
-                const tabNav = document.createElement('div');
-                tabNav.classList.add('view-markup-tabs__nav');
-                setAttributes(tabNav, {
-                    'role': 'tablist',
-                    'aria-label': 'View markup tabs'
-                });
-                parent.prepend(tabNav);
-
-                // Create tabs list element
-                const tabsList = document.createElement('div');
-                tabsList.classList.add('view-markup-tabs__tabs-list');
-                tabNav.prepend(tabsList);
-                
-                // Create tab item element(s)
-                const tabButton = document.createElement('div');
-                tabButton.classList.add('view-markup-tabs__tab-button');
-                
-                // Get title(s) if any
-                const vmEntry = parent.querySelectorAll('[data-view-markup-title]');
-                
-                // Setup tab list entry
-                vmEntry.forEach((entry, index) => {
-                    let tabButtonEntry = tabButton.cloneNode();
-                    let uniqueString = camelize(entry.getAttribute('data-view-markup-title').replace(/[^a-z0-9]/gi, ' '));
-                    setAttributes(tabButtonEntry, {
-                        'aria-selected': (index === 0) ? 'true' : 'false',
-                        'role': 'tab',
-                        'tabindex': (index === 0) ? '0' : '-1',
-                        'aria-controls': uniqueString + 'Panel',
-                        'id': uniqueString
-                    });
-                    tabButtonEntry.innerHTML = entry.getAttribute('data-view-markup-title');
-                    tabsList.appendChild(tabButtonEntry);
-                });
-
-                // Setup tab panel areas
-                const vmPanel = parent.querySelectorAll('.view-markup');
-                const tabButtonElement = parent.querySelectorAll('.view-markup-tabs__tab-button');
-                
-                vmPanel.forEach((panel, index) => {
-                    panel.classList.add('view-markup-tabs__panel');
-                    setAttributes(panel, {
-                        'role': 'tabpanel',
-                        'tabindex': '0',
-                        'aria-labelledby': tabButtonElement[index].getAttribute('id'),
-                        'id': tabButtonElement[index].getAttribute('id') + 'Panel'
-                    });
-
-                    if (index > 0) {
-                        panel.setAttribute('hidden', 'true');
-                    }
-                });
-
-                const tabs = parent.querySelectorAll('[role="tab"]');
-                const tabList = parent.querySelector('[role="tablist"]');
-
-                // Add a click event handler to each tab
-                tabs.forEach((tab) => {
-                    tab.addEventListener('click', changeTabs);
-                });
-                
-                // Enable arrow navigation between tabs in the tab list
-                let tabFocus = 0;
-                
-                tabList.addEventListener('keydown', (event) => {
+                const viewMarkupParent = document.querySelectorAll('[data-view-markup-parent]');
+        
+                viewMarkupParent.forEach((parent) => {
+                    parent.classList.add('view-markup-tabs');
                     
-                    // Move right
-                    if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
-                        tabs[tabFocus].setAttribute('tabindex', '-1');
-                        
-                        if (event.key === 'ArrowRight') {
-                            tabFocus++;
-                            
-                            // If we're at the end, go to the start
-                            if (tabFocus >= tabs.length) {
-                                tabFocus = 0;
-                            }
-                        
-                        // Move left
-                        } else if (event.key === 'ArrowLeft') {
-                            tabFocus--;
-                            
-                            // If we're at the start, move to the end
-                            if (tabFocus < 0) {
-                                tabFocus = tabs.length - 1;
-                            }
-                        }
-
-                        tabs[tabFocus].setAttribute('tabindex', '0');
-                        tabs[tabFocus].focus();
-                    }
-
-                    if (event.key === 'Enter' || event.code === 'Space') {
-                        event.preventDefault();
-                        event.target.click();
-                    }
-                });
-
-                // Create tab title
-                let tabTitle = null;
-                if (parent.getAttribute('data-view-markup-parent') !== '') {
-                    let semiColonSplit = parent.getAttribute('data-view-markup-parent').split(';');
+                    // Create tab nav element
+                    const tabNav = document.createElement('div');
+                    tabNav.classList.add('view-markup-tabs__nav');
+                    setAttributes(tabNav, {
+                        'role': 'tablist',
+                        'aria-label': 'View markup tabs'
+                    });
+                    parent.prepend(tabNav);
+    
+                    // Create tabs list element
+                    const tabsList = document.createElement('div');
+                    tabsList.classList.add('view-markup-tabs__tabs-list');
+                    tabNav.prepend(tabsList);
                     
-                    semiColonSplit.forEach(function (item, index) {
-                        if (semiColonSplit[index].split('title:')[1] !== undefined) {
-                            tabTitle = parseOption(semiColonSplit[index], 'title');
+                    // Create tab nav item element(s)
+                    const tabButton = document.createElement('div');
+                    tabButton.classList.add('view-markup-tabs__tab-button');
+                    
+                    // Get title(s) if any
+                    const vmEntry = parent.querySelectorAll('[data-view-markup-title]');
+                    
+                    // Setup tab list entry
+                    vmEntry.forEach((entry, index) => {
+                        let tabButtonEntry = tabButton.cloneNode();
+                        let uniqueString = camelize(entry.getAttribute('data-view-markup-title').replace(/[^a-z0-9]/gi, ' '));
+                        setAttributes(tabButtonEntry, {
+                            'aria-selected': (index === 0) ? 'true' : 'false',
+                            'role': 'tab',
+                            'tabindex': (index === 0) ? '0' : '-1',
+                            'aria-controls': uniqueString + 'Panel',
+                            'id': uniqueString
+                        });
+                        tabButtonEntry.innerHTML = entry.getAttribute('data-view-markup-title');
+                        tabsList.appendChild(tabButtonEntry);
+                    });
+    
+                    // Setup tab panel areas
+                    const vmPanel = parent.querySelectorAll('.view-markup');
+                    const tabButtonElement = parent.querySelectorAll('.view-markup-tabs__tab-button');
+                    
+                    vmPanel.forEach((panel, index) => {
+                        panel.classList.add('view-markup-tabs__panel');
+                        setAttributes(panel, {
+                            'role': 'tabpanel',
+                            'tabindex': '0',
+                            'aria-labelledby': tabButtonElement[index].getAttribute('id'),
+                            'id': tabButtonElement[index].getAttribute('id') + 'Panel'
+                        });
+    
+                        if (index > 0) {
+                            panel.setAttribute('hidden', 'true');
                         }
                     });
-                }
-                const tabsTitle = document.createElement('div');
-                tabsTitle.classList.add('view-markup-tabs__title');
-                tabsTitle.innerHTML = tabTitle;
-                tabNav.prepend(tabsTitle);
-            });
-
-            function changeTabs(event) {
-                const target = event.target;
-                const parent = target.closest('.view-markup-tabs__nav');
-                const grandparent = parent.closest('.view-markup-tabs');
-
-                // Remove all current selected tabs
-                parent
-                    .querySelectorAll('[aria-selected="true"]')
-                    .forEach((tab) => tab.setAttribute('aria-selected', 'false'));
-
-                // Set this tab as selected
-                target.setAttribute('aria-selected', 'true');
-
-                // Hide all tab panels
-                grandparent
-                    .querySelectorAll('[role="tabpanel"]')
-                    .forEach((panel) => panel.setAttribute('hidden', 'true'));
-
-                // Show the selected panel
-                grandparent.parentNode
-                    .querySelector(`#${target.getAttribute('aria-controls')}`)
-                    .removeAttribute('hidden');
-
-                event.target.focus();
-            }
-
-            function setAttributes(el, attrs) {
-                for(var key in attrs) {
-                    el.setAttribute(key, attrs[key]);
-                }
-            }
-
-            function camelize(str) {
-                return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-                if (+match === 0) return "";
-                    return index === 0 ? match.toLowerCase() : match.toUpperCase();
+    
+                    const tabs = parent.querySelectorAll('[role="tab"]');
+                    const tabList = parent.querySelector('[role="tablist"]');
+    
+                    // Add a click event handler to each tab
+                    tabs.forEach((tab) => {
+                        tab.addEventListener('click', changeTabs);
+                    });
+                    
+                    // Enable arrow navigation between tabs in the tab list
+                    let tabFocus = 0;
+                    
+                    tabList.addEventListener('keydown', (event) => {
+                        
+                        // Move right
+                        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+                            tabs[tabFocus].setAttribute('tabindex', '-1');
+                            
+                            if (event.key === 'ArrowRight') {
+                                tabFocus++;
+                                
+                                // If we're at the end, go to the start
+                                if (tabFocus >= tabs.length) {
+                                    tabFocus = 0;
+                                }
+                            
+                            // Move left
+                            } else if (event.key === 'ArrowLeft') {
+                                tabFocus--;
+                                
+                                // If we're at the start, move to the end
+                                if (tabFocus < 0) {
+                                    tabFocus = tabs.length - 1;
+                                }
+                            }
+    
+                            tabs[tabFocus].setAttribute('tabindex', '0');
+                            tabs[tabFocus].focus();
+                        }
+    
+                        if (event.key === 'Enter' || event.code === 'Space') {
+                            event.preventDefault();
+                            event.target.click();
+                        }
+                    });
+    
+                    // Create tab title
+                    let tabTitle = null;
+                    if (parent.getAttribute('data-view-markup-parent') !== '') {
+                        let semiColonSplit = parent.getAttribute('data-view-markup-parent').split(';');
+                        
+                        semiColonSplit.forEach(function (item, index) {
+                            if (semiColonSplit[index].split('title:')[1] !== undefined) {
+                                tabTitle = parseOption(semiColonSplit[index], 'title');
+                            }
+                        });
+                    }
+                    const tabsTitle = document.createElement('div');
+                    tabsTitle.classList.add('view-markup-tabs__title');
+                    tabsTitle.innerHTML = tabTitle;
+                    tabNav.prepend(tabsTitle);
                 });
-            }
+    
+                // Display and scrollto tablist item if hash is available
+                let urlHash = window.location.hash;
+                if (urlHash !== '') {
+                    let urlIDElement = document.querySelector(`${urlHash}`);
+                    if (urlIDElement && urlIDElement.closest('[data-view-markup-parent]')) {
+                        let associatedTab = document.querySelector('[aria-controls="' + urlHash.replace('#', '') +'"]')
+                        
+                        // Click associated tab
+                        associatedTab.click();
 
-            // Spit out option value
-            function parseOption(splitOn, optionString) {
-                return splitOn.split(optionString + ':')[1].trim();
+                        // Scroll into view
+                        associatedTab.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+    
+                function changeTabs(event) {
+                    const target = event.target;
+                    const parent = target.closest('.view-markup-tabs__nav');
+                    const grandparent = parent.closest('.view-markup-tabs');
+    
+                    // Remove all current selected tabs
+                    parent
+                        .querySelectorAll('[aria-selected="true"]')
+                        .forEach((tab) => tab.setAttribute('aria-selected', 'false'));
+    
+                    // Set this tab as selected
+                    target.setAttribute('aria-selected', 'true');
+    
+                    // Hide all tab panels
+                    grandparent
+                        .querySelectorAll('[role="tabpanel"]')
+                        .forEach((panel) => panel.setAttribute('hidden', 'true'));
+    
+                    // Show the selected panel
+                    grandparent.parentNode
+                        .querySelector(`#${target.getAttribute('aria-controls')}`)
+                        .removeAttribute('hidden');
+    
+                    event.target.focus();
+                }
+    
+                function setAttributes(el, attrs) {
+                    for(var key in attrs) {
+                        el.setAttribute(key, attrs[key]);
+                    }
+                }
+    
+                function camelize(str) {
+                    return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
+                    if (+match === 0) return "";
+                        return index === 0 ? match.toLowerCase() : match.toUpperCase();
+                    });
+                }
             }
         });
     });
