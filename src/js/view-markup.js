@@ -145,7 +145,9 @@
                         
                     // Apply some options to toggle if available
                     let currentElement = viewMarkupEl[index];
-                    if (currentElement.getAttribute('data-view-markup') !== '') {
+                    //let currentElementParamUrl = convertToParamString(currentElement.getAttribute('data-view-markup'));
+                    
+                    if (currentElement.getAttribute('data-view-markup') !== 'null') {
                         let semiColonSplit = viewMarkupEl[index].getAttribute('data-view-markup').split(';');
                         
                         // Assign option values if any
@@ -1409,20 +1411,17 @@
                     });
     
                     // Create tab title
-                    let tabTitle = null;
-                    if (parent.getAttribute('data-view-markup-parent') !== '') {
-                        let semiColonSplit = parent.getAttribute('data-view-markup-parent').split(';');
-                        
-                        semiColonSplit.forEach(function (item, index) {
-                            if (semiColonSplit[index].split('title:')[1] !== undefined) {
-                                tabTitle = parseOption(semiColonSplit[index], 'title');
-                            }
-                        });
+                    let tabslistParamUrl = convertToParamString(parent.getAttribute('data-view-markup-parent'));
+                    let tabsParams = {
+                        title: tabslistParamUrl.get('title'),
+                        maxWidth: tabslistParamUrl.get('max-width')
                     }
-                    const tabsTitle = document.createElement('div');
-                    tabsTitle.classList.add('view-markup-tabs__title');
-                    tabsTitle.innerHTML = tabTitle;
-                    tabNav.prepend(tabsTitle);
+                    if (tabsParams.title !== null) {
+                        const tabsTitle = document.createElement('div');
+                        tabsTitle.classList.add('view-markup-tabs__title');
+                        tabsTitle.innerHTML = tabsParams.title;
+                        tabNav.prepend(tabsTitle);
+                    }
                 });
     
                 // Display and scrollto tablist item if hash is available
@@ -1479,6 +1478,12 @@
                     if (+match === 0) return "";
                         return index === 0 ? match.toLowerCase() : match.toUpperCase();
                     });
+                }
+
+                function convertToParamString(str) {
+                    let stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
+                    let optionParam = new URLSearchParams(stringCleanup);
+                    return optionParam;
                 }
             }
         });
