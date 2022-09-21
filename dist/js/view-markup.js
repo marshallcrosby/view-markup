@@ -29,7 +29,7 @@
             excludeAttribute = urlParam.get('exclude-attribute');
         }
     
-        let srcready = new Event('src-is-ready');
+        let srcready = new Event('ViewMarkupSrcIsReady');
         let pageSrc = null;
         let request = makeHttpObject();
         
@@ -65,23 +65,15 @@
             });
         }
 
-        document.addEventListener('src-is-ready', function () {
+        document.addEventListener('ViewMarkupSrcIsReady', function () {
             const copiedPageHTML = stringToHTML(pageSrc);
             const copiedViewMarkupEl = copiedPageHTML.querySelectorAll('[data-view-markup]');
-            
-            // copiedViewMarkupEl.forEach((item) => {
-            //     item.removeAttribute('data-view-markup');
-            // });
-            
+                        
             if (viewMarkupEl.length > 0) {
                 let elHtmlInitial = [];
                 let elHtmlClean = [];
                 let elAmount = 0;
                 let options;
-
-                // Declare base modal element right away to add some data attributes to
-                let modalEl = document.createElement('div');
-
                 let markupContentHtmlString = `<div class="view-markup__content"><div class="view-markup__header"><div class="view-markup__nav"><button class="view-markup__prev-btn view-markup--fancy-hover" aria-label="Previous" type="button"><svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;"><polygon class="sty0" points="0,7.1 7.1,14.1 8.5,12.7 2.8,7.1 8.5,1.4 7.1,0 0,7.1 0,7.1 "/></svg></button> <button class="view-markup__next-btn view-markup--fancy-hover" aria-label="Next" type="button"><svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;"><polygon class="sty0" points="8.5,7.1 1.4,0 0,1.4 5.7,7.1 0,12.7 1.4,14.1 8.5,7.1 8.5,7.1 "/></svg></button></div><div class="view-markup__title" id="viewMarkupModalTitle"></div><button class="view-markup__close-btn view-markup--fancy-hover" aria-label="Close" type="button"><svg aria-hidden="true" x="0px" y="0px" width="15.6px" height="15.6px" viewBox="0 0 15.6 15.6" style="enable-background:new 0 0 15.6 15.6;"><g><rect x="6.8" y="-2.2" transform="matrix(0.7071 0.7071 -0.7071 0.7071 7.7782 -3.2218)" class="sty0" width="2" height="20"/><rect x="6.8" y="-2.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.2218 7.7782)" class="sty0" width="2" height="20"/></g></svg></button></div><div class="view-markup__body"><div class="view-markup__controls"><button class="view-markup__copy-btn view-markup--fancy-hover" type="button">Copy</button><div class="view-markup__settings"><button class="view-markup__settings-btn view-markup--fancy-hover" id="viewMarkupModalSettingsBtn" aria-label="Settings" type="button" aria-expanded="false"><svg x="0px" y="0px" width="3px" height="15px" viewBox="0 0 3 15" style="enable-background:new 0 0 3 15;"><g><circle class="sty0" cx="1.5" cy="1.5" r="1.5"/><circle class="sty0" cx="1.5" cy="7.5" r="1.5"/><circle class="sty0" cx="1.5" cy="13.5" r="1.5"/></g></svg></button><div class="view-markup__settings-dropdown" aria-labelledby="viewMarkupModalSettingsBtn"><form class="view-markup__tab-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingIndent"><span id="viewMarkupSettingsHeadingIndent" aria-hidden="true">Indent:</span><fieldset class="view-markup__switch"><legend class="view-markup__switch-label">Indent:</legend><input class="view-markup__indent-2" type="radio" id="viewMarkupModalIndent2" name="tabspaces"> <label for="viewMarkupModalIndent2">2</label> <input class="view-markup__indent-4" type="radio" id="viewMarkupModalIndent4" name="tabspaces"> <label for="viewMarkupModalIndent4">4</label><div class="view-markup__switch-face"></div></fieldset></form><form class="view-markup__size-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingModalSize"><span id="viewMarkupSettingsHeadingModalSize" aria-hidden="true">Modal size:</span><fieldset class="view-markup__switch"><legend class="view-markup__switch-label">Modal size:</legend><input class="view-markup__size-medium" type="radio" id="viewMarkupModalSizeMedium" name="modalsize"> <label for="viewMarkupModalSizeMedium">md</label> <input class="view-markup__size-large" type="radio" id="viewMarkupModalSizeLarge" name="modalsize"> <label for="viewMarkupModalSizeLarge">lg</label><div class="view-markup__switch-face"></div></fieldset></form><form class="view-markup__theme-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingTheme"><span id="viewMarkupSettingsHeadingTheme" aria-hidden="true">Theme:</span><fieldset class="view-markup__switch"><legend class="view-markup__switch-label">Theme:</legend><input class="view-markup__theme-dark" type="radio" id="viewMarkupModalThemeDark" name="themecolor"> <label for="viewMarkupModalThemeDark"><span class="view-markup-sr-only">Dark</span> <svg class="view-markup__switch-moon" x="0px" y="0px" width="7.6px" height="9.5px" viewBox="0 0 7.6 9.5" style="enable-background:new 0 0 7.6 9.5;"><path class="sty0" d="M3.3,5.5C2.5,3.5,3.2,1.3,4.8,0C4.2,0,3.6,0.1,3,0.3C0.6,1.3-0.6,4,0.3,6.5c1,2.4,3.7,3.6,6.1,2.7 C6.9,9,7.3,8.7,7.6,8.5C5.8,8.4,4,7.3,3.3,5.5z"/></svg></label> <input class="view-markup__theme-light" type="radio" id="viewMarkupModalThemeLight" name="themecolor"> <label for="viewMarkupModalThemeLight"><span class="view-markup-sr-only">Light</span> <svg class="view-markup__switch-sun" x="0px" y="0px" width="14px" height="14px" viewBox="0 0 14 14" style="enable-background:new 0 0 14 14;"><g><path class="sty0" d="M7.5,2.5V0h-1v2.5c0.2,0,0.3-0.1,0.5-0.1S7.3,2.5,7.5,2.5z"/><path class="sty0" d="M6.5,11.4V14h1v-2.5c-0.2,0-0.3,0.1-0.5,0.1S6.6,11.4,6.5,11.4z"/><path class="sty0" d="M10.5,4.2l1.8-1.8l-0.7-0.7L9.8,3.5C10,3.7,10.3,3.9,10.5,4.2z"/><path class="sty0" d="M3.5,9.8l-1.8,1.8l0.7,0.7l1.8-1.8C3.9,10.3,3.7,10,3.5,9.8z"/><path class="sty0" d="M11.4,7.5H14v-1h-2.5c0,0.2,0.1,0.3,0.1,0.5S11.4,7.3,11.4,7.5z"/><path class="sty0" d="M2.5,6.5H0v1h2.5c0-0.2-0.1-0.3-0.1-0.5S2.5,6.6,2.5,6.5z"/><path class="sty0" d="M4.2,3.5L2.4,1.7L1.7,2.4l1.8,1.8C3.7,3.9,3.9,3.7,4.2,3.5z"/><path class="sty0" d="M9.8,10.5l1.8,1.8l0.7-0.7l-1.8-1.8C10.3,10,10,10.3,9.8,10.5z"/><circle class="sty0" cx="7" cy="7" r="3.5"/></g></svg></label><div class="view-markup__switch-face"></div></fieldset></form><div class="view-markup__settings-item"><label class="view-markup__settings-label" for="viewMarkupSettingsFontSize">Font size (px):</label> <input class="view-markup__font-size" id="viewMarkupSettingsFontSize" type="number"></div></div></div></div><div class="view-markup__main" id="viewMarkupModalHtml"><div class="view-markup__tabs" role="tablist"><button class="view-markup__tabs-button view-markup__tabs-button--html view-markup--fancy-hover" id="viewMarkupModalHtmlTab" type="button" role="tab" aria-selected="true">HTML</button> <button class="view-markup__tabs-button view-markup__tabs-button--js view-markup--fancy-hover" id="viewMarkupModalJsTab" type="button" role="tab" aria-selected="false">JS</button><div class="view-markup__tabs-indicator" aria-hidden="true"></div></div><label class="view-markup-sr-only" for="viewMarkupModalHiddenTextArea" aria-hidden="true">Copied</label> <textarea class="view-markup__hidden-textarea" id="viewMarkupModalHiddenTextArea" aria-hidden="true"></textarea><pre class="view-markup__pre" id="viewMarkupModalPreTag">
                 <code class="view-markup__code view-markup__code--html html" id="viewMarkupHtmlCodeTag"></code>
                 <code class="view-markup__code view-markup__code--js html" id="viewMarkupJsCodeTag"></code>
@@ -89,7 +81,7 @@
 
                 viewMarkupEl.forEach(function (item, index) {
 
-                    // Remove specified param attrbute(s)
+                    // Remove specified param attribute(s)
                     if (excludeAttribute !== null) {
                         let excludeAttributeArr = excludeAttribute.split(',');
                         removeAttributes(copiedViewMarkupEl[index], excludeAttributeArr);
@@ -101,9 +93,10 @@
                         copiedViewMarkupEl[index].outerHTML;
                     
                     // Remove the view markup specific data attributes
-                    if (!leaveAttr(viewMarkupEl[index])) {
+                    if (!preserveViewMarkupAttr(viewMarkupEl[index])) {
                         elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
-                        // elHtmlClean[index] = elHtmlInitial[index];
+                    } else {
+                        elHtmlClean[index] = elHtmlInitial[index];
                     }
                     
                     // Create modal button
@@ -115,8 +108,7 @@
                     // if <html> or <body> do things a bit differently
                     if (viewMarkupEl[index].nodeName.toLowerCase()  === 'body' || viewMarkupEl[index].nodeName.toLowerCase()  === 'html') {
                         let wrapperDivBody = document.createElement('div');
-                        wrapperDivBody.classList.add('view-markup');
-                        wrapperDivBody.classList.add('view-markup--body');
+                        wrapperDivBody.classList.add('view-markup', 'view-markup--body');
                         document.body.prepend(wrapperDivBody);
                         wrapperDivBody.appendChild(modalBtn);
                     } else {
@@ -128,91 +120,29 @@
                         wrapElement(viewMarkupEl[index], markupWrapperDiv);
                         markupWrapperDiv.prepend(modalBtn);
                     }
-                    
-                    options = {
-                        title: null,
-                        btnX: null,
-                        btnY: null,
-                        btnZ: null,
-                        btnPos: null,
-                        btnAppendTo: null,
-                        btnPrependTo: null,
-                        btnColor: null,
-                        scriptSelector: null,
-                        backdropRgb: null,
-                        renderInPage: null,
-                        marginBottom: null,
-                        marginTop: null,
-                        modalNav: null
-                    };
-                        
+
                     // Apply some options to toggle if available
                     let currentElement = viewMarkupEl[index];
-                    //let currentElementParamUrl = convertToParamString(currentElement.getAttribute('data-view-markup'));
+                    let optionsParams = convertToParamString(currentElement.getAttribute('data-view-markup'));
                     
-                    if (currentElement.getAttribute('data-view-markup') !== 'null') {
-                        let semiColonSplit = viewMarkupEl[index].getAttribute('data-view-markup').split(';');
-                        
-                        // Assign option values if any
-                        semiColonSplit.forEach(function (item, index) {
-                            if (semiColonSplit[index].split('title:')[1] !== undefined) {
-                                options.title = parseOption(semiColonSplit[index], 'title');
-                            }
-
-                            if (semiColonSplit[index].split('btn-x:')[1] !== undefined) {
-                                options.btnX = parseOption(semiColonSplit[index], 'btn-x');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-y:')[1] !== undefined) {
-                                options.btnY = parseOption(semiColonSplit[index], 'btn-y');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-z:')[1] !== undefined) {
-                                options.btnZ = parseOption(semiColonSplit[index], 'btn-z');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-pos:')[1] !== undefined) {
-                                options.btnPos = parseOption(semiColonSplit[index], 'btn-pos');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-append-to:')[1] !== undefined) {
-                                options.btnAppendTo = parseOption(semiColonSplit[index], 'btn-append-to');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-prepend-to:')[1] !== undefined) {
-                                options.btnPrependTo = parseOption(semiColonSplit[index], 'btn-prepend-to');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-color:')[1] !== undefined) {
-                                options.btnColor = parseOption(semiColonSplit[index], 'btn-color');
-                            }
-                            
-                            if (semiColonSplit[index].split('associated-script:')[1] !== undefined) {
-                                options.scriptSelector = parseOption(semiColonSplit[index], 'associated-script');
-                            }
-                            
-                            if (semiColonSplit[index].split('backdrop-rgb:')[1] !== undefined) {
-                                options.backdropRgb = parseOption(semiColonSplit[index], 'backdrop-rgb');
-                            }
-                            
-                            if (semiColonSplit[index].split('render-in-page:')[1] !== undefined) {
-                                options.renderInPage = parseOption(semiColonSplit[index], 'render-in-page');
-                                currentElement.setAttribute('data-view-markup-render-in-page', '');
-                            }
-                            
-                            if (semiColonSplit[index].split('margin-bottom:')[1] !== undefined) {
-                                options.marginBottom = parseOption(semiColonSplit[index], 'margin-bottom');
-                            }
-                            
-                            if (semiColonSplit[index].split('margin-top:')[1] !== undefined) {
-                                options.marginTop = parseOption(semiColonSplit[index], 'margin-top');
-                            }
-                            
-                            if (semiColonSplit[index].split('modal-nav:')[1] !== undefined) {
-                                options.modalNav = parseOption(semiColonSplit[index], 'modal-nav');
-                            }
-                        });          
+                    options = {
+                        title: optionsParams.get('title'),
+                        btnX: optionsParams.get('btn-x'),
+                        btnY: optionsParams.get('btn-y'),
+                        btnZ: optionsParams.get('btn-z'),
+                        btnPos: optionsParams.get('btn-pos'),
+                        btnAppendTo: optionsParams.get('btn-append-to'),
+                        btnPrependTo: optionsParams.get('btn-prepend-to'),
+                        btnColor: optionsParams.get('btn-color'),
+                        scriptSelector: optionsParams.get('script-selector'),
+                        backdropRgb: optionsParams.get('backdrop-rgb'),
+                        renderInPage: optionsParams.get('render-in-page'),
+                        marginBottom: optionsParams.get('margin-bottom'),
+                        marginTop: optionsParams.get('margin-top')
+                    };
                                             
+                    if (optionsParams !== 'null') {
+                        
                         // Setup title attribute to be used later
                         if (options.title) {
                             modalBtn.setAttribute('data-view-markup-title', options.title);
@@ -273,13 +203,9 @@
                         // In page rendering
                         if (options.renderInPage) {
                             modalBtn.setAttribute('data-view-markup-in-page', 'true');
+                            item.setAttribute('data-view-markup-render-in-page', '');
                         }
-                        
-                        // Modal navigation
-                        if (options.modalNav === 'true') {
-                            modalBtn.setAttribute('data-view-markup-modal-nav', 'true');
-                        }
-                        
+                                                
                         // Bottom margin for in page view
                         if (options.marginBottom) {
                             item.closest('.view-markup').style.marginBottom = options.marginBottom;
@@ -294,16 +220,11 @@
 
 
                 // Check for preserve-attribute option
-                function leaveAttr(el) {
-                    let optionPreserveAttr = null;
+                function preserveViewMarkupAttr(el) {                   
+                    let optionsParams = convertToParamString(el.getAttribute('data-view-markup'));
+                    let optionPreserveAttr = optionsParams.get('preserve-attribute');
                     
-                    if (el.getAttribute('data-view-markup').split(';')) {
-                        let semiColonSplit = el.getAttribute('data-view-markup').split(';');
-                        
-                        if (semiColonSplit[0].split('preserve-attribute:')[1] !== undefined) {
-                            optionPreserveAttr = semiColonSplit[0].split('preserve-attribute:')[1].trim();
-                        }
-                                
+                    if (optionPreserveAttr) {                                
                         if (optionPreserveAttr === 'true') {
                             return true;
                         } else {
@@ -325,7 +246,7 @@
                 textStyle.setAttribute('id', 'viewMarkupStyle');
 
                 // Import compressed styles as a string
-                let textStyleString = `.view-markup-sr-only,.view-markup__content .view-markup__hidden-textarea,.view-markup__content .view-markup__switch [type=radio],.view-markup__content .view-markup__switch-label,.view-markup__modal-btn-text{position:absolute;overflow:hidden;clip:rect(0,0,0,0);width:1px;height:1px;margin:-1px;padding:0;white-space:nowrap;border:0}:root{--vm-color-primary:#1e2127;--vm-color-text:#e0e0e0;--vm-color-ui-controls:#343944;--vm-color-radio-background:#131519;--vm-color-switch-face:#3f4652;--vm-color-html-primary:#e06c75;--vm-color-js-primary:#e6c07b;--vm-color-border-common:rgba(0, 0, 0, 0.23);--vm-color-moon:lightyellow;--vm-color-sun:gold;--vm-color-block-highlight:#ff0000;--vm-color-gray-100:#f2f2f2;--vm-color-gray-200:#dedede;--vm-color-gray-800:#1e2127;--vm-height-modal-header:50px;--vm-spacing-outer-modal:15px;--vm-spacing-common:18px;--vm-size-touch-common:30px;--vm-ff-primary:Helvetica Neue,Helvetica,Arial,sans-serif;--vm-ff-code:Menlo,Consolas,DejaVu Sans Mono,monospace;--vm-ease-common:cubic-bezier(0.19, 1, 0.22, 1);--vm-modal-z:1000000000000;--vm-border-radius-common:12px}:root.js-view-markup-theme-light{--vm-color-primary:#fcfcfc;--vm-color-text:#333;--vm-color-ui-controls:#ededed;--vm-color-radio-background:#e8e8e8;--vm-color-switch-face:#fcfcfc;--vm-color-html-primary:#e45649;--vm-color-js-primary:#deac50;--vm-color-border-common:rgba(0, 0, 0, 0.06);--vm-color-moon:#333;--vm-color-sun:#333}.view-markup-sr-only{color:#000;background-color:#fff}.js-view-markup-modal-showing{overflow:hidden;height:100vh;scroll-behavior:smooth}.js-view-markup-modal-showing .view-markup__modal-btn:focus{z-index:var(--vm-modal-z)!important;-webkit-animation:modal-btn-bounce .3s .3s ease;animation:modal-btn-bounce .3s .3s ease}@-webkit-keyframes modal-btn-bounce{50%{margin-top:-5px}}@keyframes modal-btn-bounce{50%{margin-top:-5px}}.view-markup{position:relative}.view-markup-dynamic-nav{position:static;height:1px;width:1px;overflow:visible}button.view-markup__modal-btn{position:absolute;z-index:100;top:5px;left:5px;margin:0;display:flex;overflow:hidden;align-items:center;justify-content:center;width:2.1875em;height:1.5625em;padding:0;cursor:pointer;transition:left .2s ease,top .2s ease;letter-spacing:normal;opacity:.8;border:0;border-radius:3px;background:var(--vm-color-primary);box-shadow:1px 1px 4px rgba(0,0,0,.2);font-family:var(--vm-ff-code)!important;font-size:13px}button.view-markup__modal-btn:after{margin-top:2px;content:"</>";color:var(--vm-color-html-primary);font-size:62%;font-weight:700}button.view-markup__modal-btn:before{position:absolute;top:3px;left:0;width:100%;height:4px;content:"..";text-align:left;text-indent:3px;color:var(--vm-color-text);font-size:40%;line-height:0}button.view-markup__modal-btn:focus,button.view-markup__modal-btn:hover{opacity:1}button.view-markup__modal-btn:focus+.view-markup__highlight:nth-child(2),button.view-markup__modal-btn:hover+.view-markup__highlight:nth-child(2){position:absolute;z-index:99;top:0;left:0;width:100%;height:100%;content:"";pointer-events:none;border:3px solid rgba(255,0,0,.1);background-color:rgba(255,0,0,.05)}.view-markup-modal{position:fixed;z-index:var(--vm-modal-z);top:0;left:0;display:none;overflow:hidden;width:100%;height:100%;outline:0;background-color:rgba(30,33,39,.3);font-family:var(--vm-ff-code);line-height:normal}.view-markup-modal *{margin:0;padding:0;border:0;border-radius:0}.view-markup-modal:focus{outline:0}.view-markup-modal *{box-sizing:border-box;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto}.view-markup-modal.view-markup-modal--showing{display:block;overflow-x:hidden;overflow-y:auto}.view-markup-modal .view-markup-modal__dialog{position:relative;display:flex;align-items:center;width:auto;max-width:900px;min-height:calc(100% - var(--vm-spacing-outer-modal) * 2);margin:15px auto;padding:0 15px;transition:max-width .5s var(--vm-ease-common),opacity 90ms linear,filter 90ms linear;pointer-events:none}.view-markup-modal .view-markup__content{border-radius:var(--vm-border-radius-common);box-shadow:0 19px 38px rgba(0,0,0,.4)}.view-markup-modal .view-markup__code{height:490px}.js-view-markup-size-large .view-markup-modal .view-markup-modal__dialog{max-width:100%}.js-view-markup-size-large .view-markup-modal .view-markup__code{width:100%;height:calc(100vh - (40px + var(--vm-height-modal-header) + 1px));max-height:calc(100vh - (40px + var(--vm-height-modal-header) + 1px))}.view-markup__content{position:relative;display:flex;overflow:hidden;flex-direction:column;width:100%;pointer-events:auto;outline:0;background-color:var(--vm-color-primary);background-clip:padding-box;font-size:13px;font-weight:500}.view-markup__content *{-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto}.view-markup__content .view-markup__header{position:relative;display:flex;align-items:center;flex-direction:row;height:var(--vm-height-modal-header);padding:5px var(--vm-spacing-common) 5px var(--vm-spacing-common);color:var(--vm-color-text);border-bottom:1px solid var(--vm-color-border-common)}.view-markup__content .view-markup__header:after{position:absolute;z-index:1;top:0;right:0;width:75px;height:100%;content:"";pointer-events:none;background:linear-gradient(90deg,rgba(30,33,39,0) 0,#1e2127 32%)}.view-markup__content .view-markup__title{position:relative;z-index:0;overflow:hidden;padding-right:40px;white-space:nowrap;letter-spacing:.5px;font-family:var(--vm-ff-primary);font-size:1.16666em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:antialiased}.view-markup__content .view-markup__nav{position:relative;z-index:2;display:flex;margin-right:8px;margin-left:-8px}.view-markup__content .view-markup__close-btn,.view-markup__content .view-markup__next-btn,.view-markup__content .view-markup__prev-btn,.view-markup__content .view-markup__settings-btn{display:inline-flex;align-items:center;justify-content:center;width:var(--vm-size-touch-common);min-width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);padding:0;cursor:pointer;text-align:center;color:var(--vm-color-text);border:0;border-radius:60px;background-color:transparent;line-height:0;margin-top:0;margin-bottom:0}.view-markup__content .view-markup__close-btn svg,.view-markup__content .view-markup__next-btn svg,.view-markup__content .view-markup__prev-btn svg,.view-markup__content .view-markup__settings-btn svg{position:relative;width:auto;height:1em;pointer-events:none;font-size:1em}.view-markup__content .view-markup__close-btn:focus,.view-markup__content .view-markup__close-btn:hover,.view-markup__content .view-markup__close-btn[aria-expanded=true],.view-markup__content .view-markup__next-btn:focus,.view-markup__content .view-markup__next-btn:hover,.view-markup__content .view-markup__next-btn[aria-expanded=true],.view-markup__content .view-markup__prev-btn:focus,.view-markup__content .view-markup__prev-btn:hover,.view-markup__content .view-markup__prev-btn[aria-expanded=true],.view-markup__content .view-markup__settings-btn:focus,.view-markup__content .view-markup__settings-btn:hover,.view-markup__content .view-markup__settings-btn[aria-expanded=true]{opacity:.8;background-color:var(--vm-color-ui-controls)}.view-markup__content .view-markup__prev-btn svg{right:.125em}.view-markup__content .view-markup__prev-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__next-btn{margin:0}.view-markup__content .view-markup__next-btn svg{left:.125em}.view-markup__content .view-markup__next-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__close-btn{position:relative;z-index:2;margin-right:-5px;margin-left:2px}.view-markup__content .view-markup__close-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__title+.view-markup__close-btn{margin-left:auto}.view-markup__content .view-markup__controls{position:absolute;z-index:1;top:8px;right:10px;display:flex;margin-left:auto;padding:2px 0 2px 2px;color:var(--vm-color-text);border-radius:100px;background-color:var(--vm-color-primary);font-size:1em}.view-markup__content .view-markup__copy-btn{position:relative;z-index:2;flex:0 0 auto;max-width:none;height:var(--vm-size-touch-common);margin-right:0;padding:6px 12px;cursor:pointer;text-align:center;letter-spacing:.5px;text-transform:none;color:var(--vm-color-text);border:0;border-radius:100px;background-color:var(--vm-color-ui-controls);font-family:var(--vm-ff-primary);font-size:.92em;font-weight:400;line-height:normal;margin-top:0;margin-bottom:0}.view-markup__content .view-markup__copy-btn:disabled{opacity:.5}.view-markup__content .view-markup__copy-btn:focus,.view-markup__content .view-markup__copy-btn:hover{opacity:.8;color:inherit}.view-markup__content .view-markup__settings-btn svg{height:auto}.view-markup__content .view-markup__settings-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__settings{position:relative;z-index:5;margin-right:2px;margin-left:2px}.view-markup__content .view-markup__settings-dropdown{position:absolute;top:75%;right:5%;display:none;width:160px;letter-spacing:.5px;border-radius:var(--vm-border-radius-common);background:var(--vm-color-primary);box-shadow:2px 2px 10px rgba(0,0,0,.65);font-family:var(--vm-ff-primary);font-weight:400}.view-markup__content .view-markup__settings-dropdown.view-markup__settings-dropdown--showing{display:block}.view-markup__content .view-markup__settings-item{display:flex;align-items:center;justify-content:center;padding:6px 10px;font-size:.92em}.view-markup__content .view-markup__settings-item:last-child{border:0}.view-markup__content .view-markup__settings-label{color:inherit;font-size:inherit;font-weight:inherit;font-style:inherit}.view-markup__content .view-markup__switch-face{position:absolute;z-index:0;left:2px;overflow:hidden;width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);transition:all .3s var(--vm-ease-common)}.view-markup__content .view-markup__switch-face:after{position:absolute;z-index:0;top:0;left:0;width:100%;height:100%;content:"";border-radius:60px;background:var(--vm-color-switch-face)}.view-markup__content .view-markup__switch{position:relative;display:flex;align-items:center;flex-direction:row;justify-content:center;box-sizing:content-box;width:calc(var(--vm-size-touch-common) * 2);height:var(--vm-size-touch-common);margin-top:0;margin-right:0;margin-left:auto;padding:2px;border:0 none!important;border-radius:60px;background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__switch:focus,.view-markup__content .view-markup__switch:hover{opacity:.8}.view-markup__content .view-markup__switch label{position:static;z-index:1;top:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);margin:0;margin-bottom:0;padding:0;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;color:var(--vm-color-text);font-family:var(--vm-ff-code);font-size:1em;font-weight:400;line-height:0;-webkit-touch-callout:none}.view-markup__content .view-markup__switch label:before{position:absolute;top:0;left:0;width:calc(var(--vm-size-touch-common) * 2.2);height:100%;content:""}.view-markup__content .view-markup__switch label:first-of-type{margin-right:auto}.view-markup__content .view-markup__switch label:last-of-type{margin-left:auto}.view-markup__content .view-markup__switch .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__switch [type=radio]:focus~.view-markup__switch-face:after{background-color:#4a5261}.view-markup__content .view-markup__switch [type=radio]:checked+label{pointer-events:none}.view-markup__content .view-markup__switch [type=radio]:last-of-type:checked~.view-markup__switch-face{left:calc(100% - 32px)}.view-markup__content .view-markup__switch-moon{transform:rotate(13deg)}.view-markup__content .view-markup__switch-moon .sty0{fill:var(--vm-color-moon)}.view-markup__content .view-markup__switch-sun{transform:rotate(13deg)}.view-markup__content .view-markup__switch-sun .sty0{fill:var(--vm-color-sun)}.view-markup__content input.view-markup__font-size{flex:0 0 40px;padding:0;line-height:normal;max-width:40px;height:var(--vm-size-touch-common);margin-bottom:0;margin-left:auto;text-align:center;text-indent:0;color:var(--vm-color-text);border:0;border-radius:4px;background-color:var(--vm-color-radio-background);font-family:var(--vm-ff-code);font-size:1em}.view-markup__content input.view-markup__font-size::-webkit-inner-spin-button{-webkit-appearance:none}.view-markup__content input.view-markup__font-size:active,.view-markup__content input.view-markup__font-size:focus,.view-markup__content input.view-markup__font-size:hover{background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__main{flex:0 0 100%;min-width:100%;padding:0}.view-markup__content .view-markup__body{display:flex;flex-direction:row;position:relative}.view-markup__content .view-markup__pre{position:relative;display:flex;margin:0;padding:0;border:0;border-radius:0;background-color:transparent;font-size:1em}.view-markup__content .view-markup__pre:after,.view-markup__content .view-markup__pre:before{position:absolute;top:0;right:0;width:var(--vm-spacing-common);height:100%;content:"";pointer-events:none;background:0 0;background:linear-gradient(90deg,rgba(30,33,39,0) 0,rgba(30,33,39,.8) 50%)}.view-markup__content .view-markup__pre:after{top:auto;bottom:0;width:100%;height:var(--vm-spacing-common);background:linear-gradient(180deg,rgba(30,33,39,0) 0,rgba(30,33,39,.8) 50%)}.view-markup__content .view-markup__code{overflow-y:auto;width:100%;min-height:190px;max-height:490px;padding:var(--vm-spacing-common);transition:width .5s var(--vm-ease-common),height .5s var(--vm-ease-common),max-height .5s var(--vm-ease-common);white-space:pre;letter-spacing:normal;border:0;border-radius:0;outline:0!important;background-color:var(--vm-color-primary);font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:1em;line-height:1.45;scrollbar-color:rgba(255,255,255,.75) transparent;scrollbar-width:thin}.view-markup__content .view-markup__code::-webkit-scrollbar-corner{background-color:transparent}.view-markup__content .view-markup__code::-webkit-scrollbar{width:5px;height:5px}.view-markup__content .view-markup__code::-webkit-scrollbar-track{background-color:transparent}.view-markup__content .view-markup__code::-webkit-scrollbar-thumb{outline:0;background-color:rgba(255,255,255,.75)}.view-markup__content .view-markup__tabs{position:absolute;z-index:1;top:8px;left:10px;display:none;align-items:center;flex-direction:row;justify-content:center;box-sizing:content-box;height:43px;height:var(--vm-size-touch-common);margin-right:auto;margin-left:0;padding:2px;border-radius:60px;background-color:var(--vm-color-primary);background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__tabs-button{height:30px;padding-right:15px;padding-left:15px;cursor:pointer;color:var(--vm-color-text);border:0;border-radius:60px;background-color:var(--vm-color-ui-controls);font-size:.92em}.view-markup__content .view-markup__tabs-button:hover{opacity:.8;background-color:#252830}.view-markup__content .view-markup__code--js{display:none}.view-markup__content.view-markup-modal--has-js .view-markup__code{padding-top:50px}.view-markup__content.view-markup-modal--has-js .view-markup__tabs-button--html{pointer-events:none}.view-markup__content.view-markup-modal--has-js .view-markup__tabs-button--js{margin-left:2px;background-color:#252830}.view-markup__content.view-markup-modal--has-js .view-markup__tabs{display:inline-flex}.view-markup__content.view-markup--js-tab-showing .view-markup__tabs-button--html{pointer-events:initial;background-color:#252830}.view-markup__content.view-markup--js-tab-showing .view-markup__tabs-button--js{pointer-events:none;background-color:var(--vm-color-ui-controls)}.view-markup__content.view-markup--js-tab-showing .view-markup__code--html{display:none}.view-markup__content.view-markup--js-tab-showing .view-markup__code--js{display:block}.view-markup__in-page-view{margin-top:var(--vm-spacing-common);margin-bottom:var(--vm-spacing-common)}.js-view-markup-theme-light .view-markup__modal-btn{border:1px solid var(--vm-color-border-common)}.js-view-markup-theme-light .view-markup-modal .view-markup__content{border:0}.js-view-markup-theme-light .view-markup__header:after{background:linear-gradient(90deg,rgba(252,252,252,0) 0,#fcfcfc 25%)}.js-view-markup-theme-light .view-markup__settings-dropdown{box-shadow:2px 2px 10px rgba(0,0,0,.1)}.js-view-markup-theme-light .view-markup__tabs-button{background-color:#fff}.js-view-markup-theme-light .view-markup__tabs-button:hover{opacity:.8;background-color:#e6e6e6}.js-view-markup-theme-light .view-markup-modal--has-js .view-markup__tabs-button--js{background-color:#f2f2f2}.js-view-markup-theme-light .view-markup--js-tab-showing .view-markup__tabs-button--html{background-color:#f2f2f2}.js-view-markup-theme-light .view-markup--js-tab-showing .view-markup__tabs-button--js{background-color:#fff}.js-view-markup-theme-light .view-markup__pre:after,.js-view-markup-theme-light .view-markup__pre:before{background:linear-gradient(90deg,rgba(252,252,252,0) 0,rgba(252,252,252,.8) 50%)}.js-view-markup-theme-light .view-markup__pre:after{background:linear-gradient(180deg,rgba(252,252,252,0) 0,rgba(252,252,252,.8) 50%)}.js-view-markup-theme-light .view-markup__code{scrollbar-color:rgba(51,51,51,.75) transparent}.js-view-markup-theme-light .view-markup__code::-webkit-scrollbar-thumb{outline:0;background-color:rgba(51,51,51,.75)}.js-view-markup-theme-light .view-markup__switch:focus,.js-view-markup-theme-light .view-markup__switch:hover{opacity:.8}.js-view-markup-theme-light .view-markup__switch [type=radio]:focus~.view-markup__switch-face:after{background-color:#fff}.js-view-markup-theme-light .view-markup--fancy-hover:before{background-color:rgba(0,0,0,.1)}.js-view-markup-theme-light .view-markup__in-page-view{border:1px solid var(--vm-color-border-common)}.view-markup-tabs{font-size:16px}.view-markup-tabs .view-markup-tabs__nav{display:flex;align-items:center;flex-wrap:wrap;background-color:var(--vm-color-gray-100)}.view-markup-tabs .view-markup-tabs__title{margin-top:14px;padding:0 20px;line-height:normal}.view-markup-tabs .view-markup-tabs__tabs-list{display:flex;overflow:auto;width:100%;padding:13px 20px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 20px),rgba(0,0,0,0) 100%);mask-image:linear-gradient(to right,#000 calc(100% - 20px),rgba(0,0,0,0) 100%);scrollbar-color:var(--vm-color-gray-200) transparent;scrollbar-width:thin}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-corner{background-color:transparent}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar{width:5px;height:5px}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-track{background-color:transparent}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-thumb{outline:0;background-color:var(--vm-color-gray-200)}.view-markup-tabs .view-markup-tabs__tab-button{display:flex;align-items:center;justify-content:center;margin-right:5px;padding:10px 20px;cursor:pointer;text-align:center;white-space:nowrap;border:0;border-radius:4px;background-color:#fff;box-shadow:1px 1px 2px rgba(0,0,0,.15);font-size:.92em;font-weight:700}.view-markup-tabs .view-markup-tabs__tab-button[aria-selected=true]{color:var(--vm-color-gray-100);background-color:var(--vm-color-gray-800)}.view-markup-tabs .view-markup-tabs__tab-button:last-child{margin-right:0}.view-markup__in-page-view,.view-markup__modal-btn{visibility:hidden}.js-view-markup-ready .view-markup__in-page-view,.js-view-markup-ready .view-markup__modal-btn{visibility:visible}
+                let textStyleString = `.view-markup-sr-only,.view-markup__content .view-markup__hidden-textarea,.view-markup__content .view-markup__switch [type=radio],.view-markup__content .view-markup__switch-label,.view-markup__modal-btn-text{position:absolute;overflow:hidden;clip:rect(0,0,0,0);width:1px;height:1px;margin:-1px;padding:0;white-space:nowrap;border:0}:root{--vm-color-primary:#1e2127;--vm-color-text:#e0e0e0;--vm-color-ui-controls:#343944;--vm-color-radio-background:#131519;--vm-color-switch-face:#3f4652;--vm-color-html-primary:#e06c75;--vm-color-js-primary:#e6c07b;--vm-color-border-common:rgba(0, 0, 0, 0.175);--vm-color-moon:lightyellow;--vm-color-sun:gold;--vm-color-block-highlight:#ff0000;--vm-color-gray-100:#f2f2f2;--vm-color-gray-200:#dedede;--vm-color-gray-800:#1e2127;--vm-height-modal-header:50px;--vm-spacing-outer-modal:15px;--vm-spacing-common:18px;--vm-size-touch-common:30px;--vm-ff-primary:Helvetica Neue,Helvetica,Arial,sans-serif;--vm-ff-code:Menlo,Consolas,DejaVu Sans Mono,monospace;--vm-ease-common:cubic-bezier(0.19, 1, 0.22, 1);--vm-modal-z:1000000000000;--vm-border-radius-common:12px}:root.js-view-markup-theme-light{--vm-color-primary:#fcfcfc;--vm-color-text:#333;--vm-color-ui-controls:#ededed;--vm-color-radio-background:#e8e8e8;--vm-color-switch-face:#fcfcfc;--vm-color-html-primary:#e45649;--vm-color-js-primary:#deac50;--vm-color-border-common:rgba(0, 0, 0, 0.06);--vm-color-moon:#333;--vm-color-sun:#333}.view-markup-sr-only{color:#000;background-color:#fff}.js-view-markup-modal-showing{overflow:hidden;height:100vh;scroll-behavior:smooth}.js-view-markup-modal-showing .view-markup__modal-btn:focus{z-index:var(--vm-modal-z)!important;-webkit-animation:modal-btn-bounce .3s .3s ease;animation:modal-btn-bounce .3s .3s ease}@-webkit-keyframes modal-btn-bounce{50%{margin-top:-5px}}@keyframes modal-btn-bounce{50%{margin-top:-5px}}.view-markup{position:relative}.view-markup-dynamic-nav{position:static;height:1px;width:1px;overflow:visible}button.view-markup__modal-btn{position:absolute;z-index:100;top:5px;left:5px;margin:0;display:flex;overflow:hidden;align-items:center;justify-content:center;width:2.1875em;height:1.5625em;padding:0;cursor:pointer;transition:left .2s ease,top .2s ease;letter-spacing:normal;opacity:.8;border:0;border-radius:3px;background:var(--vm-color-primary);box-shadow:1px 1px 4px rgba(0,0,0,.2);font-family:var(--vm-ff-code)!important;font-size:13px}button.view-markup__modal-btn:after{margin-top:2px;content:"</>";color:var(--vm-color-html-primary);font-size:62%;font-weight:700}button.view-markup__modal-btn:before{position:absolute;top:3px;left:0;width:100%;height:4px;content:"..";text-align:left;text-indent:3px;color:var(--vm-color-text);font-size:40%;line-height:0}button.view-markup__modal-btn:focus,button.view-markup__modal-btn:hover{opacity:1}button.view-markup__modal-btn:focus+.view-markup__highlight:nth-child(2),button.view-markup__modal-btn:hover+.view-markup__highlight:nth-child(2){position:absolute;z-index:99;top:0;left:0;width:100%;height:100%;content:"";pointer-events:none;border:3px solid rgba(255,0,0,.1);background-color:rgba(255,0,0,.05)}.view-markup-modal{position:fixed;z-index:var(--vm-modal-z);top:0;left:0;display:none;overflow:hidden;width:100%;height:100%;outline:0;background-color:rgba(30,33,39,.3);font-family:var(--vm-ff-code);line-height:normal}.view-markup-modal *{margin:0;padding:0;border:0;border-radius:0}.view-markup-modal:focus{outline:0}.view-markup-modal *{box-sizing:border-box;-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto}.view-markup-modal.view-markup-modal--showing{display:block;overflow-x:hidden;overflow-y:auto}.view-markup-modal .view-markup-modal__dialog{position:relative;display:flex;align-items:center;width:auto;max-width:900px;min-height:calc(100% - var(--vm-spacing-outer-modal) * 2);margin:15px auto;padding:0 15px;transition:max-width .5s var(--vm-ease-common),opacity 90ms linear,filter 90ms linear;pointer-events:none}.view-markup-modal .view-markup__content{border-radius:var(--vm-border-radius-common);box-shadow:0 19px 38px rgba(0,0,0,.4)}.view-markup-modal .view-markup__code{height:490px}.js-view-markup-size-large .view-markup-modal .view-markup-modal__dialog{max-width:100%}.js-view-markup-size-large .view-markup-modal .view-markup__code{width:100%;height:calc(100vh - (40px + var(--vm-height-modal-header) + 1px));max-height:calc(100vh - (40px + var(--vm-height-modal-header) + 1px))}.view-markup__content{position:relative;display:flex;overflow:hidden;flex-direction:column;width:100%;pointer-events:auto;outline:0;background-color:var(--vm-color-primary);background-clip:padding-box;font-size:13px;font-weight:500}.view-markup__content *{-webkit-font-smoothing:auto;-moz-osx-font-smoothing:auto}.view-markup__content .view-markup__header{position:relative;display:flex;align-items:center;flex-direction:row;height:var(--vm-height-modal-header);padding:5px var(--vm-spacing-common) 5px var(--vm-spacing-common);color:var(--vm-color-text);border-bottom:1px solid var(--vm-color-border-common)}.view-markup__content .view-markup__header:after{position:absolute;z-index:1;top:0;right:0;width:75px;height:100%;content:"";pointer-events:none;background:linear-gradient(90deg,rgba(30,33,39,0) 0,#1e2127 32%)}.view-markup__content .view-markup__title{position:relative;z-index:0;overflow:hidden;padding-right:40px;white-space:nowrap;letter-spacing:.5px;font-family:var(--vm-ff-primary);font-size:1.16666em;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:antialiased}.view-markup__content .view-markup__nav{position:relative;z-index:2;display:flex;margin-right:8px;margin-left:-8px}.view-markup__content .view-markup__close-btn,.view-markup__content .view-markup__next-btn,.view-markup__content .view-markup__prev-btn,.view-markup__content .view-markup__settings-btn{display:inline-flex;align-items:center;justify-content:center;width:var(--vm-size-touch-common);min-width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);padding:0;cursor:pointer;text-align:center;color:var(--vm-color-text);border:0;border-radius:60px;background-color:transparent;line-height:0;margin-top:0;margin-bottom:0}.view-markup__content .view-markup__close-btn svg,.view-markup__content .view-markup__next-btn svg,.view-markup__content .view-markup__prev-btn svg,.view-markup__content .view-markup__settings-btn svg{position:relative;width:auto;height:1em;pointer-events:none;font-size:1em}.view-markup__content .view-markup__close-btn:focus,.view-markup__content .view-markup__close-btn:hover,.view-markup__content .view-markup__close-btn[aria-expanded=true],.view-markup__content .view-markup__next-btn:focus,.view-markup__content .view-markup__next-btn:hover,.view-markup__content .view-markup__next-btn[aria-expanded=true],.view-markup__content .view-markup__prev-btn:focus,.view-markup__content .view-markup__prev-btn:hover,.view-markup__content .view-markup__prev-btn[aria-expanded=true],.view-markup__content .view-markup__settings-btn:focus,.view-markup__content .view-markup__settings-btn:hover,.view-markup__content .view-markup__settings-btn[aria-expanded=true]{opacity:.8;background-color:var(--vm-color-ui-controls)}.view-markup__content .view-markup__prev-btn svg{right:.125em}.view-markup__content .view-markup__prev-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__next-btn{margin:0}.view-markup__content .view-markup__next-btn svg{left:.125em}.view-markup__content .view-markup__next-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__close-btn{position:relative;z-index:2;margin-right:-5px;margin-left:2px}.view-markup__content .view-markup__close-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__title+.view-markup__close-btn{margin-left:auto}.view-markup__content .view-markup__controls{position:absolute;z-index:1;top:8px;right:10px;display:flex;margin-left:auto;padding:2px 0 2px 2px;color:var(--vm-color-text);border-radius:100px;background-color:var(--vm-color-primary);font-size:1em}.view-markup__content .view-markup__copy-btn{position:relative;z-index:2;flex:0 0 auto;max-width:none;height:var(--vm-size-touch-common);margin-right:0;padding:6px 12px;cursor:pointer;text-align:center;letter-spacing:.5px;text-transform:none;color:var(--vm-color-text);border:0;border-radius:100px;background-color:var(--vm-color-ui-controls);font-family:var(--vm-ff-primary);font-size:.92em;font-weight:400;line-height:normal;margin-top:0;margin-bottom:0}.view-markup__content .view-markup__copy-btn:disabled{opacity:.5}.view-markup__content .view-markup__copy-btn:focus,.view-markup__content .view-markup__copy-btn:hover{opacity:.8;color:inherit}.view-markup__content .view-markup__settings-btn svg{height:auto}.view-markup__content .view-markup__settings-btn .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__settings{position:relative;z-index:5;margin-right:2px;margin-left:2px}.view-markup__content .view-markup__settings-dropdown{position:absolute;top:75%;right:5%;display:none;width:160px;letter-spacing:.5px;border-radius:var(--vm-border-radius-common);background:var(--vm-color-primary);box-shadow:2px 2px 10px rgba(0,0,0,.65);font-family:var(--vm-ff-primary);font-weight:400}.view-markup__content .view-markup__settings-dropdown.view-markup__settings-dropdown--showing{display:block}.view-markup__content .view-markup__settings-item{display:flex;align-items:center;justify-content:center;padding:6px 10px;font-size:.92em}.view-markup__content .view-markup__settings-item:last-child{border:0}.view-markup__content .view-markup__settings-label{color:inherit;font-size:inherit;font-weight:inherit;font-style:inherit}.view-markup__content .view-markup__switch-face{position:absolute;z-index:0;left:2px;overflow:hidden;width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);transition:all .3s var(--vm-ease-common)}.view-markup__content .view-markup__switch-face:after{position:absolute;z-index:0;top:0;left:0;width:100%;height:100%;content:"";border-radius:60px;background:var(--vm-color-switch-face)}.view-markup__content .view-markup__switch{position:relative;display:flex;align-items:center;flex-direction:row;justify-content:center;box-sizing:content-box;width:calc(var(--vm-size-touch-common) * 2);height:var(--vm-size-touch-common);margin-top:0;margin-right:0;margin-left:auto;padding:2px;border:0 none!important;border-radius:60px;background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__switch:focus,.view-markup__content .view-markup__switch:hover{opacity:.8}.view-markup__content .view-markup__switch label{position:static;z-index:1;top:0;display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:var(--vm-size-touch-common);height:var(--vm-size-touch-common);margin:0;margin-bottom:0;padding:0;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;color:var(--vm-color-text);font-family:var(--vm-ff-code);font-size:1em;font-weight:400;line-height:0;-webkit-touch-callout:none}.view-markup__content .view-markup__switch label:before{position:absolute;top:0;left:0;width:calc(var(--vm-size-touch-common) * 2.2);height:100%;content:""}.view-markup__content .view-markup__switch label:first-of-type{margin-right:auto}.view-markup__content .view-markup__switch label:last-of-type{margin-left:auto}.view-markup__content .view-markup__switch .sty0{fill:var(--vm-color-text)}.view-markup__content .view-markup__switch [type=radio]:focus~.view-markup__switch-face:after{background-color:#4a5261}.view-markup__content .view-markup__switch [type=radio]:checked+label{pointer-events:none}.view-markup__content .view-markup__switch [type=radio]:last-of-type:checked~.view-markup__switch-face{left:calc(100% - 32px)}.view-markup__content .view-markup__switch-moon{transform:rotate(13deg)}.view-markup__content .view-markup__switch-moon .sty0{fill:var(--vm-color-moon)}.view-markup__content .view-markup__switch-sun{transform:rotate(13deg)}.view-markup__content .view-markup__switch-sun .sty0{fill:var(--vm-color-sun)}.view-markup__content input.view-markup__font-size{flex:0 0 40px;padding:0;line-height:normal;max-width:40px;height:var(--vm-size-touch-common);margin-bottom:0;margin-left:auto;text-align:center;text-indent:0;color:var(--vm-color-text);border:0;border-radius:4px;background-color:var(--vm-color-radio-background);font-family:var(--vm-ff-code);font-size:1em}.view-markup__content input.view-markup__font-size::-webkit-inner-spin-button{-webkit-appearance:none}.view-markup__content input.view-markup__font-size:active,.view-markup__content input.view-markup__font-size:focus,.view-markup__content input.view-markup__font-size:hover{background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__main{flex:0 0 100%;min-width:100%;padding:0}.view-markup__content .view-markup__body{display:flex;flex-direction:row;position:relative}.view-markup__content .view-markup__pre{position:relative;display:flex;margin:0;padding:0;border:0;border-radius:0;background-color:transparent;font-size:1em}.view-markup__content .view-markup__pre:after,.view-markup__content .view-markup__pre:before{position:absolute;top:0;right:0;width:var(--vm-spacing-common);height:100%;content:"";pointer-events:none;background:0 0;background:linear-gradient(90deg,rgba(30,33,39,0) 0,rgba(30,33,39,.8) 50%)}.view-markup__content .view-markup__pre:after{top:auto;bottom:0;width:100%;height:var(--vm-spacing-common);background:linear-gradient(180deg,rgba(30,33,39,0) 0,rgba(30,33,39,.8) 50%)}.view-markup__content .view-markup__code{overflow-y:auto;width:100%;min-height:190px;max-height:490px;padding:var(--vm-spacing-common);transition:width .5s var(--vm-ease-common),height .5s var(--vm-ease-common),max-height .5s var(--vm-ease-common);white-space:pre;letter-spacing:normal;border:0;border-radius:0;outline:0!important;background-color:var(--vm-color-primary);font-family:Menlo,Consolas,"DejaVu Sans Mono",monospace;font-size:1em;line-height:1.45;scrollbar-color:rgba(255,255,255,.75) transparent;scrollbar-width:thin}.view-markup__content .view-markup__code::-webkit-scrollbar-corner{background-color:transparent}.view-markup__content .view-markup__code::-webkit-scrollbar{width:5px;height:5px}.view-markup__content .view-markup__code::-webkit-scrollbar-track{background-color:transparent}.view-markup__content .view-markup__code::-webkit-scrollbar-thumb{outline:0;background-color:rgba(255,255,255,.75)}.view-markup__content .view-markup__tabs{position:absolute;z-index:1;top:8px;left:10px;display:none;align-items:center;flex-direction:row;justify-content:center;box-sizing:content-box;height:43px;height:var(--vm-size-touch-common);margin-right:auto;margin-left:0;padding:2px;border-radius:60px;background-color:var(--vm-color-primary);background-color:var(--vm-color-radio-background)}.view-markup__content .view-markup__tabs-button{height:30px;padding-right:15px;padding-left:15px;cursor:pointer;color:var(--vm-color-text);border:0;border-radius:60px;background-color:var(--vm-color-ui-controls);font-size:.92em}.view-markup__content .view-markup__tabs-button:hover{opacity:.8;background-color:#252830}.view-markup__content .view-markup__code--js{display:none}.view-markup__content.view-markup-modal--has-js .view-markup__code{padding-top:50px}.view-markup__content.view-markup-modal--has-js .view-markup__tabs-button--html{pointer-events:none}.view-markup__content.view-markup-modal--has-js .view-markup__tabs-button--js{margin-left:2px;background-color:#252830}.view-markup__content.view-markup-modal--has-js .view-markup__tabs{display:inline-flex}.view-markup__content.view-markup--js-tab-showing .view-markup__tabs-button--html{pointer-events:initial;background-color:#252830}.view-markup__content.view-markup--js-tab-showing .view-markup__tabs-button--js{pointer-events:none;background-color:var(--vm-color-ui-controls)}.view-markup__content.view-markup--js-tab-showing .view-markup__code--html{display:none}.view-markup__content.view-markup--js-tab-showing .view-markup__code--js{display:block}.view-markup__in-page-view{margin-top:var(--vm-spacing-common);margin-bottom:var(--vm-spacing-common)}.js-view-markup-theme-light .view-markup__modal-btn{border:1px solid var(--vm-color-border-common)}.js-view-markup-theme-light .view-markup-modal .view-markup__content{border:0}.js-view-markup-theme-light .view-markup__header:after{background:linear-gradient(90deg,rgba(252,252,252,0) 0,#fcfcfc 25%)}.js-view-markup-theme-light .view-markup__settings-dropdown{box-shadow:2px 2px 10px rgba(0,0,0,.1)}.js-view-markup-theme-light .view-markup__tabs-button{background-color:#fff}.js-view-markup-theme-light .view-markup__tabs-button:hover{opacity:.8;background-color:#e6e6e6}.js-view-markup-theme-light .view-markup-modal--has-js .view-markup__tabs-button--js{background-color:#f2f2f2}.js-view-markup-theme-light .view-markup--js-tab-showing .view-markup__tabs-button--html{background-color:#f2f2f2}.js-view-markup-theme-light .view-markup--js-tab-showing .view-markup__tabs-button--js{background-color:#fff}.js-view-markup-theme-light .view-markup__pre:after,.js-view-markup-theme-light .view-markup__pre:before{background:linear-gradient(90deg,rgba(252,252,252,0) 0,rgba(252,252,252,.8) 50%)}.js-view-markup-theme-light .view-markup__pre:after{background:linear-gradient(180deg,rgba(252,252,252,0) 0,rgba(252,252,252,.8) 50%)}.js-view-markup-theme-light .view-markup__code{scrollbar-color:rgba(51,51,51,.75) transparent}.js-view-markup-theme-light .view-markup__code::-webkit-scrollbar-thumb{outline:0;background-color:rgba(51,51,51,.75)}.js-view-markup-theme-light .view-markup__switch:focus,.js-view-markup-theme-light .view-markup__switch:hover{opacity:.8}.js-view-markup-theme-light .view-markup__switch [type=radio]:focus~.view-markup__switch-face:after{background-color:#fff}.js-view-markup-theme-light .view-markup--fancy-hover:before{background-color:rgba(0,0,0,.1)}.js-view-markup-theme-light .view-markup__in-page-view{border:1px solid var(--vm-color-border-common)}.view-markup-tabs{font-size:16px}.view-markup-tabs .view-markup-tabs__nav{display:flex;align-items:center;flex-wrap:wrap;background-color:var(--vm-color-gray-100)}.view-markup-tabs .view-markup-tabs__title{margin-top:14px;padding:0 20px;line-height:normal}.view-markup-tabs .view-markup-tabs__tabs-list{display:flex;overflow:auto;width:100%;padding:13px 20px;-webkit-mask-image:linear-gradient(to right,#000 calc(100% - 20px),rgba(0,0,0,0) 100%);mask-image:linear-gradient(to right,#000 calc(100% - 20px),rgba(0,0,0,0) 100%);scrollbar-color:var(--vm-color-gray-200) transparent;scrollbar-width:thin}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-corner{background-color:transparent}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar{width:5px;height:5px}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-track{background-color:transparent}.view-markup-tabs .view-markup-tabs__tabs-list::-webkit-scrollbar-thumb{outline:0;background-color:var(--vm-color-gray-200)}.view-markup-tabs .view-markup-tabs__tab-button{display:flex;align-items:center;justify-content:center;margin-right:5px;padding:10px 20px;cursor:pointer;text-align:center;white-space:nowrap;border:0;border-radius:4px;background-color:#fff;box-shadow:1px 1px 2px rgba(0,0,0,.15);font-size:.92em;font-weight:700}.view-markup-tabs .view-markup-tabs__tab-button[aria-selected=true]{color:var(--vm-color-gray-100);background-color:var(--vm-color-gray-800)}.view-markup-tabs .view-markup-tabs__tab-button:last-child{margin-right:0}.view-markup__in-page-view,.view-markup__modal-btn{visibility:hidden}.js-view-markup-ready .view-markup__in-page-view,.js-view-markup-ready .view-markup__modal-btn{visibility:visible}
 `;
 
                 // Apply in page styles to style tag
@@ -402,12 +323,16 @@
                 // -----------------------------------------------------------------------------
                     
                 // Setup modal outer div and attributes
+                let modalEl = document.createElement('div');
                 modalEl.classList.add('view-markup-modal');
-                modalEl.setAttribute('id', 'viewMarkupModal');
-                modalEl.setAttribute('aria-labelledby', 'viewMarkupModalTitle');
-                modalEl.setAttribute('aria-modal', true);
-                modalEl.setAttribute('role', 'dialog');
-                modalEl.setAttribute('tabindex', '-1');
+                
+                setAttributes(modalEl, {
+                    'id': 'viewMarkupModal',
+                    'aria-labelledby': 'viewMarkupModalTitle',
+                    'aria-modal': 'true',
+                    'role': 'dialog',
+                    'tabindex': '-1',
+                });
 
                 // Create modal dialog div
                 let modalDialog = document.createElement('div');
@@ -508,8 +433,7 @@
                     // Add ready class on body
                     document.documentElement.classList.add('js-view-markup-ready');
 
-                    const vmReadyEvent = document.createEvent('Event');
-                    vmReadyEvent.initEvent('ViewMarkupReady', true, true);
+                    const vmReadyEvent = new Event('ViewMarkupReady');
                     window.dispatchEvent(vmReadyEvent);
                 }
 
@@ -536,7 +460,6 @@
                 let fontSize = document.querySelectorAll('.view-markup__font-size');
                 let htmlTab = document.querySelectorAll('.view-markup__tabs-button--html');
                 let jsTab = document.querySelectorAll('.view-markup__tabs-button--js');
-                let inPageCodeBlock = document.querySelectorAll('.view-markup-in-page');
 
                 // Modal specific elements
                 let modalCodeHtmlEL = document.querySelector('.view-markup-modal .view-markup__code--html');
@@ -545,9 +468,6 @@
                 let modalSizeMedium = document.querySelectorAll('.view-markup__size-medium');
                 let modalSizeLarge = document.querySelectorAll('.view-markup__size-large');
                 let modalCodeJsEL = document.querySelectorAll('.view-markup-modal .view-markup__code--js');
-
-
-
 
 
 
@@ -612,6 +532,7 @@
                     });
                 }
 
+                
                 // Font code font size
                 fontSize.forEach(function (item, index) {
                     item.addEventListener('change', function () {
@@ -903,12 +824,6 @@
                     });
                 });
 
-                // Focus out of dropdown
-                // settingsDropdown.addEventListener('focusout', function (event) {
-                //     settingsBtn.setAttribute('aria-expanded', false);
-                //     settingsDropdown.classList.remove(optionDropdownClass);
-                // });
-
 
 
 
@@ -1070,18 +985,19 @@
                     modalEl.addEventListener('keydown', trapTabKey);
                     
                     // Find all focusable children
-                    let focusableElementsString =
-                        'a[href],' +
-                        'area[href],' +
-                        'input,' +
-                        'select:not([disabled]),' +
-                        'textarea:not([tabindex="-1"]),' +
-                        'button:not([disabled]),' +
-                        'iframe,' +
-                        'object,' +
-                        'embed,' +
-                        '[tabindex="0"],' +
-                        '[contenteditable]';
+                    let focusableElementsString =`
+                        a[href],
+                        area[href],
+                        input,
+                        select:not([disabled]),
+                        textarea:not([tabindex="-1"]),
+                        button:not([disabled]),
+                        iframe,
+                        object,
+                        embed,
+                        [tabindex="0"],
+                        [contenteditable]
+                    `;
                         
                     let focusableElements = modalEl.querySelectorAll(focusableElementsString);
                     
@@ -1294,12 +1210,6 @@
                     };
                 }
 
-                // Spit out option value
-                function parseOption(splitOn, optionString) {
-                    return splitOn.split(optionString + ':')[1].trim();
-                }
-
-
 
 
 
@@ -1334,12 +1244,14 @@
                     tabButton.classList.add('view-markup-tabs__tab-button');
                     
                     // Get title(s) if any
-                    const vmEntry = parent.querySelectorAll('[data-view-markup-title]');
+                    const vmEntry = parent.querySelectorAll('[data-view-markup]');
                     
                     // Setup tab list entry
                     vmEntry.forEach((entry, index) => {
                         let tabButtonEntry = tabButton.cloneNode();
-                        let uniqueString = camelize(entry.getAttribute('data-view-markup-title').replace(/[^a-z0-9]/gi, ' '));
+                        let entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
+                        let uniqueString = camelize(entryTitle);
+                        
                         setAttributes(tabButtonEntry, {
                             'aria-selected': (index === 0) ? 'true' : 'false',
                             'role': 'tab',
@@ -1347,7 +1259,8 @@
                             'aria-controls': uniqueString + 'Panel',
                             'id': uniqueString
                         });
-                        tabButtonEntry.innerHTML = entry.getAttribute('data-view-markup-title');
+
+                        tabButtonEntry.innerHTML = entryTitle;
                         tabsList.appendChild(tabButtonEntry);
                     });
     
@@ -1414,17 +1327,26 @@
                         }
                     });
     
-                    // Create tab title
+                    // Create tab title and max-width option
                     let tabslistParamUrl = convertToParamString(parent.getAttribute('data-view-markup-parent'));
                     let tabsParams = {
                         title: tabslistParamUrl.get('title'),
                         maxWidth: tabslistParamUrl.get('max-width')
                     }
+
                     if (tabsParams.title !== null) {
                         const tabsTitle = document.createElement('div');
                         tabsTitle.classList.add('view-markup-tabs__title');
                         tabsTitle.innerHTML = tabsParams.title;
                         tabNav.prepend(tabsTitle);
+                    }
+
+                    if (tabsParams.maxWidth !== null) {
+                        Object.assign(tabNav.style,{
+                            maxWidth: tabsParams.maxWidth,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        });
                     }
                 });
     
@@ -1449,7 +1371,7 @@
                     const target = event.target;
                     const parent = target.closest('.view-markup-tabs__nav');
                     const grandparent = parent.closest('.view-markup-tabs');
-    
+
                     // Remove all current selected tabs
                     parent
                         .querySelectorAll('[aria-selected="true"]')

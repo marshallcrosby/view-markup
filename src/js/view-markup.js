@@ -29,7 +29,7 @@
             excludeAttribute = urlParam.get('exclude-attribute');
         }
     
-        let srcready = new Event('src-is-ready');
+        let srcready = new Event('ViewMarkupSrcIsReady');
         let pageSrc = null;
         let request = makeHttpObject();
         
@@ -65,28 +65,20 @@
             });
         }
 
-        document.addEventListener('src-is-ready', function () {
+        document.addEventListener('ViewMarkupSrcIsReady', function () {
             const copiedPageHTML = stringToHTML(pageSrc);
             const copiedViewMarkupEl = copiedPageHTML.querySelectorAll('[data-view-markup]');
-            
-            // copiedViewMarkupEl.forEach((item) => {
-            //     item.removeAttribute('data-view-markup');
-            // });
-            
+                        
             if (viewMarkupEl.length > 0) {
                 let elHtmlInitial = [];
                 let elHtmlClean = [];
                 let elAmount = 0;
                 let options;
-
-                // Declare base modal element right away to add some data attributes to
-                let modalEl = document.createElement('div');
-
                 let markupContentHtmlString = `//import _view-markup-modal.html`;
 
                 viewMarkupEl.forEach(function (item, index) {
 
-                    // Remove specified param attrbute(s)
+                    // Remove specified param attribute(s)
                     if (excludeAttribute !== null) {
                         let excludeAttributeArr = excludeAttribute.split(',');
                         removeAttributes(copiedViewMarkupEl[index], excludeAttributeArr);
@@ -98,9 +90,10 @@
                         copiedViewMarkupEl[index].outerHTML;
                     
                     // Remove the view markup specific data attributes
-                    if (!leaveAttr(viewMarkupEl[index])) {
+                    if (!preserveViewMarkupAttr(viewMarkupEl[index])) {
                         elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
-                        // elHtmlClean[index] = elHtmlInitial[index];
+                    } else {
+                        elHtmlClean[index] = elHtmlInitial[index];
                     }
                     
                     // Create modal button
@@ -112,8 +105,7 @@
                     // if <html> or <body> do things a bit differently
                     if (viewMarkupEl[index].nodeName.toLowerCase()  === 'body' || viewMarkupEl[index].nodeName.toLowerCase()  === 'html') {
                         let wrapperDivBody = document.createElement('div');
-                        wrapperDivBody.classList.add('view-markup');
-                        wrapperDivBody.classList.add('view-markup--body');
+                        wrapperDivBody.classList.add('view-markup', 'view-markup--body');
                         document.body.prepend(wrapperDivBody);
                         wrapperDivBody.appendChild(modalBtn);
                     } else {
@@ -125,91 +117,29 @@
                         wrapElement(viewMarkupEl[index], markupWrapperDiv);
                         markupWrapperDiv.prepend(modalBtn);
                     }
-                    
-                    options = {
-                        title: null,
-                        btnX: null,
-                        btnY: null,
-                        btnZ: null,
-                        btnPos: null,
-                        btnAppendTo: null,
-                        btnPrependTo: null,
-                        btnColor: null,
-                        scriptSelector: null,
-                        backdropRgb: null,
-                        renderInPage: null,
-                        marginBottom: null,
-                        marginTop: null,
-                        modalNav: null
-                    };
-                        
+
                     // Apply some options to toggle if available
                     let currentElement = viewMarkupEl[index];
-                    //let currentElementParamUrl = convertToParamString(currentElement.getAttribute('data-view-markup'));
+                    let optionsParams = convertToParamString(currentElement.getAttribute('data-view-markup'));
                     
-                    if (currentElement.getAttribute('data-view-markup') !== 'null') {
-                        let semiColonSplit = viewMarkupEl[index].getAttribute('data-view-markup').split(';');
-                        
-                        // Assign option values if any
-                        semiColonSplit.forEach(function (item, index) {
-                            if (semiColonSplit[index].split('title:')[1] !== undefined) {
-                                options.title = parseOption(semiColonSplit[index], 'title');
-                            }
-
-                            if (semiColonSplit[index].split('btn-x:')[1] !== undefined) {
-                                options.btnX = parseOption(semiColonSplit[index], 'btn-x');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-y:')[1] !== undefined) {
-                                options.btnY = parseOption(semiColonSplit[index], 'btn-y');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-z:')[1] !== undefined) {
-                                options.btnZ = parseOption(semiColonSplit[index], 'btn-z');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-pos:')[1] !== undefined) {
-                                options.btnPos = parseOption(semiColonSplit[index], 'btn-pos');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-append-to:')[1] !== undefined) {
-                                options.btnAppendTo = parseOption(semiColonSplit[index], 'btn-append-to');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-prepend-to:')[1] !== undefined) {
-                                options.btnPrependTo = parseOption(semiColonSplit[index], 'btn-prepend-to');
-                            }
-                            
-                            if (semiColonSplit[index].split('btn-color:')[1] !== undefined) {
-                                options.btnColor = parseOption(semiColonSplit[index], 'btn-color');
-                            }
-                            
-                            if (semiColonSplit[index].split('associated-script:')[1] !== undefined) {
-                                options.scriptSelector = parseOption(semiColonSplit[index], 'associated-script');
-                            }
-                            
-                            if (semiColonSplit[index].split('backdrop-rgb:')[1] !== undefined) {
-                                options.backdropRgb = parseOption(semiColonSplit[index], 'backdrop-rgb');
-                            }
-                            
-                            if (semiColonSplit[index].split('render-in-page:')[1] !== undefined) {
-                                options.renderInPage = parseOption(semiColonSplit[index], 'render-in-page');
-                                currentElement.setAttribute('data-view-markup-render-in-page', '');
-                            }
-                            
-                            if (semiColonSplit[index].split('margin-bottom:')[1] !== undefined) {
-                                options.marginBottom = parseOption(semiColonSplit[index], 'margin-bottom');
-                            }
-                            
-                            if (semiColonSplit[index].split('margin-top:')[1] !== undefined) {
-                                options.marginTop = parseOption(semiColonSplit[index], 'margin-top');
-                            }
-                            
-                            if (semiColonSplit[index].split('modal-nav:')[1] !== undefined) {
-                                options.modalNav = parseOption(semiColonSplit[index], 'modal-nav');
-                            }
-                        });          
+                    options = {
+                        title: optionsParams.get('title'),
+                        btnX: optionsParams.get('btn-x'),
+                        btnY: optionsParams.get('btn-y'),
+                        btnZ: optionsParams.get('btn-z'),
+                        btnPos: optionsParams.get('btn-pos'),
+                        btnAppendTo: optionsParams.get('btn-append-to'),
+                        btnPrependTo: optionsParams.get('btn-prepend-to'),
+                        btnColor: optionsParams.get('btn-color'),
+                        scriptSelector: optionsParams.get('script-selector'),
+                        backdropRgb: optionsParams.get('backdrop-rgb'),
+                        renderInPage: optionsParams.get('render-in-page'),
+                        marginBottom: optionsParams.get('margin-bottom'),
+                        marginTop: optionsParams.get('margin-top')
+                    };
                                             
+                    if (optionsParams !== 'null') {
+                        
                         // Setup title attribute to be used later
                         if (options.title) {
                             modalBtn.setAttribute('data-view-markup-title', options.title);
@@ -270,13 +200,9 @@
                         // In page rendering
                         if (options.renderInPage) {
                             modalBtn.setAttribute('data-view-markup-in-page', 'true');
+                            item.setAttribute('data-view-markup-render-in-page', '');
                         }
-                        
-                        // Modal navigation
-                        if (options.modalNav === 'true') {
-                            modalBtn.setAttribute('data-view-markup-modal-nav', 'true');
-                        }
-                        
+                                                
                         // Bottom margin for in page view
                         if (options.marginBottom) {
                             item.closest('.view-markup').style.marginBottom = options.marginBottom;
@@ -291,16 +217,11 @@
 
 
                 // Check for preserve-attribute option
-                function leaveAttr(el) {
-                    let optionPreserveAttr = null;
+                function preserveViewMarkupAttr(el) {                   
+                    let optionsParams = convertToParamString(el.getAttribute('data-view-markup'));
+                    let optionPreserveAttr = optionsParams.get('preserve-attribute');
                     
-                    if (el.getAttribute('data-view-markup').split(';')) {
-                        let semiColonSplit = el.getAttribute('data-view-markup').split(';');
-                        
-                        if (semiColonSplit[0].split('preserve-attribute:')[1] !== undefined) {
-                            optionPreserveAttr = semiColonSplit[0].split('preserve-attribute:')[1].trim();
-                        }
-                                
+                    if (optionPreserveAttr) {                                
                         if (optionPreserveAttr === 'true') {
                             return true;
                         } else {
@@ -398,12 +319,16 @@
                 // -----------------------------------------------------------------------------
                     
                 // Setup modal outer div and attributes
+                let modalEl = document.createElement('div');
                 modalEl.classList.add('view-markup-modal');
-                modalEl.setAttribute('id', 'viewMarkupModal');
-                modalEl.setAttribute('aria-labelledby', 'viewMarkupModalTitle');
-                modalEl.setAttribute('aria-modal', true);
-                modalEl.setAttribute('role', 'dialog');
-                modalEl.setAttribute('tabindex', '-1');
+                
+                setAttributes(modalEl, {
+                    'id': 'viewMarkupModal',
+                    'aria-labelledby': 'viewMarkupModalTitle',
+                    'aria-modal': 'true',
+                    'role': 'dialog',
+                    'tabindex': '-1',
+                });
 
                 // Create modal dialog div
                 let modalDialog = document.createElement('div');
@@ -504,8 +429,7 @@
                     // Add ready class on body
                     document.documentElement.classList.add('js-view-markup-ready');
 
-                    const vmReadyEvent = document.createEvent('Event');
-                    vmReadyEvent.initEvent('ViewMarkupReady', true, true);
+                    const vmReadyEvent = new Event('ViewMarkupReady');
                     window.dispatchEvent(vmReadyEvent);
                 }
 
@@ -532,7 +456,6 @@
                 let fontSize = document.querySelectorAll('.view-markup__font-size');
                 let htmlTab = document.querySelectorAll('.view-markup__tabs-button--html');
                 let jsTab = document.querySelectorAll('.view-markup__tabs-button--js');
-                let inPageCodeBlock = document.querySelectorAll('.view-markup-in-page');
 
                 // Modal specific elements
                 let modalCodeHtmlEL = document.querySelector('.view-markup-modal .view-markup__code--html');
@@ -541,9 +464,6 @@
                 let modalSizeMedium = document.querySelectorAll('.view-markup__size-medium');
                 let modalSizeLarge = document.querySelectorAll('.view-markup__size-large');
                 let modalCodeJsEL = document.querySelectorAll('.view-markup-modal .view-markup__code--js');
-
-
-
 
 
 
@@ -608,6 +528,7 @@
                     });
                 }
 
+                
                 // Font code font size
                 fontSize.forEach(function (item, index) {
                     item.addEventListener('change', function () {
@@ -899,12 +820,6 @@
                     });
                 });
 
-                // Focus out of dropdown
-                // settingsDropdown.addEventListener('focusout', function (event) {
-                //     settingsBtn.setAttribute('aria-expanded', false);
-                //     settingsDropdown.classList.remove(optionDropdownClass);
-                // });
-
 
 
 
@@ -1066,18 +981,19 @@
                     modalEl.addEventListener('keydown', trapTabKey);
                     
                     // Find all focusable children
-                    let focusableElementsString =
-                        'a[href],' +
-                        'area[href],' +
-                        'input,' +
-                        'select:not([disabled]),' +
-                        'textarea:not([tabindex="-1"]),' +
-                        'button:not([disabled]),' +
-                        'iframe,' +
-                        'object,' +
-                        'embed,' +
-                        '[tabindex="0"],' +
-                        '[contenteditable]';
+                    let focusableElementsString =`
+                        a[href],
+                        area[href],
+                        input,
+                        select:not([disabled]),
+                        textarea:not([tabindex="-1"]),
+                        button:not([disabled]),
+                        iframe,
+                        object,
+                        embed,
+                        [tabindex="0"],
+                        [contenteditable]
+                    `;
                         
                     let focusableElements = modalEl.querySelectorAll(focusableElementsString);
                     
@@ -1290,12 +1206,6 @@
                     };
                 }
 
-                // Spit out option value
-                function parseOption(splitOn, optionString) {
-                    return splitOn.split(optionString + ':')[1].trim();
-                }
-
-
 
 
 
@@ -1330,12 +1240,14 @@
                     tabButton.classList.add('view-markup-tabs__tab-button');
                     
                     // Get title(s) if any
-                    const vmEntry = parent.querySelectorAll('[data-view-markup-title]');
+                    const vmEntry = parent.querySelectorAll('[data-view-markup]');
                     
                     // Setup tab list entry
                     vmEntry.forEach((entry, index) => {
                         let tabButtonEntry = tabButton.cloneNode();
-                        let uniqueString = camelize(entry.getAttribute('data-view-markup-title').replace(/[^a-z0-9]/gi, ' '));
+                        let entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
+                        let uniqueString = camelize(entryTitle);
+                        
                         setAttributes(tabButtonEntry, {
                             'aria-selected': (index === 0) ? 'true' : 'false',
                             'role': 'tab',
@@ -1343,7 +1255,8 @@
                             'aria-controls': uniqueString + 'Panel',
                             'id': uniqueString
                         });
-                        tabButtonEntry.innerHTML = entry.getAttribute('data-view-markup-title');
+
+                        tabButtonEntry.innerHTML = entryTitle;
                         tabsList.appendChild(tabButtonEntry);
                     });
     
@@ -1410,17 +1323,26 @@
                         }
                     });
     
-                    // Create tab title
+                    // Create tab title and max-width option
                     let tabslistParamUrl = convertToParamString(parent.getAttribute('data-view-markup-parent'));
                     let tabsParams = {
                         title: tabslistParamUrl.get('title'),
                         maxWidth: tabslistParamUrl.get('max-width')
                     }
+
                     if (tabsParams.title !== null) {
                         const tabsTitle = document.createElement('div');
                         tabsTitle.classList.add('view-markup-tabs__title');
                         tabsTitle.innerHTML = tabsParams.title;
                         tabNav.prepend(tabsTitle);
+                    }
+
+                    if (tabsParams.maxWidth !== null) {
+                        Object.assign(tabNav.style,{
+                            maxWidth: tabsParams.maxWidth,
+                            marginLeft: 'auto',
+                            marginRight: 'auto',
+                        });
                     }
                 });
     
@@ -1445,7 +1367,7 @@
                     const target = event.target;
                     const parent = target.closest('.view-markup-tabs__nav');
                     const grandparent = parent.closest('.view-markup-tabs');
-    
+
                     // Remove all current selected tabs
                     parent
                         .querySelectorAll('[aria-selected="true"]')
