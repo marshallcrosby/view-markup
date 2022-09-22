@@ -30,8 +30,8 @@
         </fieldset>
     </div>
 
-    <div data-view-markup-parent="title: B.1.4 - Full Width Promo Block; background: none; pill-view: true; padding-x: 28px;">
-        <div data-view-markup="title: Example 1; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+    <div data-view-markup-tabs="class: container px-5; pill-view; background: false;">
+        <div data-view-markup="title: Example 1; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255;">
             <div class="more-stuff">
                 <h3>Example 1 test title</h3>
                 <p>Veritatis officia eum dolorem error non ullam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
@@ -43,13 +43,13 @@
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
         </div>
 
-        <div data-view-markup="title: Example 3; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+        <div data-view-markup="title: Example 3; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255;">
             <div class="more-stuff">
                 <h3>Example 3 test title</h3>
                 <p>Consequatur doloribus cumque quis illo possimus accusantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
             </div>
         </div>
-        <div data-view-markup="title: Example 4; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+        <div data-view-markup="title: Example 4; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255;">
             <div class="more-stuff">
                 <h3>Example 4 test title</h3>
                 <p>Veritatis officia eum dolorem error non ullam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
@@ -61,11 +61,25 @@
             <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
         </div>
 
-        <div data-view-markup="title: Example 6; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255; modal-nav: true;">
+        <div data-view-markup="title: Example 6; btn-z: 500;btn-x: 60px; backdrop-rgb: 255, 255, 255;">
             <div class="more-stuff">
                 <h3>Example 6 test title</h3>
                 <p>Consequatur doloribus cumque quis illo possimus accusantium iure. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
             </div>
+        </div>
+    </div>
+
+    <div data-view-markup-tabs="class: container px-5; modal-btn;">
+        <div data-view-markup="title: Example 7; backdrop-rgb: 255, 255, 255;">
+            <div class="more-stuff">
+                <h3>Example 7 test title</h3>
+                <p>Veritatis officia eum dolorem error non ullam molestiae. Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
+            </div>
+        </div>
+    
+        <div data-view-markup="title: Test title 8; backdrop-rgb: 255, 255, 255;">
+            <h3>Test title 8</h3>
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam incidunt soluta, veritatis officia eum dolorem error non ullam molestiae a aliquam vel, consequatur doloribus cumque quis illo possimus accusantium iure.</p>
         </div>
     </div>
 
@@ -74,7 +88,7 @@
         Add view-markup.js before any script tags at the bottom of the body. Add the <strong>data-view-markup</strong> attribute to the any html element inside the body that you want to view the markup for.
     </p>
 
-    <h2>Options</h2>
+    <h2>View Markup setup and options</h2>
     
     <p>
         Add the below options inside the <strong>data-view-markup</strong> value.
@@ -133,6 +147,59 @@
             <strong>Multiple options (separate with a semi-colon)</strong><br>
             <small>Example:</small><br>
             data-view-markup="<strong><em>title: Block Name; btn-x: -3px; btn-z: 3</em></strong>"
+        </li>
+    </ul>
+
+    <h2>Tablist setup and options</h2>
+    
+    <p>
+        Wrap view markup items inside and element with the <strong>data-view-markup-tabs</strong> attribute.
+    </p>
+    <p>
+        Options below for customization
+    </p>
+
+    <ul class="option-list">        
+        <li>
+            <strong>Add title to tabs navigation</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>title: Tab section name</em></strong>"
+        </li>
+
+        <li>
+            <strong>Add max-with to tabs navigation</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>max-width: 1200px</em></strong>"
+        </li>
+
+        <li>
+            <strong>Adjust horizontal outer padding on the tabs navigation</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>padding-x: 28px</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Add class(es) to tabs navigation</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>class: container px-5</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Remove background color</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>background: false</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Pill styled navigation tab items</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>pill-view: true</em></strong>"
+        </li>
+        
+        <li>
+            <strong>Show modal button in tab nav bar</strong><br>
+            <small>Example:</small><br>
+            data-view-markup-tabs="<strong><em>modal-btn: true</em></strong>"
         </li>
     </ul>
 

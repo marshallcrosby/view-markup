@@ -2,6 +2,7 @@
     font-size: 16px;
 
     .view-markup-tabs__nav {
+        position: relative;
         display: flex;
         align-items: center;
         flex-wrap: wrap;
@@ -21,7 +22,7 @@
         overflow: auto;
 
         width: 100%;
-        padding: 13px 20px;
+        padding: 10px 20px;
 
         mask-image: linear-gradient(to right, #000 calc(100% - 20px), rgba(#000, 0) 100%);
         scrollbar-color: var(--vm-color-gray-200) transparent;
@@ -50,9 +51,10 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        min-height: 34px;
 
         margin-right: 5px;
-        padding: 10px 20px;
+        padding: 0 20px;
 
         cursor: pointer;
         text-align: center;
@@ -66,6 +68,8 @@
         font-size: .92em;
         font-weight: bold;
 
+        color: var(--vm-color-gray-800);
+
         &[aria-selected="true"] {
             color: var(--vm-color-gray-100);
             background-color: var(--vm-color-gray-800);
@@ -76,30 +80,63 @@
         }
     }
 
+    .view-markup-tabs__modal-btn {
+        left: auto;
+        top: 10px;
+        right: 20px;
+        height: 34px;
+        font-size: 24px;
+        border-radius: 4px;
+        box-shadow: 1px 1px 2px rgba(#000, .15);
+        color: var(--vm-color-gray-800);
+        background-color: #fff;
+        padding: 0;
+        opacity: 1;
+
+        &:before {
+            display: none;
+        }
+
+        &:after {
+            margin-top: 0;
+            // color: var(--vm-color-gray-800);
+        }
+    }
+
     &.view-markup-tabs--bg-none {
         .view-markup-tabs__title {
             padding: 0;
         }
-        
+
         .view-markup-tabs__nav {
             background-color: transparent;
         }
 
         .view-markup-tabs__tabs-list {
-            padding: 13px 0;
+            padding: 10px 0;
         }
 
         &.view-markup-tabs--pill-view {
             .view-markup-tabs__tab-button {
                 box-shadow: none;
-                
+
                 &:not([aria-selected="true"]) {
                     background-color: var(--vm-color-gray-100);
                 }
             }
         }
     }
-    
+
+    &.view-markup-tabs--show-modal-btn {
+        .view-markup-tabs__tabs-list {
+            width: calc(100% - 120px);
+        }
+
+        .view-markup__modal-btn {
+            visibility: hidden !important;
+        }
+    }
+
     &.view-markup-tabs--pill-view {
         .view-markup-tabs__tab-button {
             border-radius: 30px;
