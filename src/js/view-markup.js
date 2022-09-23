@@ -1381,6 +1381,10 @@ const viewMarkup = function() {
                     parent.classList.add('view-markup-tabs--show-modal-btn');
 
                     // Create view markup button which controls the visible tab panel element
+                    const tabViewModalBtnSep = document.createElement('span');
+                    tabViewModalBtnSep.classList.add('view-markup-tabs__sep');
+                    tabNav.appendChild(tabViewModalBtnSep);
+
                     const tabViewModalBtn = document.createElement('div');
                     tabViewModalBtn.classList.add('view-markup-tabs__modal-btn');
                     tabViewModalBtn.innerHTML = '<span class="view-markup__modal-btn-text">View markup</span>';

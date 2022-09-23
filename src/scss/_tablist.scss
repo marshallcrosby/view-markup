@@ -87,6 +87,14 @@
         }
     }
 
+    .view-markup-tabs__sep {
+        display: inline-block;
+        height: calc(var(--vm-tablist-button-height) * .6666);
+        border-right: 1px solid var(--vm-color-gray-200);
+        position: relative;
+        left: 15px;
+    }
+
     &.view-markup-tabs--bg-none {
         .view-markup-tabs__title {
             padding: 0;
@@ -98,7 +106,6 @@
 
         .view-markup-tabs__tabs-list {
             padding: var(--vm-tablist-padding-y-common) 0;
-            width: calc(100% - 80px);
         }
 
         .view-markup-tabs__modal-btn {
@@ -112,6 +119,12 @@
                 &:not([aria-selected="true"]) {
                     background-color: var(--vm-color-gray-100);
                 }
+            }
+        }
+
+        &.view-markup-tabs--show-modal-btn {
+            .view-markup-tabs__tabs-list {
+                width: calc(100% - 80px);
             }
         }
     }
