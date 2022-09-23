@@ -60,25 +60,4 @@
     font-family: $ff-code;
     font-size: 1em;
     line-height: 1.45;
-
-    scrollbar-color: rgba(255, 255, 255, .75) transparent;
-    scrollbar-width: thin;
-
-    &::-webkit-scrollbar-corner {
-        background-color: transparent;
-    }
-
-    &::-webkit-scrollbar {
-        width: 5px;
-        height: 5px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background-color: transparent;
-    }
-
-    &::-webkit-scrollbar-thumb {
-        outline: 0;
-        background-color: rgba(255, 255, 255, .75);
-    }
 }

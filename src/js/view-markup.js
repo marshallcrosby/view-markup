@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.5.2
+    * View markup v1.5.3
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -85,10 +85,12 @@ const viewMarkup = function() {
                 elHtmlInitial[index] = (index === 0 && viewMarkupEl[0].tagName.toLowerCase() === 'html') ?
                     pageSrc :
                     copiedViewMarkupEl[index].outerHTML;
+
+                console.log(elHtmlInitial[index]);
                 
                 // Remove the view markup specific data attributes
                 if (!preserveViewMarkupAttr(viewMarkupEl[index])) {
-                    elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/data-view-markup/g, '');
+                    elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/^data-view-markup$/g, '');
                 } else {
                     elHtmlClean[index] = elHtmlInitial[index];
                 }
@@ -217,12 +219,10 @@ const viewMarkup = function() {
                 let optionsParams = convertToParamString(el.getAttribute('data-view-markup'));
                 let optionPreserveAttr = optionsParams.get('preserve-attribute');
                 
-                if (optionPreserveAttr) {                                
-                    if (optionPreserveAttr === 'true') {
-                        return true;
-                    } else {
-                        return false;
-                    }    
+                if (optionPreserveAttr !== null) {
+                    return true;
+                } else {
+                    return false;
                 }
             }
             
@@ -1237,7 +1237,7 @@ const viewMarkup = function() {
 
                 // Create tabs list element
                 const tabsList = document.createElement('div');
-                tabsList.classList.add('view-markup-tabs__tabs-list');
+                tabsList.classList.add('view-markup-tabs__tabs-list', 'view-markup-styled-scrollbar');
                 tabNav.prepend(tabsList);
                 
                 // Create tab nav item element(s)
@@ -1251,14 +1251,14 @@ const viewMarkup = function() {
                 vmEntry.forEach((entry, index) => {
                     let tabButtonEntry = tabButton.cloneNode();
                     let entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
-                    let uniqueString = camelize(entryTitle.replace(/[^a-z0-9]/gi, ' '));
+                    let uniqueID = renderID(entryTitle);
                     
                     setAttributes(tabButtonEntry, {
                         'aria-selected': (index === 0) ? 'true' : 'false',
                         'role': 'tab',
                         'tabindex': (index === 0) ? '0' : '-1',
-                        'aria-controls': uniqueString + 'Panel',
-                        'id': uniqueString
+                        'aria-controls': uniqueID,
+                        'id': uniqueID + 'TabItem'
                     });
 
                     tabButtonEntry.innerHTML = entryTitle;
@@ -1275,7 +1275,7 @@ const viewMarkup = function() {
                         'role': 'tabpanel',
                         'tabindex': '0',
                         'aria-labelledby': tabButtonElement[index].getAttribute('id'),
-                        'id': tabButtonElement[index].getAttribute('id') + 'Panel'
+                        'id': tabButtonElement[index].getAttribute('aria-controls')
                     });
 
                     if (index > 0) {
@@ -1456,6 +1456,10 @@ const viewMarkup = function() {
                 if (+match === 0) return "";
                     return index === 0 ? match.toLowerCase() : match.toUpperCase();
                 });
+            }
+
+            function renderID(str) {
+                return camelize(str.replace(/[^a-z0-9]/gi, ' '));
             }
 
             function convertToParamString(str) {
