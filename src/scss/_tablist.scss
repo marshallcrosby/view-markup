@@ -88,11 +88,14 @@
     }
 
     .view-markup-tabs__sep {
-        display: inline-block;
-        height: calc(var(--vm-tablist-button-height) * .6666);
-        border-right: 1px solid var(--vm-color-gray-200);
         position: relative;
         left: 15px;
+
+        display: inline-block;
+
+        height: calc(var(--vm-tablist-button-height) * .6666);
+
+        border-right: 1px solid var(--vm-color-gray-200);
     }
 
     &.view-markup-tabs--bg-none {
