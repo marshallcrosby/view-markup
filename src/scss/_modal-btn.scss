@@ -1,10 +1,9 @@
 .view-markup-tabs__modal-btn,
-button.view-markup__modal-btn {
+.view-markup__modal-btn {
     position: absolute;
     z-index: 100;
     top: 5px;
     left: 5px;
-    margin: 0;
 
     display: flex;
     overflow: hidden;
@@ -13,6 +12,7 @@ button.view-markup__modal-btn {
 
     width: 2.1875em;
     height: 1.5625em;
+    margin: 0;
     padding: 0;
 
     cursor: pointer;
@@ -80,6 +80,10 @@ button.view-markup__modal-btn {
             background-color: rgba($color-block-highlight, .05);
         }
     }
+}
+
+div[data-view-markup-in-page] {
+    visibility: hidden !important;
 }
 
 .view-markup__modal-btn-text {

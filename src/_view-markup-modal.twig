@@ -1,36 +1,36 @@
 <div class="view-markup__content">
     <div class="view-markup__header">        
         <div class="view-markup__nav">
-            <button class="view-markup__prev-btn view-markup--fancy-hover" aria-label="Previous" type="button">
+            <div class="view-markup__prev-btn view-markup--fancy-hover" aria-label="Previous" role="button" tabindex="0">
                 <svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;">
                     <polygon class="sty0" points="0,7.1 7.1,14.1 8.5,12.7 2.8,7.1 8.5,1.4 7.1,0 0,7.1 0,7.1 "/>
                 </svg>
-            </button>
-            <button class="view-markup__next-btn view-markup--fancy-hover" aria-label="Next" type="button">
+            </div>
+            <div class="view-markup__next-btn view-markup--fancy-hover" aria-label="Next" role="button" tabindex="0">
                 <svg aria-hidden="true" x="0px" y="0px" width="8.5px" height="14.1px" viewBox="0 0 8.5 14.1" style="enable-background:new 0 0 8.5 14.1;">
                     <polygon class="sty0" points="8.5,7.1 1.4,0 0,1.4 5.7,7.1 0,12.7 1.4,14.1 8.5,7.1 8.5,7.1 "/>
                 </svg>
-            </button>
+            </div>
         </div>
 
         <div class="view-markup__title" id="viewMarkupModalTitle"></div>        
         
-        <button class="view-markup__close-btn view-markup--fancy-hover" aria-label="Close" type="button">
+        <div class="view-markup__close-btn view-markup--fancy-hover" aria-label="Close" role="button" tabindex="0">
             <svg aria-hidden="true" x="0px" y="0px" width="15.6px" height="15.6px" viewBox="0 0 15.6 15.6" style="enable-background:new 0 0 15.6 15.6;">
                 <g>
                     <rect x="6.8" y="-2.2" transform="matrix(0.7071 0.7071 -0.7071 0.7071 7.7782 -3.2218)" class="sty0" width="2" height="20"/>
                     <rect x="6.8" y="-2.2" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.2218 7.7782)" class="sty0" width="2" height="20"/>
                 </g>
             </svg>
-        </button>
+        </div>
     </div>
     
     <div class="view-markup__body">
         <div class="view-markup__controls">
-            <button class="view-markup__copy-btn view-markup--fancy-hover" type="button">Copy</button>
+            <div class="view-markup__copy-btn view-markup--fancy-hover" role="button" tabindex="0">Copy</div>
             
             <div class="view-markup__settings">
-                <button class="view-markup__settings-btn view-markup--fancy-hover" id="viewMarkupModalSettingsBtn" aria-label="Settings" type="button" aria-expanded="false">
+                <div class="view-markup__settings-btn view-markup--fancy-hover" id="viewMarkupModalSettingsBtn" aria-label="Settings" role="button" tabindex="0" aria-expanded="false">
                     <svg x="0px" y="0px" width="3px" height="15px" viewBox="0 0 3 15" style="enable-background:new 0 0 3 15;">
                         <g>
                             <circle class="sty0" cx="1.5" cy="1.5" r="1.5"/>
@@ -38,7 +38,7 @@
                             <circle class="sty0" cx="1.5" cy="13.5" r="1.5"/>
                         </g>
                     </svg>
-                </button>
+                </div>
                 
                 <div class="view-markup__settings-dropdown" aria-labelledby="viewMarkupModalSettingsBtn">
                     <form class="view-markup__tab-set view-markup__settings-item" aria-labelledby="viewMarkupSettingsHeadingIndent">
@@ -112,8 +112,8 @@
         </div>        
         <div class="view-markup__main" id="viewMarkupModalHtml">
             <div class="view-markup__tabs" role="tablist">
-                <button class="view-markup__tabs-button view-markup__tabs-button--html view-markup--fancy-hover" id="viewMarkupModalHtmlTab" type="button" role="tab" aria-selected="true">HTML</button>
-                <button class="view-markup__tabs-button view-markup__tabs-button--js view-markup--fancy-hover" id="viewMarkupModalJsTab" type="button" role="tab" aria-selected="false">JS</button>
+                <div class="view-markup__tabs-button view-markup__tabs-button--html view-markup--fancy-hover" id="viewMarkupModalHtmlTab" role="button" tabindex="0" role="tab" aria-selected="true">HTML</div>
+                <div class="view-markup__tabs-button view-markup__tabs-button--js view-markup--fancy-hover" id="viewMarkupModalJsTab" role="button" tabindex="0" role="tab" aria-selected="false">JS</div>
                 <div class="view-markup__tabs-indicator" aria-hidden="true"></div>
             </div>
             <label class="view-markup-sr-only" for="viewMarkupModalHiddenTextArea" aria-hidden="true">Copied</label>

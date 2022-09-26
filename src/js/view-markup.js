@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.5.3
+    * View markup v1.6.0
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -62,32 +62,36 @@ const viewMarkup = function() {
         });
     }
 
+    Element.prototype.setAttributes = function (attrs) {
+        for(let key in attrs) {
+            this.setAttribute(key, attrs[key]);
+        }
+    };
+
     document.addEventListener('ViewMarkupSrcIsReady', function () {
-        const copiedPageHTML = stringToHTML(pageSrc);
-        const copiedViewMarkupEl = copiedPageHTML.querySelectorAll('[data-view-markup]');
+        const srcPageHTML = stringToHTML(pageSrc);
+        const srcViewMarkupEl = srcPageHTML.querySelectorAll('[data-view-markup]');
                     
         if (viewMarkupEl.length > 0) {
             let elHtmlInitial = [];
             let elHtmlClean = [];
             let elAmount = 0;
             let options;
-            let markupContentHtmlString = `//import _view-markup-modal.html`;
+            let markupContentHtmlString = `//=inject _view-markup-modal.html`;
 
             viewMarkupEl.forEach(function (item, index) {
 
                 // Remove specified param attribute(s)
                 if (excludeAttribute !== null) {
                     let excludeAttributeArr = excludeAttribute.split(',');
-                    removeAttributes(copiedViewMarkupEl[index], excludeAttributeArr);
+                    removeAttributes(srcViewMarkupEl[index], excludeAttributeArr);
                 }
                 
                 // Cache all viewable markup elements               
                 elHtmlInitial[index] = (index === 0 && viewMarkupEl[0].tagName.toLowerCase() === 'html') ?
                     pageSrc :
-                    copiedViewMarkupEl[index].outerHTML;
+                    srcViewMarkupEl[index].outerHTML;
 
-                console.log(elHtmlInitial[index]);
-                
                 // Remove the view markup specific data attributes
                 if (!preserveViewMarkupAttr(viewMarkupEl[index])) {
                     elHtmlClean[index] = elHtmlInitial[index].replace(/data-view-markup="[^\"]*"/g, '').replace(/^data-view-markup$/g, '');
@@ -96,9 +100,12 @@ const viewMarkup = function() {
                 }
                 
                 // Create modal button
-                let modalBtn = document.createElement('button');
+                let modalBtn = document.createElement('div');
                 modalBtn.classList.add('view-markup__modal-btn');
-                modalBtn.setAttribute('type', 'button');
+                modalBtn.setAttributes({
+                    'role': 'button',
+                    'tabindex': '0'
+                })
                 modalBtn.innerHTML = '<span class="view-markup__modal-btn-text">View markup</span>';
                     
                 // if <html> or <body> do things a bit differently
@@ -239,7 +246,7 @@ const viewMarkup = function() {
             textStyle.setAttribute('id', 'viewMarkupStyle');
 
             // Import compressed styles as a string
-            let textStyleString = `//import view-markup.css`;
+            let textStyleString = `//=inject view-markup.css`;
 
             // Apply in page styles to style tag
             textStyle.textContent = textStyleString;
@@ -318,7 +325,7 @@ const viewMarkup = function() {
             let modalEl = document.createElement('div');
             modalEl.classList.add('view-markup-modal');
             
-            setAttributes(modalEl, {
+            modalEl.setAttributes({
                 'id': 'viewMarkupModal',
                 'aria-labelledby': 'viewMarkupModalTitle',
                 'aria-modal': 'true',
@@ -413,9 +420,6 @@ const viewMarkup = function() {
                         
                         inPageCodeHtmlBlock.textContent = tidyHTML;
                         hljs.highlightElement(inPageCodeHtmlBlock);
-                        
-                        // Remove uneeded modal button
-                        item.querySelector('[data-view-markup-in-page]').remove();
                     }
                 });
                 
@@ -959,11 +963,6 @@ const viewMarkup = function() {
                 wrapper.appendChild(el);
             }
 
-            // Insert after
-            function insertAfter(newNode, existingNode) {
-                existingNode.parentNode.insertBefore(newNode, existingNode.nextSibling);
-            }
-
             // Show modal
             let focusedElementBeforeModal;
             function modalShow() {
@@ -1169,6 +1168,18 @@ const viewMarkup = function() {
             }
 
 
+            // Make div with role=button act like an actual button for a11y reasons
+            document.querySelectorAll('div[role="button"]').forEach((item) => {
+                item.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter' || event.code === 'Space') {
+                        event.preventDefault();
+                        this.click();
+                    }
+                });
+            });
+                
+
+
 
 
             
@@ -1229,7 +1240,7 @@ const viewMarkup = function() {
                 // Create tab nav element
                 const tabNav = document.createElement('div');
                 tabNav.classList.add('view-markup-tabs__nav');
-                setAttributes(tabNav, {
+                tabNav.setAttributes({
                     'role': 'tablist',
                     'aria-label': 'View markup tabs'
                 });
@@ -1253,7 +1264,7 @@ const viewMarkup = function() {
                     let entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
                     let uniqueID = renderID(entryTitle);
                     
-                    setAttributes(tabButtonEntry, {
+                    tabButtonEntry.setAttributes({
                         'aria-selected': (index === 0) ? 'true' : 'false',
                         'role': 'tab',
                         'tabindex': (index === 0) ? '0' : '-1',
@@ -1271,7 +1282,7 @@ const viewMarkup = function() {
                 
                 vmPanel.forEach((panel, index) => {
                     panel.classList.add('view-markup-tabs__panel');
-                    setAttributes(panel, {
+                    panel.setAttributes({
                         'role': 'tabpanel',
                         'tabindex': '0',
                         'aria-labelledby': tabButtonElement[index].getAttribute('id'),
@@ -1388,7 +1399,7 @@ const viewMarkup = function() {
                     const tabViewModalBtn = document.createElement('div');
                     tabViewModalBtn.classList.add('view-markup-tabs__modal-btn');
                     tabViewModalBtn.innerHTML = '<span class="view-markup__modal-btn-text">View markup</span>';
-                    setAttributes(tabViewModalBtn, {
+                    tabViewModalBtn.setAttributes({
                         'role': 'button',
                         'tabindex': '0'
                     });
@@ -1447,12 +1458,6 @@ const viewMarkup = function() {
                     .removeAttribute('hidden');
 
                 event.target.focus();
-            }
-
-            function setAttributes(el, attrs) {
-                for(var key in attrs) {
-                    el.setAttribute(key, attrs[key]);
-                }
             }
 
             function camelize(str) {

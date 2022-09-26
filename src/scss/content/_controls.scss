@@ -19,6 +19,8 @@
     width: var(--vm-size-touch-common);
     min-width: var(--vm-size-touch-common);
     height: var(--vm-size-touch-common);
+    margin-top: 0;
+    margin-bottom: 0;
     padding: 0;
 
     cursor: pointer;
@@ -30,8 +32,6 @@
     background-color: transparent;
 
     line-height: 0;
-    margin-top: 0;
-    margin-bottom: 0;
 
     svg {
         position: relative;
@@ -114,12 +114,17 @@
     position: relative;
     z-index: 2;
 
+    display: flex;
+    align-items: center;
     flex: 0 0 auto;
+    justify-content: center;
 
     max-width: none;
     height: var(--vm-size-touch-common);
+    margin-top: 0;
     margin-right: 0;
-    padding: 6px 12px;
+    margin-bottom: 0;
+    padding: 0 12px;
 
     cursor: pointer;
     text-align: center;
@@ -135,9 +140,6 @@
     font-size: .92em;
     font-weight: 400;
     line-height: normal;
-
-    margin-top: 0;
-    margin-bottom: 0;
 
     &:disabled {
         opacity: .5;

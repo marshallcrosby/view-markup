@@ -76,10 +76,10 @@ gulp.task('js', function (done) {
         .pipe(concat('view-markup.js'))
         
         // Inject css string into js
-        .pipe(inject.replace('//import view-markup.css', cssFileContent.trim() ))
+        .pipe(inject.replace('//=inject view-markup.css', cssFileContent.trim() ))
         
         // Inject html string into js
-        .pipe(inject.replace('//import _view-markup-modal.html', modalFileContent.trim() ))
+        .pipe(inject.replace('//=inject _view-markup-modal.html', modalFileContent.trim() ))
         
         // Remove scss sourcemaps linkage from string
         .pipe(gulpReplace('/*# sourceMappingURL=view-markup.css.map */', ''))
