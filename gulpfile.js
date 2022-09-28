@@ -105,7 +105,7 @@ gulp.task('sass', function (done) {
         .pipe(sourcemaps.init())
         .pipe(sass().on('error', sass.logError))
         .pipe(postcss(plugins))
-        .pipe(cleanCss({compatibility: 'ie11'}))
+        .pipe(cleanCss())
         .pipe(sourcemaps.write('./'))
         .pipe(gulp.dest(`${roots.dist}/temp`))
         .pipe(connect.reload());

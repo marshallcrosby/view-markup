@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.0
+    * View markup v1.6.1
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -12,30 +12,32 @@ const viewMarkup = function() {
     const viewMarkupEl = document.querySelectorAll('[data-view-markup]');
     
     // Get query params if any
-    let scriptLinkage = document.getElementById('view-markup-js') || document.querySelector('script[src*=view-markup]');
-    let modalNav = null;
-    let dynamicPos = null;
-    let dynamicPosZIndex = null;
-    let excludeAttribute = null;
-
-    if (scriptLinkage) {
-        let urlParam = new URLSearchParams(scriptLinkage.getAttribute('src').split('?')[1]);
-        modalNav = urlParam.get('modal-nav');
-        dynamicPos = urlParam.get('dynamic-pos');
-        dynamicPosZIndex = urlParam.get('z-index');
-        excludeAttribute = urlParam.get('exclude-attribute');
+    const scriptLinkage = document.getElementById('view-markup-js') || document.querySelector('script[src*=view-markup]');
+    const param = {
+        modalNav: null,
+        dynamicPos: null,
+        dynamicPosZIndex: null,
+        excludeAttribute: null
     }
 
-    let srcready = new Event('ViewMarkupSrcIsReady');
+    if (scriptLinkage) {
+        const urlParam = new URLSearchParams(scriptLinkage.getAttribute('src').split('?')[1]);
+        param.modalNav = urlParam.get('modal-nav');
+        param.dynamicPos = urlParam.get('dynamic-pos');
+        param.dynamicPosZIndex = urlParam.get('z-index');
+        param.excludeAttribute = urlParam.get('exclude-attribute');
+    }
+
+    const srcReady = new Event('ViewMarkupSrcIsReady');
+    const request = makeHttpObject();
     let pageSrc = null;
-    let request = makeHttpObject();
     
     request.open('GET', window.location.href, true);
     request.send(null);
     request.onreadystatechange = function() {
         if (request.readyState === 4) {
             pageSrc = request.responseText;
-            document.dispatchEvent(srcready);
+            document.dispatchEvent(srcReady);
         }
     }
 
@@ -50,8 +52,8 @@ const viewMarkup = function() {
     
     // Convert src string to HTML
     function stringToHTML(str) {
-        let parser = new DOMParser();
-        let doc = parser.parseFromString(str, 'text/html');
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(str, 'text/html');
         return doc;
     }
 
@@ -77,15 +79,18 @@ const viewMarkup = function() {
             let elHtmlClean = [];
             let elAmount = 0;
             let options;
-            let markupContentHtmlString = `//=inject _view-markup-modal.html`;
+            const markupContentHtmlString = `//=inject _view-markup-modal.html`;
 
             viewMarkupEl.forEach(function (item, index) {
 
-                // Remove specified param attribute(s)
-                if (excludeAttribute !== null) {
-                    let excludeAttributeArr = excludeAttribute.split(',');
+                // Globally remove specified param attribute(s) from url param
+                if (param.excludeAttribute !== null) {
+                    const excludeAttributeArr = param.excludeAttribute.split(',');
                     removeAttributes(srcViewMarkupEl[index], excludeAttributeArr);
                 }
+                
+                // Remove specific attribute(s) based on option
+                excludeAttr(srcViewMarkupEl[index]);
                 
                 // Cache all viewable markup elements               
                 elHtmlInitial[index] = (index === 0 && viewMarkupEl[0].tagName.toLowerCase() === 'html') ?
@@ -110,14 +115,14 @@ const viewMarkup = function() {
                     
                 // if <html> or <body> do things a bit differently
                 if (viewMarkupEl[index].nodeName.toLowerCase()  === 'body' || viewMarkupEl[index].nodeName.toLowerCase()  === 'html') {
-                    let wrapperDivBody = document.createElement('div');
+                    const wrapperDivBody = document.createElement('div');
                     wrapperDivBody.classList.add('view-markup', 'view-markup--body');
                     document.body.prepend(wrapperDivBody);
                     wrapperDivBody.appendChild(modalBtn);
                 } else {
                     
                     // Wrap in div
-                    let markupWrapperDiv = document.createElement('div');
+                    const markupWrapperDiv = document.createElement('div');
                     markupWrapperDiv.classList.add('view-markup');
                     markupWrapperDiv.innerHTML = '<div class="view-markup__highlight"></div>';
                     wrapElement(viewMarkupEl[index], markupWrapperDiv);
@@ -125,7 +130,7 @@ const viewMarkup = function() {
                 }
 
                 // Apply some options to toggle if available
-                let optionsParams = convertToParamString(viewMarkupEl[index].getAttribute('data-view-markup'));
+                const optionsParams = convertToParamString(viewMarkupEl[index].getAttribute('data-view-markup'));
                 
                 options = {
                     title: optionsParams.get('title'),
@@ -143,93 +148,105 @@ const viewMarkup = function() {
                     marginTop: optionsParams.get('margin-top')
                 };
                                         
-                if (optionsParams !== 'null') {
-                    
-                    // Setup title attribute to be used later
-                    if (options.title) {
-                        modalBtn.setAttribute('data-view-markup-title', options.title);
-                    }
+                // Setup title attribute to be used later
+                if (options.title) {
+                    modalBtn.setAttribute('data-view-markup-title', options.title);
+                }
 
-                    // Btn x postion set
-                    if (options.btnX) {
-                        modalBtn.style.transform = 'translateX(' + options.btnX + ')';
-                    }
+                // Btn x postion set
+                if (options.btnX) {
+                    modalBtn.style.transform = 'translateX(' + options.btnX + ')';
+                }
 
-                    // Btn y postion set
-                    if (options.btnY) {
-                        modalBtn.style.transform = 'translateY(' + options.btnY + ')';
-                    }
+                // Btn y postion set
+                if (options.btnY) {
+                    modalBtn.style.transform = 'translateY(' + options.btnY + ')';
+                }
 
-                    // Btn both positions
-                    if (options.btnX && options.btnY) {
-                        modalBtn.style.transform = 'translateX(' + options.btnX + ') translateY(' + options.btnY + ')';
-                    }
+                // Btn both positions
+                if (options.btnX && options.btnY) {
+                    modalBtn.style.transform = 'translateX(' + options.btnX + ') translateY(' + options.btnY + ')';
+                }
 
-                    // Btn z-index
-                    if (options.btnZ) {
-                        modalBtn.style.zIndex = options.btnZ;
-                    }
+                // Btn z-index
+                if (options.btnZ) {
+                    modalBtn.style.zIndex = options.btnZ;
+                }
 
-                    // Btn position
-                    if (options.btnPos) {
-                        modalBtn.style.position = options.btnPos;
-                    }
-                    
-                    // TODO: Btn color
-                    if (options.btnColor) {
-                        modalBtn.style.backgroundColor = options.btnColor;
-                    }
+                // Btn position
+                if (options.btnPos) {
+                    modalBtn.style.position = options.btnPos;
+                }
+                
+                // TODO: Btn color
+                if (options.btnColor) {
+                    modalBtn.style.backgroundColor = options.btnColor;
+                }
 
-                    // Append to selector
-                    if (options.btnAppendTo) {
-                        elBtnParent = document.querySelector(options.btnAppendTo);
-                        elBtnParent.appendChild(modalBtn);
-                    }
+                // Append to selector
+                if (options.btnAppendTo) {
+                    elBtnParent = document.querySelector(options.btnAppendTo);
+                    elBtnParent.appendChild(modalBtn);
+                }
 
-                    // Prepend to selector
-                    if (options.btnPrependTo) {
-                        elBtnParent = document.querySelector(options.btnPrependTo);
-                        elBtnParent.prepend(modalBtn);
-                    }
-                    
-                    // Script selector
-                    if (options.scriptSelector) {
-                        modalBtn.setAttribute('data-view-markup-script-selector', options.scriptSelector);
-                    }
-                    
-                    // Backdrop rgba
-                    if (options.backdropRgb) {
-                        modalBtn.setAttribute('data-view-markup-backdrop-rgb', options.backdropRgb);
-                    }
-                    
-                    // In page rendering
-                    if (options.renderInPage) {
-                        modalBtn.setAttribute('data-view-markup-in-page', 'true');
-                        item.setAttribute('data-view-markup-render-in-page', '');
-                    }
-                                            
-                    // Bottom margin for in page view
-                    if (options.marginBottom) {
-                        item.closest('.view-markup').style.marginBottom = options.marginBottom;
-                    }
-                    
-                    // Top margin for in page view
-                    if (options.marginTop) {
-                        item.closest('.view-markup').style.marginTop = options.marginTop;
-                    }
-                }   
+                // Prepend to selector
+                if (options.btnPrependTo) {
+                    elBtnParent = document.querySelector(options.btnPrependTo);
+                    elBtnParent.prepend(modalBtn);
+                }
+                
+                // Script selector
+                if (options.scriptSelector) {
+                    modalBtn.setAttribute('data-view-markup-script-selector', options.scriptSelector);
+                }
+                
+                // Backdrop rgba
+                if (options.backdropRgb) {
+                    modalBtn.setAttribute('data-view-markup-backdrop-rgb', options.backdropRgb);
+                }
+                
+                // In page rendering
+                if (options.renderInPage) {
+                    modalBtn.setAttribute('data-view-markup-in-page', 'true');
+                    item.setAttribute('data-view-markup-render-in-page', '');
+                }
+                                        
+                // Bottom margin for in page view
+                if (options.marginBottom) {
+                    item.closest('.view-markup').style.marginBottom = options.marginBottom;
+                }
+                
+                // Top margin for in page view
+                if (options.marginTop) {
+                    item.closest('.view-markup').style.marginTop = options.marginTop;
+                }
             });
 
 
             // Check for preserve-attribute option
             function preserveViewMarkupAttr(el) {                   
-                let optionsParams = convertToParamString(el.getAttribute('data-view-markup'));
-                let optionPreserveAttr = optionsParams.get('preserve-attribute');
+                const optionsParams = convertToParamString(el.getAttribute('data-view-markup'));
+                const optionPreserveAttr = optionsParams.get('preserve-attribute');
                 
                 if (optionPreserveAttr !== null) {
                     return true;
                 } else {
                     return false;
+                }
+            }
+            
+            // Remove attributes on a specific element
+            function excludeAttr(el) {                   
+                const optionExclude = convertToParamString(el.getAttribute('data-view-markup')).get('exclude-attribute');
+                
+                if (optionExclude !== null) {
+                    const optionExlcudeArr = optionExclude.split(/,\s|,/);
+                    
+                    optionExlcudeArr.forEach(function (attribute) {
+                        el.removeAttribute(attribute);
+                    });
+                    
+                    return el;
                 }
             }
             
@@ -242,11 +259,11 @@ const viewMarkup = function() {
             // -----------------------------------------------------------------------------
 
             // Create style tag to dump styles into for the markup modal
-            let textStyle = document.createElement('style');
+            const textStyle = document.createElement('style');
             textStyle.setAttribute('id', 'viewMarkupStyle');
 
             // Import compressed styles as a string
-            let textStyleString = `//=inject view-markup.css`;
+            const textStyleString = `//=inject view-markup.css`;
 
             // Apply in page styles to style tag
             textStyle.textContent = textStyleString;
@@ -265,19 +282,19 @@ const viewMarkup = function() {
             // TODO: import these through npm packages
 
             // Highlight css and js CDN. Project repo: https://github.com/highlightjs/highlight.js/
-            let highlightVersionNumb = {
+            const highlightVersionNumb = {
                 css: '10.7.2',
                 js: '11.3.1'
             }
-            let themeCssDarkUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.css + '/styles/atom-one-dark.min.css';
-            let themeCssLightUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.css + '/styles/github.min.css';
+            const themeCssDarkUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.css + '/styles/atom-one-dark.min.css';
+            const themeCssLightUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.css + '/styles/github.min.css';
 
-            let highlightCssUrl = (localStorage.getItem('checkedThemeColor') === null || localStorage.getItem('checkedThemeColor') === 'dark') ? themeCssDarkUrl : themeCssLightUrl;
-            let highlightScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.js + '/highlight.min.js';
+            const highlightCssUrl = (localStorage.getItem('checkedThemeColor') === null || localStorage.getItem('checkedThemeColor') === 'dark') ? themeCssDarkUrl : themeCssLightUrl;
+            const highlightScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/' + highlightVersionNumb.js + '/highlight.min.js';
 
             // Beautify HTML CDN. Project repo: https://github.com/beautifier/beautifier.io
-            let beautifyVersionNumb = '1.14.0';
-            let beautifyScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/' + beautifyVersionNumb + '/beautify-html.min.js';
+            const beautifyVersionNumb = '1.14.0';
+            const beautifyScriptUrl = 'https://cdnjs.cloudflare.com/ajax/libs/js-beautify/' + beautifyVersionNumb + '/beautify-html.min.js';
 
             // Load highlight js/css external assets
             loadExternalCss(highlightCssUrl);
@@ -290,8 +307,8 @@ const viewMarkup = function() {
             }
 
             function loadExternalJs(scriptSrc, callback) {
-                let head = document.getElementsByTagName('head')[0];
-                let script = document.createElement('script');
+                const head = document.getElementsByTagName('head')[0];
+                const script = document.createElement('script');
                 
                 script.src = scriptSrc;
                 
@@ -301,8 +318,8 @@ const viewMarkup = function() {
 
             // Run after getting beautify-html/highlight.io external assets
             function loadExternalCss(url, callback) {
-                let head = document.getElementsByTagName('head')[0];
-                let link = document.createElement('link');
+                const head = document.getElementsByTagName('head')[0];
+                const link = document.createElement('link');
                     
                 link.id = 'highlightJsCss';
                 link.rel = 'stylesheet';
@@ -322,7 +339,7 @@ const viewMarkup = function() {
             // -----------------------------------------------------------------------------
                 
             // Setup modal outer div and attributes
-            let modalEl = document.createElement('div');
+            const modalEl = document.createElement('div');
             modalEl.classList.add('view-markup-modal');
             
             modalEl.setAttributes({
@@ -334,7 +351,7 @@ const viewMarkup = function() {
             });
 
             // Create modal dialog div
-            let modalDialog = document.createElement('div');
+            const modalDialog = document.createElement('div');
 
             // Insert modal dialog element into outer modal element
             modalDialog.classList.add('view-markup-modal__dialog');
@@ -345,10 +362,10 @@ const viewMarkup = function() {
             document.body.appendChild(modalEl);
 
             // Set in page element
-            let wrapperEl = document.querySelectorAll('.view-markup');
+            const wrapperEl = document.querySelectorAll('.view-markup');
             wrapperEl.forEach(function (item) {
                 if (item.querySelector('[data-view-markup-in-page]')) {
-                    let inPageBlock = document.createElement('div');
+                    const inPageBlock = document.createElement('div');
                     inPageBlock.classList.add('view-markup__in-page-view');
                     item.appendChild(inPageBlock);
                     inPageBlock.innerHTML = markupContentHtmlString;
@@ -356,17 +373,17 @@ const viewMarkup = function() {
             });
 
             // Assign in page unique ids and adjust aria-lablledby to match
-            let inPageContent = document.querySelectorAll('.view-markup__in-page-view .view-markup__content');
-            let inPageHeader = document.querySelectorAll('.view-markup__in-page-view .view-markup__header');
-            let modalSetSize = document.querySelectorAll('.view-markup__size-set');
+            const inPageContent = document.querySelectorAll('.view-markup__in-page-view .view-markup__content');
+            const inPageHeader = document.querySelectorAll('.view-markup__in-page-view .view-markup__header');
+            const modalSetSize = document.querySelectorAll('.view-markup__size-set');
 
             inPageContent.forEach(function (item, index) {
                 inPageHeader[index].remove();
                 modalSetSize[index].remove();
                 
-                let allID = item.querySelectorAll('[id]');
-                let allFor = item.querySelectorAll('[for]');
-                let allAriaLabelledBy = item.querySelectorAll('[aria-labelledby]');
+                const allID = item.querySelectorAll('[id]');
+                const allFor = item.querySelectorAll('[for]');
+                const allAriaLabelledBy = item.querySelectorAll('[aria-labelledby]');
 
                 // Unique id
                 for (let x = 0; x < allID.length; x++) {
@@ -392,12 +409,12 @@ const viewMarkup = function() {
                     
                     // Tidy js
                     if (item.querySelector('[data-view-markup-in-page]') && item.querySelector('[data-view-markup-script-selector]')) {
-                        let inPageCodeJsBlock = item.querySelector('.view-markup__code--js');
-                        let scriptSelector = item.querySelector('[data-view-markup-script-selector]').getAttribute('data-view-markup-script-selector');
-                        let scriptElement = document.querySelector(scriptSelector);
-                        let jsToTidy = scriptElement.outerHTML.toString().replace(/ id=".*"/g, '');
+                        const inPageCodeJsBlock = item.querySelector('.view-markup__code--js');
+                        const scriptSelector = item.querySelector('[data-view-markup-script-selector]').getAttribute('data-view-markup-script-selector');
+                        const scriptElement = document.querySelector(scriptSelector);
+                        const jsToTidy = scriptElement.outerHTML.toString().replace(/ id=".*"/g, '');
                         
-                        let tidyJS = html_beautify(jsToTidy, {
+                        const tidyJS = html_beautify(jsToTidy, {
                             indent_size: getCachedSpaceTab(),
                             space_in_empty_paren: true
                         });
@@ -412,8 +429,8 @@ const viewMarkup = function() {
                     
                     // Tidy html
                     if (item.querySelector('[data-view-markup-in-page]')) {
-                        let inPageCodeHtmlBlock = item.querySelector('.view-markup__code--html');
-                        let tidyHTML = html_beautify(elHtmlClean[index], {
+                        const inPageCodeHtmlBlock = item.querySelector('.view-markup__code--html');
+                        const tidyHTML = html_beautify(elHtmlClean[index], {
                             indent_size: getCachedSpaceTab(),
                             space_in_empty_paren: true
                         });
@@ -440,30 +457,30 @@ const viewMarkup = function() {
             // Cache rendered elements
             // -----------------------------------------------------------------------------
 
-            let modalContent = document.querySelectorAll('.view-markup__content');
-            let modalCloseBtn = document.querySelectorAll('.view-markup__close-btn');
-            let copyBtn = document.querySelectorAll('.view-markup__copy-btn');
-            let settingsBtn = document.querySelectorAll('.view-markup__settings-btn');
-            let settingsDropdown = document.querySelectorAll('.view-markup__settings-dropdown');
-            let textArea = document.querySelectorAll('.view-markup__hidden-textarea');
-            let preEl = document.querySelectorAll('.view-markup__pre');
-            let htmlCodeEl = document.querySelectorAll('.view-markup__code--html');
-            let jsCodeEl = document.querySelectorAll('.view-markup__code--js');
-            let radio2Spaces = document.querySelectorAll('.view-markup__indent-2');
-            let radio4Spaces = document.querySelectorAll('.view-markup__indent-4');
-            let themeDark = document.querySelectorAll('.view-markup__theme-dark');
-            let themeLight = document.querySelectorAll('.view-markup__theme-light');
-            let fontSize = document.querySelectorAll('.view-markup__font-size');
-            let htmlTab = document.querySelectorAll('.view-markup__tabs-button--html');
-            let jsTab = document.querySelectorAll('.view-markup__tabs-button--js');
+            const modalContent = document.querySelectorAll('.view-markup__content');
+            const modalCloseBtn = document.querySelectorAll('.view-markup__close-btn');
+            const copyBtn = document.querySelectorAll('.view-markup__copy-btn');
+            const settingsBtn = document.querySelectorAll('.view-markup__settings-btn');
+            const settingsDropdown = document.querySelectorAll('.view-markup__settings-dropdown');
+            const textArea = document.querySelectorAll('.view-markup__hidden-textarea');
+            const preEl = document.querySelectorAll('.view-markup__pre');
+            const htmlCodeEl = document.querySelectorAll('.view-markup__code--html');
+            const jsCodeEl = document.querySelectorAll('.view-markup__code--js');
+            const radio2Spaces = document.querySelectorAll('.view-markup__indent-2');
+            const radio4Spaces = document.querySelectorAll('.view-markup__indent-4');
+            const themeDark = document.querySelectorAll('.view-markup__theme-dark');
+            const themeLight = document.querySelectorAll('.view-markup__theme-light');
+            const fontSize = document.querySelectorAll('.view-markup__font-size');
+            const htmlTab = document.querySelectorAll('.view-markup__tabs-button--html');
+            const jsTab = document.querySelectorAll('.view-markup__tabs-button--js');
 
             // Modal specific elements
-            let modalCodeHtmlEL = document.querySelector('.view-markup-modal .view-markup__code--html');
-            let modalContentEl = document.querySelector('.view-markup-modal .view-markup__content');
-            let modalTitleEl = document.querySelector('.view-markup-modal .view-markup__title');
-            let modalSizeMedium = document.querySelectorAll('.view-markup__size-medium');
-            let modalSizeLarge = document.querySelectorAll('.view-markup__size-large');
-            let modalCodeJsEL = document.querySelectorAll('.view-markup-modal .view-markup__code--js');
+            const modalCodeHtmlEL = document.querySelector('.view-markup-modal .view-markup__code--html');
+            const modalContentEl = document.querySelector('.view-markup-modal .view-markup__content');
+            const modalTitleEl = document.querySelector('.view-markup-modal .view-markup__title');
+            const modalSizeMedium = document.querySelectorAll('.view-markup__size-medium');
+            const modalSizeLarge = document.querySelectorAll('.view-markup__size-large');
+            const modalCodeJsEL = document.querySelectorAll('.view-markup-modal .view-markup__code--js');
 
 
 
@@ -517,7 +534,7 @@ const viewMarkup = function() {
                     item.value = '13';
                 });
             } else {
-                let currentValue = localStorage.getItem('fontSizevalue');
+                const currentValue = localStorage.getItem('fontSizevalue');
                 
                 fontSize.forEach(function (item) {
                     item.value = localStorage.getItem('fontSizevalue');
@@ -532,7 +549,7 @@ const viewMarkup = function() {
             // Font code font size
             fontSize.forEach(function (item, index) {
                 item.addEventListener('change', function () {
-                    let currentValue = item.value;
+                    const currentValue = item.value;
                     
                     localStorage.setItem('fontSizevalue', currentValue);
 
@@ -557,10 +574,10 @@ const viewMarkup = function() {
             copyBtn.forEach(function (item, index) {
                 item.addEventListener('click', function () {
                     let currentShowingCode;
-                    let closestElement = item.closest('.view-markup__content');
-                    let currentCode = closestElement.querySelectorAll('.view-markup__code');
+                    const closestElement = item.closest('.view-markup__content');
+                    const currentCode = closestElement.querySelectorAll('.view-markup__code');
                             
-                    for (let i = 0; i < currentCode.length; i++) {
+                    for (const i = 0; i < currentCode.length; i++) {
                         if (currentCode[i].offsetWidth > 0 && currentCode[i].offsetHeight > 0) {
                             currentShowingCode = currentCode[i];
                         }
@@ -686,11 +703,11 @@ const viewMarkup = function() {
                 item.addEventListener('change', function () {
                     if (this.checked === true) {
                         
-                        modalSizeLarge.forEach(function (item, index) {
+                        modalSizeLarge.forEach(function (item) {
                             item.checked = false;
                         });
                         
-                        modalSizeMedium.forEach(function (item, index) {
+                        modalSizeMedium.forEach(function (item) {
                             item.checked = true;
                         });
                         
@@ -706,11 +723,11 @@ const viewMarkup = function() {
                 item.addEventListener('change', function () {
                     if (this.checked === true) {
                         
-                        modalSizeMedium.forEach(function (item, index) {
+                        modalSizeMedium.forEach(function (item) {
                             item.checked = false;
                         });
                         
-                        modalSizeLarge.forEach(function (item, index) {
+                        modalSizeLarge.forEach(function (item) {
                             item.checked = true;
                         });
                         
@@ -729,14 +746,14 @@ const viewMarkup = function() {
             // HTML/JS tab toggling
             // -----------------------------------------------------------------------------
 
-            htmlTab.forEach(function (item, index) {
+            htmlTab.forEach(function (item) {
                 item.addEventListener('click', function () {
                     applyCopyBtnState('enabled');
                     this.closest('.view-markup__content').classList.remove('view-markup--js-tab-showing');
                 });
             });
 
-            jsTab.forEach(function (item, index) {
+            jsTab.forEach(function (item) {
                 item.addEventListener('click', function () {
                     applyCopyBtnState('enabled');
                     this.closest('.view-markup__content').classList.add('view-markup--js-tab-showing');
@@ -776,10 +793,8 @@ const viewMarkup = function() {
             });
 
             // Hide modal with esc key
-            modalEl.addEventListener('keydown', function (e) {
-                let key = e.key;
-
-                if (key === 'Escape' && document.documentElement.classList.contains('js-view-markup-modal-showing')) {
+            modalEl.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape' && document.documentElement.classList.contains('js-view-markup-modal-showing')) {
                     modalHide();
                 }
             });
@@ -792,12 +807,12 @@ const viewMarkup = function() {
             // Settings dropdown functionality
             // -----------------------------------------------------------------------------
 
-            let optionDropdownClass = 'view-markup__settings-dropdown--showing';
+            const optionDropdownClass = 'view-markup__settings-dropdown--showing';
 
             // Settings dropdown
             settingsBtn.forEach(function (item, index) {
                 item.addEventListener('click', function () {
-                    let ariaExpandedAttr = this.getAttribute('aria-expanded');
+                    const ariaExpandedAttr = this.getAttribute('aria-expanded');
 
                     this.setAttribute('aria-expanded', (ariaExpandedAttr === 'true') ? 'false' : 'true');
                     settingsDropdown[index].classList.toggle(optionDropdownClass);
@@ -807,7 +822,7 @@ const viewMarkup = function() {
             // Hide settings dropdown by clicking outside of it
             document.addEventListener('mousedown', function (event) {
                 settingsDropdown.forEach(function (item, index) {
-                    let isClickInside = item.contains(event.target);
+                    const isClickInside = item.contains(event.target);
 
                     if (
                         !event.target.classList.contains('view-markup__settings-btn') &&
@@ -833,8 +848,8 @@ const viewMarkup = function() {
                 elHtmlClean.forEach(function (item, index) {
                     
                     // Assign modal button to correct html to view
-                    let modalParent = viewMarkupEl[index].closest('.view-markup') || viewMarkupEl[index];
-                    let modalBtnEL = modalParent.querySelector('.view-markup__modal-btn');
+                    const modalParent = viewMarkupEl[index].closest('.view-markup') || viewMarkupEl[index];
+                    const modalBtnEL = modalParent.querySelector('.view-markup__modal-btn');
 
                     // Crack open the modal with the correct html in view
                     modalMapping(item, 2, modalBtnEL, null);
@@ -845,7 +860,7 @@ const viewMarkup = function() {
 
             // Cleanup and highlight markup
             function applyCleanHtml(html, spaces, btnEl, codeEl) {
-                let tidyHTML = html_beautify(html, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
+                const tidyHTML = html_beautify(html, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
                     
                 codeEl.textContent = tidyHTML;
                 
@@ -867,7 +882,7 @@ const viewMarkup = function() {
                                 
                         jsCodeEl[i].textContent = '';
                         
-                        let tidyJs = html_beautify(jsToTidy, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
+                        const tidyJs = html_beautify(jsToTidy, { indent_size: getCachedSpaceTab(), space_in_empty_paren: true });
                         
                         jsCodeEl[i].textContent = tidyJs;
                         
@@ -889,7 +904,7 @@ const viewMarkup = function() {
 
             // Populate hidden textarea with tidy html/js for copy button
             function applyTidyCodeToTextArea(code, spaceTabRadio, index) {
-                let tidyCode = html_beautify(code, { indent_size: spaceTabRadio, space_in_empty_paren: true });
+                const tidyCode = html_beautify(code, { indent_size: spaceTabRadio, space_in_empty_paren: true });
                 textArea[index].textContent = tidyCode;
                 return;
             }
@@ -926,7 +941,7 @@ const viewMarkup = function() {
 
                     // Add option title to modal title if there is one
                     if (btnEl.hasAttribute('data-view-markup-title')) {
-                        let cleanTitle = btnEl.getAttribute('data-view-markup-title').replace(/^'(.*)'$/, '$1');
+                        const cleanTitle = btnEl.getAttribute('data-view-markup-title').replace(/^'(.*)'$/, '$1');
                         modalTitleEl.textContent = cleanTitle;
                     } else {
                         modalTitleEl.textContent = 'Viewing markup';
@@ -943,7 +958,7 @@ const viewMarkup = function() {
 
             // Apply copy button state
             function applyCopyBtnState(state) {
-                let clickedButton = document.querySelectorAll('.view-markup__copy-btn:focus');
+                const clickedButton = document.querySelectorAll('.view-markup__copy-btn:focus');
                 if (state === 'disabled') {
                     clickedButton.forEach(function (item) {
                         item.textContent = 'Copied';
@@ -987,7 +1002,8 @@ const viewMarkup = function() {
                     object,
                     embed,
                     [tabindex="0"],
-                    [contenteditable]
+                    [contenteditable],
+                    [role="button"]
                 `;
                     
                 let focusableElements = modalEl.querySelectorAll(focusableElementsString);
@@ -995,28 +1011,28 @@ const viewMarkup = function() {
                 // Convert NodeList to Array
                 focusableElements = Array.prototype.slice.call(focusableElements);
 
-                let firstTabStop = focusableElements[0];
-                let lastTabStop = focusableElements[focusableElements.length - 1];
+                const firstTabStop = focusableElements[0];
+                const lastTabStop = focusableElements[focusableElements.length - 1];
                 
                 // Set initial focus on the modal
                 modalEl.focus();
                 
-                function trapTabKey(e) {
+                function trapTabKey(event) {
                     
                     // Check for TAB key press
-                    if (e.keyCode === 9) {
+                    if (event.keyCode === 9) {
 
                         // SHIFT + TAB
-                        if (e.shiftKey) {
+                        if (event.shiftKey) {
                             if (document.activeElement === firstTabStop) {
-                                e.preventDefault();
+                                event.preventDefault();
                                 lastTabStop.focus();
                             }
 
                         // TAB
                         } else {
                             if (document.activeElement === lastTabStop) {
-                                e.preventDefault();
+                                event.preventDefault();
                                 firstTabStop.focus();
                             }
                         }
@@ -1042,8 +1058,8 @@ const viewMarkup = function() {
                     mapToModalBtnIndex = (parseInt(currentViewMarkupIndex) === parseInt(elAmount) - 1) ? 0 : parseInt(currentViewMarkupIndex) + 1;
                 }
                     
-                let mapToModalBtnSelector = '[data-view-markup-nav-index="' + mapToModalBtnIndex + '"]';
-                let mapToModalBtn = document.querySelector(mapToModalBtnSelector.toString());
+                const mapToModalBtnSelector = '[data-view-markup-nav-index="' + mapToModalBtnIndex + '"]';
+                const mapToModalBtn = document.querySelector(mapToModalBtnSelector.toString());
                 
                 document.documentElement.classList.add('js-view-markup-modal-showing--navigating');
                 
@@ -1052,8 +1068,8 @@ const viewMarkup = function() {
                 
                 // Show corresponding tab if contained in one
                 if (mapToModalBtn.closest('.view-markup-tabs__panel')) {
-                    let tabParent = mapToModalBtn.closest('[data-view-markup-tabs]');
-                    let tablistPanelId = mapToModalBtn.closest('.view-markup-tabs__panel').id;
+                    const tabParent = mapToModalBtn.closest('[data-view-markup-tabs]');
+                    const tablistPanelId = mapToModalBtn.closest('.view-markup-tabs__panel').id;
                     
                     tabParent
                         .querySelector(`[aria-controls="${tablistPanelId}"]`)
@@ -1069,8 +1085,8 @@ const viewMarkup = function() {
             function modalNavigation() {    
                 
                 // Add index to modal buttons for navigation
-                let modalNavEl = document.querySelector('.view-markup__nav');
-                let modalBtn = document.querySelectorAll('.view-markup__modal-btn');
+                const modalNavEl = document.querySelector('.view-markup__nav');
+                const modalBtn = document.querySelectorAll('.view-markup__modal-btn');
                 
                 elAmount = modalBtn.length;
                 
@@ -1081,10 +1097,10 @@ const viewMarkup = function() {
                 if (elAmount > 1) {
 
                     // Modal previous button
-                    let modalPrevBtn = modalEl.querySelector('.view-markup__prev-btn');
+                    const modalPrevBtn = modalEl.querySelector('.view-markup__prev-btn');
 
                     // Modal next button
-                    let modalNextBtn = modalEl.querySelector('.view-markup__next-btn');
+                    const modalNextBtn = modalEl.querySelector('.view-markup__next-btn');
                     
                     // Modal previous button click
                     modalPrevBtn.addEventListener('click', function () {
@@ -1101,7 +1117,7 @@ const viewMarkup = function() {
                     modalNavEl.remove();
                 }
                 
-                if (modalNav === null) {
+                if (param.modalNav === null) {
                 
                     // Remove modal nav if no setting is found
                     modalNavEl.remove();
@@ -1111,31 +1127,31 @@ const viewMarkup = function() {
 
 
             // If dynamic position query param is set, do some stuff
-            if (dynamicPos !== null) {
+            if (param.dynamicPos !== null) {
                 window.addEventListener('ViewMarkupReady', () => {
                 
                     // Create new div that will contain all modal buttons
-                    let floatingButtonHolder = document.createElement('div');
+                    const floatingButtonHolder = document.createElement('div');
                     floatingButtonHolder.classList.add('view-markup-dynamic-nav');
                     
-                    if (dynamicPosZIndex !== null) {
-                        floatingButtonHolder.style.zIndex = dynamicPosZIndex.toString();
+                    if (param.dynamicPosZIndex !== null) {
+                        floatingButtonHolder.style.zIndex = param.dynamicPosZIndex.toString();
                     }
                     
                     document.body.appendChild(floatingButtonHolder);
             
                     // Cache elements with modals
-                    let withmodalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
+                    const withmodalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
                     
                     // Re-cache remaining buttons
-                    let floatingModalBtn = document.querySelectorAll('.view-markup__modal-btn');
+                    const floatingModalBtn = document.querySelectorAll('.view-markup__modal-btn');
                     
                     // Dynamically position modal button next to associated element
                     function positionModalBtns(load) {
                         
                         // Add inline css to position button at the top left of the element
                         withmodalEl.forEach( (item, i) => {
-                            let btnElement = floatingModalBtn[i];
+                            const btnElement = floatingModalBtn[i];
             
                             btnElement.style.top = (item.getBoundingClientRect().top + window.scrollY) + 'px';
                             btnElement.style.left = item.getBoundingClientRect().left + 'px';
@@ -1147,7 +1163,7 @@ const viewMarkup = function() {
                     }
                     
                     // Remove un-needed highlight divs
-                    let highlightElement = document.querySelectorAll('.view-markup__highlight');
+                    const highlightElement = document.querySelectorAll('.view-markup__highlight');
                     highlightElement.forEach( (item) => {
                         item.remove();
                     });
@@ -1201,10 +1217,10 @@ const viewMarkup = function() {
 
             // Unwrap function
             function unwrap(wrapper) {
-                let docFrag = document.createDocumentFragment();
+                const docFrag = document.createDocumentFragment();
                 
                 while (wrapper.firstChild) {
-                    let child = wrapper.removeChild(wrapper.firstChild);
+                    const child = wrapper.removeChild(wrapper.firstChild);
                     docFrag.appendChild(child);
                 }
 
@@ -1260,9 +1276,9 @@ const viewMarkup = function() {
                 
                 // Setup tab list entry
                 vmEntry.forEach((entry, index) => {
-                    let tabButtonEntry = tabButton.cloneNode();
-                    let entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
-                    let uniqueID = renderID(entryTitle);
+                    const tabButtonEntry = tabButton.cloneNode();
+                    const entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
+                    const uniqueID = renderID(entryTitle);
                     
                     tabButtonEntry.setAttributes({
                         'aria-selected': (index === 0) ? 'true' : 'false',
@@ -1340,8 +1356,8 @@ const viewMarkup = function() {
                 });
 
                 // Create tab title and max-width option
-                let tabslistParam = convertToParamString(parent.getAttribute('data-view-markup-tabs'));
-                let tabsParams = {
+                const tabslistParam = convertToParamString(parent.getAttribute('data-view-markup-tabs'));
+                const tabsParams = {
                     title: tabslistParam.get('title'),
                     maxWidth: tabslistParam.get('max-width'),
                     background: tabslistParam.get('background'),
@@ -1382,7 +1398,7 @@ const viewMarkup = function() {
                 }
 
                 if (tabsParams.class !== null) {
-                    let classes = tabsParams.class.replace(/,\s|,/g, ' ').split(' ');
+                    const classes = tabsParams.class.replace(/,\s|,/g, ' ').split(' ');
                     classes.forEach((classItem) => {
                         tabNav.classList.add(classItem);
                     });
@@ -1418,11 +1434,11 @@ const viewMarkup = function() {
             });
 
             // Display and scrollto tablist item if hash is available
-            let urlHash = window.location.hash;
+            const urlHash = window.location.hash;
             if (urlHash !== '') {
-                let urlIDElement = document.querySelector(`${urlHash}`);
+                const urlIDElement = document.querySelector(`${urlHash}`);
                 if (urlIDElement && urlIDElement.closest('[data-view-markup-tabs]')) {
-                    let associatedTab = document.querySelector('[aria-controls="' + urlHash.replace('#', '') +'"]')
+                    const associatedTab = document.querySelector('[aria-controls="' + urlHash.replace('#', '') +'"]')
                     
                     // Click associated tab
                     associatedTab.click();
@@ -1472,8 +1488,8 @@ const viewMarkup = function() {
             }
 
             function convertToParamString(str) {
-                let stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
-                let optionParam = new URLSearchParams(stringCleanup);
+                const stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
+                const optionParam = new URLSearchParams(stringCleanup);
                 return optionParam;
             }
         }
