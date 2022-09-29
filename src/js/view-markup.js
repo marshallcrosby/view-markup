@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.1
+    * View markup v1.6.2
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -1277,7 +1277,8 @@ const viewMarkup = function() {
                 // Setup tab list entry
                 vmEntry.forEach((entry, index) => {
                     const tabButtonEntry = tabButton.cloneNode();
-                    const entryTitle = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
+                    const entryTitleText = convertToParamString(entry.getAttribute('data-view-markup')).get('title');
+                    const entryTitle = (entryTitleText !== null) ? entryTitleText : 'Tab Item ' + (index + 1);
                     const uniqueID = renderID(entryTitle);
                     
                     tabButtonEntry.setAttributes({

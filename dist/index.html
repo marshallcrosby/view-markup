@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" data-view-markup="title: Page Source;">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
@@ -12,17 +12,41 @@
         .option-list li {
             margin-bottom: 30px;
         }
+        .mb-4 {
+            margin-bottom: 20px;
+        }
+        .mb-10 {
+            margin-bottom: 60px;
+        }
+        .my-10 {
+            margin-top: 60px;
+            margin-bottom: 60px;
+        }
+        code {
+            font-family: Menlo, Consolas, 'DejaVu Sans Mono', monospace;
+            font-size: 14px;
+            color: #9a3939;
+        }
     </style>
+
+    <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
+    <script src="/js/view-markup.min.js?modal-nav&z-index=2&exclude-attribute=data-jtn-anchor"></script>
 </head>
 
-<body style="font-family: sans-serif; padding: 20px;">
+<body style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto;">
     <h1>View markup</h1>
     
     <p>Plugin that makes it easy for developers to view and copy the html needed for a component</p>
-    
-    <div class="example-markup" hidden disabled data-view-markup="render-in-page: true; preserve-attribute: true; exclude-attribute: hidden,disabled; script-selector: #exampleScript">
-        <h1 hidden>This is example markup</h1>
-        <h2>Add data-view-markup to any html element</h2>
+
+    <div class="mb-10"></div>
+
+    <h2>Examples</h2>
+
+    <h3>Modal view</h3>
+
+    <div class="example-markup" style="background-color: #f2f2f2; border: 2px solid #e3e3e3; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled;">
+        <h2 style="margin-top: 0">This is example markup</h2>
+        <h3>Click the little modal icon in the top left.</h3>
         <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
         <ul>
             <li>Lorem ipsum dolor</li>
@@ -30,140 +54,201 @@
             <li>Alias dignissimos nesciunt</li>
         </ul>
     </div>
-    
+
+    <h3>In page view</h3>
+    <div class="example-markup" disabled hidden data-view-markup="render-in-page: true; preserve-attribute: true; exclude-attribute: disabled, hidden; script-selector: #exampleScript">
+        <h2>This is example markup 1</h2>
+        <h3>Add data-view-markup to any html element</h3>
+        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+        <ul>
+            <li>Lorem ipsum dolor</li>
+            <li>Sit, amet consectetur adipisicing elit</li>
+            <li>Alias dignissimos nesciunt</li>
+        </ul>
+    </div>
+
+    <div class="my-10"></div>
+
     <h2>Install</h2>
+    
+    <a href="https://github.com/marshallcrosby/view-markup" target="_blank" rel="noopener noreferrer nofollow">
+        GitHub<svg style="margin-left: 5px" height="18" aria-hidden="true" viewBox="0 0 16 16" version="1.1" width="22" data-view-component="true" class="octicon octicon-mark-github v-align-middle">
+                <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+            </svg>
+    </a>
     
     <h3>CDN</h3>
     
     <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js</code>
+    
     <br>
+
+    <div class="mb-10"></div>
     
     <h2>Run</h2>
 
-    <p>
-        Add view-markup.js before any script tags at the bottom of the body. Add the <strong>data-view-markup</strong> attribute to the any html element inside the body that you want to view the markup for.
-    </p>
-
-    <p>
-        Add the below options inside the <strong>data-view-markup</strong> value.
-    </p>
+    <p>Add the <strong>data-view-markup</strong> attribute to the any html element inside the body that you want to view the markup for.</p>
 
     <h3>Options</h3>
+    
+    <p>Add the below options inside the <strong>data-view-markup</strong> value.</p>
 
     <ul class="option-list">        
         <li>
             <strong>Add title to modal</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>title: Block Name</em></strong>"
+            <code>data-view-markup="<strong>title: Block Name</strong>"</code>
         </li>
         
         <li>
             <strong>Adjust markup modal button x position</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>btn-x: 10px</em></strong>"
+            <code>data-view-markup="<strong>btn-x: 10px</strong>"</code>
         </li>
 
         <li>
             <strong>Adjust markup modal button y position</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>btn-y: 10px</em></strong>"
+            <code>data-view-markup="<strong>btn-y: 10px</strong>"</code>
         </li>
 
-        <li data-view-markup="preserve-attribute: true;">
+        <li>
             <strong>Adjust markup modal button z-index</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>btn-z: 2</em></strong>"
+            <code>data-view-markup="<strong>btn-z: 2</strong>"</code>
         </li>
         
         <li>
             <strong>Adjust markup modal button position (might need this when placing the button in a custom spot)</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>btn-pos: relative</em></strong>"
+            <code>data-view-markup="<strong>btn-pos: relative</strong>"</code>
         </li>
         
         <li>
             <strong>Display a snippet of javascript that goes along with html</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>associated-script: #scriptTagID</em></strong>"
+            <code>data-view-markup="<strong>associated-script: #scriptTagID</strong>"</code>
         </li>
         
         <li>
             <strong>Customize backdrop color (rgb values)</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>backdrop-rgb: 255, 255, 255</em></strong>"
+            <code>data-view-markup="<strong>backdrop-rgb: 255, 255, 255</strong>"</code>
         </li>
         
         <li>
             <strong>Render in page (after element)</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>render-in-page: true</em></strong>"
+            <code>data-view-markup="<strong>render-in-page: true</strong>"</code>
         </li>
         
         <li>
             <strong>Exclude attribute</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>exclude-attribute: hidden,disabled</em></strong>"
+            <code>data-view-markup="<strong>exclude-attribute: hidden,disabled</strong>"</code>
         </li>
                         
         <li>
             <strong>Multiple options (separate with a semi-colon)</strong><br>
             <small>Example:</small><br>
-            data-view-markup="<strong><em>title: Block Name; btn-x: -3px; btn-z: 3</em></strong>"
+            <code>data-view-markup="<strong>title: Block Name; btn-x: -3px; btn-z: 3</strong>"</code>
         </li>
     </ul>
+
+    <div class="mb-10"></div>
 
     <h2>Tablist setup and options</h2>
     
     <p>
         Wrap view markup items inside and element with the <strong>data-view-markup-tabs</strong> attribute.
     </p>
-    <p>
-        Options below for customization
-    </p>
+
+    <h3>Example</h3>
+    
+    <div data-view-markup-tabs="class: mb-4" data-view-markup="btn-y: -25px;">
+        <div class="example-markup" style="background-color: #f2f2f2; border: 2px solid #e3e3e3; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+            <h2 style="margin-top: 0">This is example markup</h2>
+            <h3>Use the tab navigation above to navigate between different views of this component</h3>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+            <ul>
+                <li>Lorem ipsum dolor</li>
+                <li>Sit, amet consectetur adipisicing elit</li>
+                <li>Alias dignissimos nesciunt</li>
+            </ul>
+        </div>
+        
+        <div class="example-markup" style="background-color: red; color: white; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+            <h2 style="margin-top: 0">This is example markup tab 2</h2>
+            <h3>Use the tab navigation above to navigate between different views of this component</h3>
+            <ul>
+                <li>Lorem ipsum dolor</li>
+                <li>Sit, amet consectetur adipisicing elit</li>
+                <li>Alias dignissimos nesciunt</li>
+            </ul>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+        </div>
+        
+        <div class="example-markup" style="background-color: blue; color: #fff; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+            <h2 style="margin-top: 0">This is example markup tab 3</h2>
+            <h3>Use the tab navigation above to navigate between different views of this component</h3>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+            <ul>
+                <li>Lorem ipsum dolor</li>
+                <li>Sit, amet consectetur adipisicing elit</li>
+                <li>Alias dignissimos nesciunt</li>
+            </ul>
+        </div>
+    </div>
+    
+    <h3>
+        Options
+    </h3>
 
     <ul class="option-list">        
         <li>
             <strong>Add title to tabs navigation</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>title: Tab section name"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>title: Tab section name"</strong></code>
         </li>
 
         <li>
             <strong>Add max-with to tabs navigation</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>max-width: 1200px"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>max-width: 1200px"</strong></code>
         </li>
 
         <li>
             <strong>Adjust horizontal outer padding on the tabs navigation</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>padding-x: 28px"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>padding-x: 28px"</strong></code>
         </li>
         
         <li>
             <strong>Add class(es) to tabs navigation</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>class: container px-5"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>class: container px-5"</strong></code>
         </li>
         
         <li>
             <strong>Remove background color</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>background: false"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>background: false"</strong></code>
         </li>
         
         <li>
             <strong>Pill styled navigation tab items</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>pill-view: true"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>pill-view: true"</strong></code>
         </li>
         
         <li>
             <strong>Show modal button in tab nav bar</strong><br>
             <small>Example:</small><br>
-            <code>data-view-markup-tabs="<strong><em>modal-btn: true"</em></strong></code>
+            <code>data-view-markup-tabs="<strong>modal-btn: true"</strong></code>
         </li>
     </ul>
+
+    <div class="mb-10"></div>
 
     <h2>Query param settings</h2>
     
@@ -175,31 +260,28 @@
         <li>
             <strong>modal-nav</strong> - Activate navigation arrows in modal to be able to navigate between view-markup elements<br>
             <small>Example:</small><br>
-            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong><em>modal-nav</em></strong></code>
+            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong>modal-nav</strong></code>
         </li>
         
         <li>
             <strong>dynamic-pos</strong> - Dynamically position view markup modal button(s) without modifying the DOM around the view-markup element<br>
             <small>Example:</small><br>
-            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong><em>dynamic-pos</em></strong></code>
+            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong>dynamic-pos</strong></code>
         </li>
         
         <li>
             <strong>exclude-attribute</strong> - Globally exclude attribute<br>
             <small>Example:</small><br>
-            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong><em>exclude-attribute=data-jtn-anchor,example-attr</em></strong></code>
+            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong>exclude-attribute=data-jtn-anchor,example-attr</strong></code>
         </li>
         
         <li>
             <strong>Multiple params</strong><br>
             <small>Example:</small><br>
-            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong><em>dynamic-pos</strong>&amp;<strong>modal-nav</em></strong></code>
+            <code>https://cdn.jsdelivr.net/gh/marshallcrosby/view-markup/dist/js/view-markup.min.js?<strong>dynamic-pos</strong>&amp;<strong>modal-nav</strong></code>
         </li>
     </ul>    
     
-    <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
-    <script src="/js/view-markup.min.js?modal-nav&z-index=2&exclude-attribute=data-jtn-anchor"></script>
-
     <script id="exampleScript">
         let $exampleScriptlet = () => {
             console.log('yes');

@@ -15,7 +15,7 @@
     --vm-color-gray-100: #{$color-gray-100};
     --vm-color-gray-200: #{$color-gray-200};
     --vm-color-gray-800: #{$color-gray-800};
-    --vm-color-scrollbar: rgba(255, 255, 255, .75);
+    --vm-color-scrollbar: rgba(255, 255, 255, .95);
 
     // Spacing and sizes
     --vm-height-modal-header: #{$height-modal-header};
@@ -55,6 +55,7 @@
     --vm-color-border-common: #{$color-border-common-light};
     --vm-color-moon: #{$color-text-light};
     --vm-color-sun: #{$color-text-light};
+    --vm-color-scrollbar: rgba(0, 0, 0, .75);
 }
 
 
@@ -78,6 +79,10 @@
             animation: modal-btn-bounce 300ms 300ms ease;
         }
     }
+}
+
+.view-markup {
+    font-family: var(--vm-ff-primary);
 }
 
 @keyframes modal-btn-bounce {
