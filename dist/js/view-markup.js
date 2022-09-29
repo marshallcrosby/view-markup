@@ -1474,7 +1474,7 @@ const viewMarkup = function() {
                     .forEach((panel) => panel.setAttribute('hidden', true));
 
                 // Show the selected panel
-                grandparent
+                grandparent.parentNode
                     .querySelector(`#${target.getAttribute('aria-controls')}`)
                     .removeAttribute('hidden');
 
@@ -1493,8 +1493,8 @@ const viewMarkup = function() {
             }
 
             function convertToParamString(str) {
-                let stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
-                let optionParam = new URLSearchParams(stringCleanup);
+                const stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
+                const optionParam = new URLSearchParams(stringCleanup);
                 return optionParam;
             }
         }
