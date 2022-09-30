@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.2
+    * View markup v1.6.3
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -17,7 +17,8 @@ const viewMarkup = function() {
         modalNav: null,
         dynamicPos: null,
         dynamicPosZIndex: null,
-        excludeAttribute: null
+        excludeAttribute: null,
+        dragModal: null
     }
 
     if (scriptLinkage) {
@@ -26,6 +27,7 @@ const viewMarkup = function() {
         param.dynamicPos = urlParam.get('dynamic-pos');
         param.dynamicPosZIndex = urlParam.get('z-index');
         param.excludeAttribute = urlParam.get('exclude-attribute');
+        param.dragModal = urlParam.get('drag-modal');
     }
 
     const srcReady = new Event('ViewMarkupSrcIsReady');
@@ -1212,11 +1214,11 @@ const viewMarkup = function() {
                 TODOS:
                 ✓ Allow for dynamic button positioning
                 • Add "Skip to view markup modal navigation" skip link
-                • Add visual focus indicator to modal button when focus in the background
+                ✓ Add visual focus indicator to modal button when focus in the background
                 when using modal navigation.
                 ✓ Set smooth scrolling on the html,body when modal is active
                 • Enhance preserve attribute functionality a bit. (allow for top and inner)
-                • Add tab view
+                ✓ Add tab view
             ----------------------------------------------------------------------------- */
 
             // Unwrap function
@@ -1496,6 +1498,77 @@ const viewMarkup = function() {
                 const stringCleanup = str.replace(/;\s|;/g, '&').replace(/:\s|:/g, '=');
                 const optionParam = new URLSearchParams(stringCleanup);
                 return optionParam;
+            }
+
+
+
+
+
+
+            // -----------------------------------------------------------------------------
+            // Draggable modal
+            // -----------------------------------------------------------------------------
+
+            if (param.dragModal !== null) {
+                Element.prototype.dragElement = function (dragTarget) {
+                    const el = this;
+                    el.style.position = 'absolute';
+                    
+                    let position = {
+                        one: 0,
+                        two: 0,
+                        three: 0,
+                        four: 0
+                    };
+                    
+                    if (el.querySelector(dragTarget)) {
+                        
+                        // If present, the header is where you move the DIV from:
+                        el.querySelector(dragTarget).onmousedown = dragOnMouseDown;
+                    } else {
+                        
+                        // Otherwise, move the DIV from anywhere inside the DIV:
+                        el.onmousedown = dragOnMouseDown;
+                    }
+    
+                    function dragOnMouseDown(event) {
+                        event = event || window.event;
+                        event.preventDefault();
+                        
+                        // Get the mouse cursor position at startup:
+                        position.three = event.clientX;
+                        position.four = event.clientY;
+                        document.onmouseup = endDragElement;
+                        
+                        // Call a function whenever the cursor moves:
+                        document.onmousemove = elementDrag;
+                    }
+    
+                    function elementDrag(event) {
+                        event = event || window.event;
+                        event.preventDefault();
+                        
+                        // Calculate the new cursor position:
+                        position.one = position.three - event.clientX;
+                        position.two = position.four - event.clientY;
+                        position.three = event.clientX;
+                        position.four = event.clientY;
+                        
+                        // Set the element's new position:
+                        el.style.top = `${(el.offsetTop - position.two)}px`;
+                        el.style.left = `${(el.offsetLeft - position.one)}px`;
+                    }
+    
+                    function endDragElement() {
+                        
+                        // Stop moving when mouse button is released:
+                        document.onmouseup = null;
+                        document.onmousemove = null;
+                    }
+                }
+                
+                const modalContentDragEl = document.querySelector('.view-markup-modal .view-markup__content');
+                modalContentDragEl.dragElement('.view-markup__header');
             }
         }
     });
