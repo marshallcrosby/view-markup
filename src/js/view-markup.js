@@ -951,7 +951,8 @@ const viewMarkup = function() {
                     
                     // Add option backdrop rgb to modal back
                     if (btnEl.hasAttribute('data-view-markup-backdrop-rgb')) {
-                        modalEl.style.backgroundColor = 'rgba(' + options.backdropRgb + ', .7)';
+                        const rgbaVal = `rgba(${btnEl.getAttribute('data-view-markup-backdrop-rgb')}, .7)`;
+                        modalEl.style.backgroundColor = rgbaVal;
                     } else {
                         modalEl.style.backgroundColor = '';
                     }
