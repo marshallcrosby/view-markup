@@ -30,7 +30,7 @@
     </style>
 
     <!-- TODO: Write more example html and maybe some base page styles, also some documentation -->
-    <script src="/js/view-markup.min.js?modal-nav&z-index=2&exclude-attribute=data-jtn-anchor&drag-modal=true"></script>
+    <script src="/js/view-markup.min.js?modal-nav&z-index=2&exclude-attribute=data-jtn-anchor&drag-modal=true" defer></script>
 </head>
 
 <body style="font-family: 'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto;">
@@ -166,7 +166,7 @@
     <h3>Example</h3>
     
     <div data-view-markup-tabs="class: mb-4" data-view-markup="btn-y: -25px;">
-        <div class="example-markup" style="background-color: #f2f2f2; border: 2px solid #e3e3e3; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+        <div class="example-markup" style="background-color: #f2f2f2; border: 2px solid #e3e3e3; padding: 20px;" data-view-markup="title: Example Tab 1; preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
             <h2 style="margin-top: 0">This is example markup</h2>
             <h3>Use the tab navigation above to navigate between different views of this component</h3>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
@@ -177,7 +177,7 @@
             </ul>
         </div>
         
-        <div class="example-markup" style="background-color: red; color: white; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+        <div class="example-markup" style="background-color: red; color: white; padding: 20px;" data-view-markup="title: Example Tab 2; preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
             <h2 style="margin-top: 0">This is example markup tab 2</h2>
             <h3>Use the tab navigation above to navigate between different views of this component</h3>
             <ul>
@@ -188,8 +188,30 @@
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
         </div>
         
-        <div class="example-markup" style="background-color: blue; color: #fff; padding: 20px;" data-view-markup="preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+        <div class="example-markup" style="background-color: blue; color: #fff; padding: 20px;" data-view-markup="title: Example Tab 3; preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
             <h2 style="margin-top: 0">This is example markup tab 3</h2>
+            <h3>Use the tab navigation above to navigate between different views of this component</h3>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+            <ul>
+                <li>Lorem ipsum dolor</li>
+                <li>Sit, amet consectetur adipisicing elit</li>
+                <li>Alias dignissimos nesciunt</li>
+            </ul>
+        </div>
+        
+        <div class="example-markup" style="background-color: rebeccapurple; color: white; padding: 20px;" data-view-markup="title: Example Tab 4; preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+            <h2 style="margin-top: 0">This is example markup tab 4</h2>
+            <h3>Use the tab navigation above to navigate between different views of this component</h3>
+            <ul>
+                <li>Lorem ipsum dolor</li>
+                <li>Sit, amet consectetur adipisicing elit</li>
+                <li>Alias dignissimos nesciunt</li>
+            </ul>
+            <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
+        </div>
+        
+        <div class="example-markup" style="background-color: cadetblue; color: #fff; padding: 20px;" data-view-markup="title: Example Tab 5; preserve-attribute: true; exclude-attribute: disabled; script-selector: #exampleScript">
+            <h2 style="margin-top: 0">This is example markup tab 5</h2>
             <h3>Use the tab navigation above to navigate between different views of this component</h3>
             <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Alias dignissimos nesciunt totam voluptatum ratione, repellat cum dolore obcaecati, quis fuga, dicta asperiores possimus et maiores quibusdam officia pariatur culpa quaerat.</p>
             <ul>

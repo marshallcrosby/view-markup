@@ -1,3 +1,9 @@
+[data-view-markup-tabs] {
+    > [data-view-markup]:not(:first-child) {
+        display: none;
+    }
+}
+
 .view-markup-tabs {
     font-size: 16px;
 

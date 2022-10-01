@@ -6,6 +6,23 @@
     * https://marshallcrosby.com
 */
 
+// -----------------------------------------------------------------------------
+// Custom styles added via js
+// -----------------------------------------------------------------------------
+
+// Create style tag to dump styles into for the markup modal
+const textStyle = document.createElement('style');
+textStyle.setAttribute('id', 'viewMarkupStyle');
+
+// Import compressed styles as a string
+const textStyleString = `//=inject view-markup.css`;
+
+// Apply in page styles to style tag
+textStyle.textContent = textStyleString;
+
+// Add in page styles to head
+document.head.appendChild(textStyle);
+
 const viewMarkup = function() {
     
     // Cache elements
@@ -252,26 +269,6 @@ const viewMarkup = function() {
                 }
             }
             
-
-
-
-
-            // -----------------------------------------------------------------------------
-            // Custom styles added via js
-            // -----------------------------------------------------------------------------
-
-            // Create style tag to dump styles into for the markup modal
-            const textStyle = document.createElement('style');
-            textStyle.setAttribute('id', 'viewMarkupStyle');
-
-            // Import compressed styles as a string
-            const textStyleString = `//=inject view-markup.css`;
-
-            // Apply in page styles to style tag
-            textStyle.textContent = textStyleString;
-
-            // Add in page styles to head
-            document.head.appendChild(textStyle);
 
 
 
