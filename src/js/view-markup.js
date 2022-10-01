@@ -576,7 +576,7 @@ const viewMarkup = function() {
                     const closestElement = item.closest('.view-markup__content');
                     const currentCode = closestElement.querySelectorAll('.view-markup__code');
                             
-                    for (const i = 0; i < currentCode.length; i++) {
+                    for (let i = 0; i < currentCode.length; i++) {
                         if (currentCode[i].offsetWidth > 0 && currentCode[i].offsetHeight > 0) {
                             currentShowingCode = currentCode[i];
                         }
@@ -747,6 +747,8 @@ const viewMarkup = function() {
 
             htmlTab.forEach(function (item) {
                 item.addEventListener('click', function () {
+                    item.parentNode.querySelector('.view-markup__tabs-button--js').setAttribute('aria-selected', 'false');
+                    item.setAttribute('aria-selected', 'true');
                     applyCopyBtnState('enabled');
                     this.closest('.view-markup__content').classList.remove('view-markup--js-tab-showing');
                 });
@@ -754,6 +756,8 @@ const viewMarkup = function() {
 
             jsTab.forEach(function (item) {
                 item.addEventListener('click', function () {
+                    item.parentNode.querySelector('.view-markup__tabs-button--html').setAttribute('aria-selected', 'false');
+                    item.setAttribute('aria-selected', 'true');
                     applyCopyBtnState('enabled');
                     this.closest('.view-markup__content').classList.add('view-markup--js-tab-showing');
                 });
