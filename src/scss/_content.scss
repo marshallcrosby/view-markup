@@ -13,8 +13,10 @@
     background-color: var(--vm-color-primary);
     background-clip: padding-box;
 
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 500;
+
+    font-family: var(--vm-ff-primary);
 
     * {
         -webkit-font-smoothing: auto;

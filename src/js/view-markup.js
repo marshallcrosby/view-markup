@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.3
+    * View markup v1.6.4
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -41,7 +41,7 @@ const viewMarkup = function() {
     if (scriptLinkage) {
         const urlParam = new URLSearchParams(scriptLinkage.getAttribute('src').split('?')[1]);
         param.modalNav = urlParam.get('modal-nav');
-        param.dynamicPos = urlParam.get('dynamic-pos');
+        param.dynamicPos = urlParam.get('dynamic-position');
         param.dynamicPosZIndex = urlParam.get('z-index');
         param.excludeAttribute = urlParam.get('exclude-attribute');
         param.dragModal = urlParam.get('drag-modal');
@@ -530,7 +530,7 @@ const viewMarkup = function() {
             // Get cached font-size
             if (localStorage.getItem('fontSizevalue') === null ) {
                 fontSize.forEach(function (item) {
-                    item.value = '13';
+                    item.value = '12';
                 });
             } else {
                 const currentValue = localStorage.getItem('fontSizevalue');
