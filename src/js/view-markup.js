@@ -172,12 +172,12 @@ const viewMarkup = function() {
                     modalBtn.setAttribute('data-view-markup-title', options.title);
                 }
 
-                // Btn x postion set
+                // Btn x position set
                 if (options.btnX) {
                     modalBtn.style.transform = 'translateX(' + options.btnX + ')';
                 }
 
-                // Btn y postion set
+                // Btn y position set
                 if (options.btnY) {
                     modalBtn.style.transform = 'translateY(' + options.btnY + ')';
                 }
@@ -259,9 +259,9 @@ const viewMarkup = function() {
                 const optionExclude = convertToParamString(el.getAttribute('data-view-markup')).get('exclude-attribute');
                 
                 if (optionExclude !== null) {
-                    const optionExlcudeArr = optionExclude.split(/,\s|,/);
+                    const optionExcludeArr = optionExclude.split(/,\s|,/);
                     
-                    optionExlcudeArr.forEach(function (attribute) {
+                    optionExcludeArr.forEach(function (attribute) {
                         el.removeAttribute(attribute);
                     });
                     
@@ -298,7 +298,7 @@ const viewMarkup = function() {
             // Load highlight js/css external assets
             loadExternalCss(highlightCssUrl);
 
-            // Initalize everything after getting beautify-html script
+            // Initialize everything after getting beautify-html script
             loadExternalJs(beautifyScriptUrl, loadFinalJS);
             
             function loadFinalJS() {
@@ -528,15 +528,15 @@ const viewMarkup = function() {
 
 
             // Get cached font-size
-            if (localStorage.getItem('fontSizevalue') === null ) {
+            if (localStorage.getItem('fontSizeValue') === null ) {
                 fontSize.forEach(function (item) {
                     item.value = '12';
                 });
             } else {
-                const currentValue = localStorage.getItem('fontSizevalue');
+                const currentValue = localStorage.getItem('fontSizeValue');
                 
                 fontSize.forEach(function (item) {
-                    item.value = localStorage.getItem('fontSizevalue');
+                    item.value = localStorage.getItem('fontSizeValue');
                 });
 
                 preEl.forEach(function (item, index) {
@@ -550,7 +550,7 @@ const viewMarkup = function() {
                 item.addEventListener('change', function () {
                     const currentValue = item.value;
                     
-                    localStorage.setItem('fontSizevalue', currentValue);
+                    localStorage.setItem('fontSizeValue', currentValue);
 
                     fontSize.forEach(function (item, index) {
                         item.value = currentValue
@@ -1145,7 +1145,7 @@ const viewMarkup = function() {
                     document.body.appendChild(floatingButtonHolder);
             
                     // Cache elements with modals
-                    const withmodalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
+                    const withModalEl = document.querySelectorAll('[data-view-markup]:not([data-view-markup-render-in-page])');
                     
                     // Re-cache remaining buttons
                     const floatingModalBtn = document.querySelectorAll('.view-markup__modal-btn');
@@ -1154,7 +1154,7 @@ const viewMarkup = function() {
                     function positionModalBtns(load) {
                         
                         // Add inline css to position button at the top left of the element
-                        withmodalEl.forEach( (item, i) => {
+                        withModalEl.forEach( (item, i) => {
                             const btnElement = floatingModalBtn[i];
             
                             btnElement.style.top = (item.getBoundingClientRect().top + window.scrollY) + 'px';
@@ -1204,7 +1204,7 @@ const viewMarkup = function() {
 
             
             /* -----------------------------------------------------------------------------
-                EXPIREMENTAL WIP: prototype floating the buttons over the page instead of
+                EXPERIMENTAL WIP: prototype floating the buttons over the page instead of
                 wrapping each element in a div and then positioning it inside that div. Not
                 a fan of how much it currently modifies the DOM to get the modal button next
                 to the associated element correctly
