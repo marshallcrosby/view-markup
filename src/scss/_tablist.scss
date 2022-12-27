@@ -56,6 +56,8 @@
 
         font-size: var(--vm-tablist-font-size);
         font-weight: bold;
+        font-family: var(--vm-ff-primary);
+        line-height: 1;
 
         &[aria-selected="true"] {
             color: var(--vm-color-gray-100);
