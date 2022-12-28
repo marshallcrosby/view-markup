@@ -139,7 +139,7 @@
     font-family: var(--vm-ff-primary);
     font-size: .92em;
     font-weight: 400;
-    line-height: normal;
+    line-height: 1;
 
     &:disabled {
         opacity: .5;
