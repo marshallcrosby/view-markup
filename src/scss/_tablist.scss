@@ -71,7 +71,8 @@
 
     .view-markup-tabs__modal-btn {
         z-index: 1;
-        top: var(--vm-tablist-padding-y-common);
+        top: auto;
+        bottom: var(--vm-tablist-padding-y-common);
         right: var(--vm-tablist-padding-x-common);
         left: auto;
 
