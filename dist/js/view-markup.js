@@ -1456,7 +1456,7 @@ const viewMarkup = function() {
 
                     // Scroll into view
                     associatedTab.scrollIntoView({
-                        behavior: 'smooth'
+                        behavior: 'auto'
                     });
                 }
             }
