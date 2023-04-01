@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.7
+    * View markup v1.6.8
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -1323,6 +1323,10 @@ const viewMarkup = function() {
                     tabs.forEach((tab) => {
                         tab.addEventListener('click', changeTabs);
                     });
+                }
+                
+                if (tabs.length === 1) {
+                    tabList.classList.add('view-markup-tabs__nav--has-single-item');
                 }
                 
                 // Enable arrow navigation between tabs in the tab list

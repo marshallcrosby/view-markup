@@ -15,6 +15,23 @@
         flex-wrap: wrap;
 
         background-color: var(--vm-color-gray-100);
+
+        &.view-markup-tabs__nav--has-single-item {
+            padding-top: 16px;
+            padding-bottom: 16px;
+
+            .view-markup-tabs__tabs-list,
+            .view-markup-tabs__sep {
+                display: none;
+            }
+
+            .view-markup-tabs__title {
+                margin-top: auto;
+                margin-bottom: auto;
+                padding-right: 60px;
+            }
+            
+        }
     }
 
     .view-markup-tabs__title {
