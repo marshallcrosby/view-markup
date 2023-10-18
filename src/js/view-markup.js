@@ -1,5 +1,5 @@
 /*!
-    * View markup v1.6.8
+    * View markup v1.6.9
     * Plugin that makes it easy for developers to view and copy the html needed for a component.
     *
     * Copyright 2021-2022 Marshall Crosby
@@ -1468,7 +1468,7 @@ const viewMarkup = function() {
 
                 // Remove all current selected tabs
                 parent
-                    .querySelectorAll('[aria-selected="true"]')
+                    .querySelectorAll('.view-markup-tabs__tab-button[aria-selected="true"]')
                     .forEach((tab) => tab.setAttribute('aria-selected', 'false'));
 
                 // Set this tab as selected
@@ -1476,7 +1476,7 @@ const viewMarkup = function() {
 
                 // Hide all tab panels
                 grandparent
-                    .querySelectorAll('[role="tabpanel"]')
+                    .querySelectorAll('.view-markup-tabs__panel[role="tabpanel"]')
                     .forEach((panel) => panel.setAttribute('hidden', true));
 
                 // Show the selected panel
